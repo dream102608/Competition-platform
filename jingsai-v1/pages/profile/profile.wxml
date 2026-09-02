@@ -1,0 +1,114 @@
+<view class="page">
+  <!-- 自定义导航 -->
+  <view class="p-head" style="padding-top:{{sbh}}px;">
+    <view class="p-title">我的档案</view>
+    <view class="p-issue">ARCHIVE · NO.{{user.sid || '----'}}</view>
+  </view>
+
+  <!-- 档案封面：用户信息 -->
+  <view class="me-head card">
+    <view class="me-avatar">{{user.name ? user.name[0] : '客'}}</view>
+    <view class="me-info">
+      <view class="me-name-row" bindtap="editName">
+        <text class="me-name">{{user.name || '未登录'}}</text>
+        <text class="me-pencil">✎</text>
+      </view>
+      <view class="me-sid">学号 {{user.sid || '——'}} · {{user.college || '——'}}</view>
+      <view class="me-role-tag">{{user.role === 'teacher' ? '指导教师' : (user.role === 'admin' ? '教务管理员' : '在校学生')}}</view>
+    </view>
+    <view class="me-corner">卷宗一号</view>
+  </view>
+
+  <!-- 三格统计 -->
+  <view class="me-stats card">
+    <view class="stat-cell">
+      <view class="stat-num">{{stats.total}}</view>
+      <view class="stat-label">累计报名</view>
+    </view>
+    <view class="stat-div"></view>
+    <view class="stat-cell">
+      <view class="stat-num stat-verm">{{stats.active}}</view>
+      <view class="stat-label">进行中</view>
+    </view>
+    <view class="stat-div"></view>
+    <view class="stat-cell">
+      <view class="stat-num">{{stats.awards}}</view>
+      <view class="stat-label">历史获奖</view>
+    </view>
+  </view>
+
+  <!-- 我的报名（卷宗条目） -->
+  <view class="sec-band">
+    <text>我的报名</text>
+    <text class="sec-en">REGISTRATIONS</text>
+  </view>
+
+  <view wx:if="{{!regs.length}}" class="card empty-box">
+    <view class="hand empty-hand">档案柜空空如也，去大厅转转？</view>
+    <view class="btn-ink btn-s" bindtap="goHall">去逛大厅</view>
+  </view>
+
+  <view wx:for="{{regs}}" wx:key="_id" class="card me-reg" data-id="{{item._id}}" bindtap="goApproval">
+    <view class="reg-top">
+      <view class="reg-title">{{item.compTitle}}</view>
+      <view class="pill {{item.status === 'approving' ? 'st-run' : (item.status === 'rejected' ? 'st-rej' : 'st-ok')}}">
+        {{item.status === 'approving' ? '审批中' : (item.status === 'rejected' ? '已驳回' : '已通过')}}
+      </view>
+    </view>
+    <view class="reg-team hand">{{item.teamName}} <text wx:if="{{item.version > 1}}" class="ver-pill">v{{item.version}}</text></view>
+    <view class="mini-track">
+      <view wx:for="{{item.trackFlags}}" wx:for-item="f" wx:key="*this"
+            class="mt-dot {{f ? 'mt-done' : ''}}"></view>
+    </view>
+    <view class="reg-foot">
+      <text class="reg-ddl">DDL {{item.deadline}}</text>
+      <text class="reg-arrow">查看进度 →</text>
+    </view>
+  </view>
+
+  <!-- 我的证书（留白空状态） -->
+  <view class="sec-band">
+    <text>我的证书</text>
+    <text class="sec-en">CERTIFICATES</text>
+  </view>
+  <view class="card cert-box">
+    <view class="illus-myfiles"></view>
+    <view class="hand cert-hand">获奖证书还在印刷厂排队的路上……</view>
+    <view class="btn-line btn-s" bindtap="goHall">去争取第一张</view>
+  </view>
+
+  <!-- 菜单 -->
+  <view class="sec-band">
+    <text>档案管理</text>
+    <text class="sec-en">MANAGE</text>
+  </view>
+  <view class="card me-menu">
+    <view class="menu-row" bindtap="showLogs">
+      <text class="menu-idx">01</text>
+      <text class="menu-name">操作记录</text>
+      <text class="menu-arrow">→</text>
+    </view>
+    <view class="menu-row">
+      <text class="menu-idx">02</text>
+      <text class="menu-name">收藏夹</text>
+      <text class="menu-arrow">{{favCount}} 项 →</text>
+    </view>
+    <view class="menu-row" bindtap="settings">
+      <text class="menu-idx">03</text>
+      <text class="menu-name">账号设置</text>
+      <text class="menu-arrow">→</text>
+    </view>
+    <view class="menu-row" bindtap="resetDemo">
+      <text class="menu-idx">04</text>
+      <text class="menu-name">重置演示数据</text>
+      <text class="menu-arrow">恢复初始 →</text>
+    </view>
+    <view class="menu-row menu-danger" bindtap="logout">
+      <text class="menu-idx">05</text>
+      <text class="menu-name">退出登录</text>
+      <text class="menu-arrow">→</text>
+    </view>
+  </view>
+
+  <view class="foot-note">—— 本卷宗由竞赛一体化管理平台归档 ——</view>
+</view>

@@ -1,0 +1,65 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<!-- 报头 -->
+<view class="paper-mast">
+  <view class="date mono"><span>{{dateText}}</span><span>{{issue}}</span></view>
+  <view class="mast-title serif">竞赛早报</view>
+  <view class="slogan mono">JINGSAI DAILY · 一站式竞赛管理</view>
+</view>
+
+<!-- 快讯跑马灯 -->
+<view class="ticker">
+  <text class="tag mono">快讯</text>
+  <view class="ticker-box"><text class="txt">{{news}}</text></view>
+</view>
+
+<!-- 头版 Banner（Pexels 实拍） -->
+<view class="home-banner" bindtap="goHall">
+  <image src="https://images.pexels.com/photos/5940828/pexels-photo-5940828.jpeg?auto=compress&cs=tinysrgb&w=800" mode="aspectFill"/>
+  <view class="flag serif">国赛冲刺</view>
+  <view class="cap">
+    <b>组队冲国赛，现在报名</b>
+    <text class="cap-arrow">▸</text>
+  </view>
+</view>
+
+<!-- 功能宫格 -->
+<view class="grid-nav">
+  <view class="g-item" bindtap="goHall">
+    <text class="g-ic verm">▤</text><b>竞赛大厅</b><small>双赛道 · 5 项在报</small>
+  </view>
+  <view class="g-item" bindtap="goApproval">
+    <text class="g-ic verm">▤</text><b>我的报名</b><small>{{activeCount}} 支队伍 · 审批中</small>
+  </view>
+  <view class="g-item" bindtap="goApproval">
+    <text class="g-ic verm">▤</text><b>审批中心</b><small>轨迹 · 签批 · 催办</small>
+  </view>
+  <view class="g-item off" bindtap="soon">
+    <text class="soon mono">V2.0</text>
+    <text class="g-ic">▤</text><b>知识广场</b><small>经验帖 · 空状态</small>
+  </view>
+</view>
+
+<!-- 报名进度 -->
+<view class="prog-card card">
+  <view class="pc-t">
+    <b class="serif">报 名 进 度</b>
+    <text class="pill mono">{{activeCount}} ACTIVE</text>
+  </view>
+  <view class="pc-body">
+    <view class="pc-row" wx:for="{{regs}}" wx:key="_id" bindtap="goApproval">
+      <text class="num mono">{{index + 1 < 10 ? '0' : ''}}{{index + 1}}</text>
+      <view class="pc-info">
+        <b>{{item.compTitle}} · {{item.teamName}}队</b>
+        <small class="mono">{{item.regNo}}</small>
+      </view>
+      <view class="pc-track">
+        <block wx:for="{{item.track}}" wx:for-item="done" wx:key="index">
+          <text class="dot {{done ? 'done' : ''}}"></text>
+        </block>
+      </view>
+      <text class="ver mono">v{{item.version}}</text>
+    </view>
+    <view wx:if="{{regs.length === 0}}" class="pc-empty hand">还没报名？大厅里转转，总有一场适合你。</view>
+  </view>
+</view>

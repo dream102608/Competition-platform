@@ -1,0 +1,60 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<!-- 档案封面：头图 + 渐晕 -->
+<view class="detail-hero">
+  <image src="https://images.pexels.com/photos/8199217/pexels-photo-8199217.jpeg?auto=compress&cs=tinysrgb&w=800" mode="aspectFill"/>
+  <view class="veil"></view>
+  <view class="back-btn" bindtap="back">‹</view>
+  <view class="dt">
+    <view class="pill mono">NO.{{comp.no}} · {{comp.track === 'subject' ? '学科竞赛' : '创新创业'}}赛道</view>
+    <view class="dt-title serif">{{comp.title}}</view>
+    <view class="org mono">主办：{{comp.host}}</view>
+  </view>
+</view>
+
+<!-- 档案读数 -->
+<view class="meta-grid">
+  <view class="meta-cell">
+    <small class="mono">LEVEL / 级别</small>
+    <b class="red serif">{{comp.levelName}}</b>
+  </view>
+  <view class="meta-cell">
+    <small class="mono">DEADLINE / 截止</small>
+    <b class="red serif">{{comp.deadline}}</b>
+  </view>
+</view>
+
+<!-- 赛程时间轴 -->
+<view class="sec-band"><span class="sq"></span><b>赛 程</b><span class="ln"></span></view>
+<view class="tl">
+  <view class="node {{item.now ? 'now' : ''}}" wx:for="{{comp.timeline}}" wx:key="name">
+    <view>
+      <b>{{item.name}}</b>
+      <small class="mono">{{item.range}}</small>
+    </view>
+  </view>
+</view>
+
+<!-- 队伍要求 -->
+<view class="sec-band"><span class="sq"></span><b>队 伍 要 求</b><span class="ln"></span></view>
+<view class="team-req">
+  <view class="tr-card" wx:for="{{comp.req}}" wx:key="b">
+    <text class="tr-ic">{{item.icon === 'team' ? '⧉' : '✪'}}</text>
+    <b class="serif">{{item.b}}</b>
+    <small>{{item.s}}</small>
+  </view>
+</view>
+
+<!-- 报名须知 -->
+<view class="sec-band"><span class="sq"></span><b>报 名 须 知</b><span class="ln"></span></view>
+<view class="notice">
+  提交后进入<b> {{chainName}} </b>：指导教师 → 系 → 院 → 校。驳回会退回上一级并<b>保留版本号</b>，重新提交生成 v2。逾期 48 小时未审自动催办。
+  <view class="notice-hand hand">← 这句是给学生看的重点</view>
+</view>
+
+<!-- 底部操作条 -->
+<view class="detail-foot">
+  <view class="fav-btn {{fav ? 'on' : ''}}" bindtap="toggleFav">★</view>
+  <button class="btn btn-ink apply-btn" bindtap="apply">立 即 报 名</button>
+  <view class="barcode" data-no="NO.{{comp.no}}"></view>
+</view>

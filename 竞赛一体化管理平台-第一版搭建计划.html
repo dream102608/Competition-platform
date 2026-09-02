@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>竞赛一体化管理平台 · 第一版（V1.0）搭建计划</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --text:#1f2329; --sub:#6b717c;
+    --line:#e5e6eb; --accent:#3a6df0; --accent-weak:#eef3fe;
+    --green:#0aa870; --green-weak:#e8f7f0; --orange:#e8734a; --orange-weak:#fdf0ea;
+    --purple:#7a5af8; --purple-weak:#f1ecfe;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:32px 16px 64px}
+  .wrap{max-width:1080px;margin:0 auto}
+  header.hero{background:linear-gradient(135deg,#3a6df0 0%,#6a4df0 100%);color:#fff;border-radius:16px;padding:36px 40px;margin-bottom:28px}
+  header.hero h1{font-size:26px;margin-bottom:8px}
+  header.hero p{opacity:.92;font-size:14px}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .meta span{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:4px 14px;font-size:12.5px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 32px;margin-bottom:24px}
+  section h2{font-size:19px;margin-bottom:4px;display:flex;align-items:center;gap:10px}
+  section h2 .no{background:var(--accent);color:#fff;border-radius:8px;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;flex:none}
+  section .lead{color:var(--sub);font-size:13.5px;margin-bottom:18px}
+  h3{font-size:15px;margin:20px 0 10px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+  th{background:#f2f4f8;text-align:left;padding:8px 10px;border:1px solid var(--line);font-weight:600;white-space:nowrap}
+  td{padding:8px 10px;border:1px solid var(--line);vertical-align:top}
+  tr:nth-child(even) td{background:#fafbfc}
+  .tag{display:inline-block;border-radius:6px;padding:1px 8px;font-size:12px;font-weight:600;white-space:nowrap}
+  .t-in{background:var(--green-weak);color:var(--green)}
+  .t-out{background:var(--orange-weak);color:var(--orange)}
+  .t-part{background:var(--purple-weak);color:var(--purple)}
+  .t-new{background:var(--accent-weak);color:var(--accent)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .callout{border-left:4px solid var(--accent);background:var(--accent-weak);border-radius:0 10px 10px 0;padding:14px 18px;font-size:13.5px;margin:14px 0}
+  .callout.green{border-color:var(--green);background:var(--green-weak)}
+  .callout.orange{border-color:var(--orange);background:var(--orange-weak)}
+  .svgbox{background:#fbfcfe;border:1px dashed var(--line);border-radius:12px;padding:18px;margin:14px 0;overflow-x:auto}
+  .phones{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between}
+  .phone{flex:0 0 auto;text-align:center}
+  .phone .cap{font-size:13px;font-weight:600;margin-top:8px}
+  .phone .cap small{display:block;color:var(--sub);font-weight:400;font-size:11.5px}
+  ul.tight{padding-left:20px;font-size:13.5px}
+  ul.tight li{margin:5px 0}
+  .km{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:14px}
+  .km .card{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fcfdff}
+  .km .card b{display:block;font-size:13.5px;margin-bottom:6px}
+  .km .card span{color:var(--sub);font-size:12.5px}
+  footer{text-align:center;color:var(--sub);font-size:12px;margin-top:8px}
+  @media (max-width:860px){.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>竞赛一体化管理平台 · 第一版（V1.0）搭建计划</h1>
+  <p>依据《WorkBuddy 搭建小程序教程》的 MVP 方法论，对《竞赛一体化管理平台》需求文档进行第一版裁剪与排期</p>
+  <div class="meta">
+    <span>版本：V1.0（MVP）</span><span>形态：微信小程序（云开发）</span><span>日期：2026-09-01</span>
+    <span>团队：产品 / 开发 / 测试 / 运维（学生团队）</span><span>工具：WorkBuddy + 微信开发者工具</span>
+  </div>
+</header>
+
+<!-- 1 定位 -->
+<section>
+  <h2><span class="no">1</span>项目定位与一句话定义</h2>
+  <p class="lead">教程第一课：先把产品压缩成一句话，再开始动手。</p>
+  <div class="callout">
+    <b>一句话定义：</b>这是一个面向<b>二级学院</b>师生、覆盖「发布 → 报名 → 多级审批 → 归档」主线的学生竞赛管理小程序，第一版先让<b>学生竞赛赛道</b>跑通全流程。
+  </div>
+  <ul class="tight">
+    <li><b>给谁用：</b>学院本科生/专科生（报名）、教师与辅导员（一级审批）、学赛负责人/教研室主任/副院长/院长（逐级审批）、管理员（运维）。</li>
+    <li><b>解决什么痛点：</b>纸质/Excel 报名审批不透明、进度不可查、驳回后反复跑腿、数据无法沉淀。</li>
+    <li><b>核心场景：</b>按专业/教研室维度查看数据，未来可扩展至全校。</li>
+    <li><b>V1.0 成功标准（验收口径）：</b>1 名学生可完成「注册 → 浏览竞赛 → 报名 → 被 5 级审批 → 看到报名成功」的完整闭环，全程线上可查。</li>
+  </ul>
+</section>
+
+<!-- 2 范围 -->
+<section>
+  <h2><span class="no">2</span>V1.0 范围裁剪（MVP 减法表）</h2>
+  <p class="lead">教程第二课：把脑海里所有功能写下来，再划掉一半。C（增）和 R（查）优先，U/D 留给下一版；队伍、培训、积分等大模块整体后移。</p>
+  <table>
+    <tr><th style="width:150px">模块</th><th>V1.0 是否纳入</th><th>说明 / 后移版本</th></tr>
+    <tr><td>微信登录 + 角色路由</td><td><span class="tag t-in">纳入</span></td><td>登录、10 种角色身份确认、底部 5 Tab、角色权限路由（平台文档阶段一）</td></tr>
+    <tr><td>竞赛大厅（双赛道）</td><td><span class="tag t-part">部分</span></td><td>双赛道切换 + 分类筛选 + 列表；教师赛道 V1.0 仅可浏览</td></tr>
+    <tr><td>竞赛详情 / 附件下载</td><td><span class="tag t-in">纳入</span></td><td>信息、赛程、附件、报名入口、已报名队伍（只读）</td></tr>
+    <tr><td>竞赛报名（个人/组队）</td><td><span class="tag t-in">纳入</span></td><td>表单、指导教师/辅导员可选，默认推荐规则</td></tr>
+    <tr><td>学生竞赛审批流（5 级）</td><td><span class="tag t-in">纳入</span></td><td>审批中心 + 驳回/撤回/版本号/手签字/超时催办云函数</td></tr>
+    <tr><td>教师竞赛审批流</td><td><span class="tag t-out">后移 V1.1</span></td><td>4 级 + 评审专家可跳过，与阶段三「六条审批流」一起做</td></tr>
+    <tr><td>数据收集 / Excel 导出</td><td><span class="tag t-out">后移 V1.1</span></td><td>教学秘书录入竞赛属性、Excel 归档</td></tr>
+    <tr><td>队伍空间 / 请假 / 培训</td><td><span class="tag t-out">后移 V1.2</span></td><td>阶段三、四内容</td></tr>
+    <tr><td>签到积分 / 商品兑换</td><td><span class="tag t-out">后移 V1.3</span></td><td>阶段四内容</td></tr>
+    <tr><td>知识广场 / 讨论互动</td><td><span class="tag t-out">后移 V2.0</span></td><td>阶段五内容</td></tr>
+    <tr><td>新闻动态 / 统计大屏</td><td><span class="tag t-out">后移 V2.1</span></td><td>阶段六内容（首页新闻位 V1.0 先留静态占位）</td></tr>
+    <tr><td>系统管理（完整后台）</td><td><span class="tag t-part">部分</span></td><td>V1.0 只做：用户管理（增删改查/角色分配/禁用）+ 操作日志；审批流配置、专家库等后移 V3.0</td></tr>
+  </table>
+  <div class="callout orange"><b>裁剪原则：</b>页面越少越好。V1.0 全部页面控制在 <b>10 个左右</b>，每新增一个页面都要能回答「不做它，主线能不能跑通」。</div>
+</section>
+
+<!-- 3 角色 -->
+<section>
+  <h2><span class="no">3</span>角色体系（10 种）与 V1.0 启用范围</h2>
+  <p class="lead">来自需求文档角色表；V1.0 全部角色都可登录，但审批链上仅启用学生竞赛一条流。</p>
+  <table>
+    <tr><th>编号</th><th>角色</th><th>核心职责</th><th>产生方式</th><th>V1.0</th></tr>
+    <tr><td>R1</td><td>学生（普通队员）</td><td>报名竞赛、签到打卡、发布知识点</td><td>注册自动获得</td><td><span class="tag t-in">启用</span></td></tr>
+    <tr><td>R1-C</td><td>队长</td><td>队伍管理、请假审批（一级/手签字）</td><td>创建队伍时自动成为</td><td><span class="tag t-part">仅身份</span>（队伍功能 V1.2）</td></tr>
+    <tr><td>R1-V</td><td>副队长</td><td>协助队长管理队伍</td><td>队长任命</td><td><span class="tag t-out">V1.2</span></td></tr>
+    <tr><td>R2</td><td>教师</td><td>指导学生、发布培训、审批学习培训、查看请假（只读）</td><td>注册自动获得</td><td><span class="tag t-in">启用（一级审批）</span></td></tr>
+    <tr><td>R2-F</td><td>辅导员</td><td>学生日常管理、审批请假（二级/手签字）、查看培训（只读）</td><td>注册自动获得</td><td><span class="tag t-in">启用（一级审批）</span></td></tr>
+    <tr><td>R3</td><td>学生竞赛负责人</td><td>发布学生竞赛、审批（第 2 级）、录入成绩</td><td>系统指定（需已注册）</td><td><span class="tag t-in">启用</span></td></tr>
+    <tr><td>R4</td><td>教学秘书</td><td>数据收集汇总、发布双赛道竞赛、Excel 归档</td><td>学院指定</td><td><span class="tag t-part">登录可用</span></td></tr>
+    <tr><td>R5</td><td>教研室主任</td><td>审批（第 3 级）、教学能力评估</td><td>学院指定</td><td><span class="tag t-in">启用</span></td></tr>
+    <tr><td>R6</td><td>教学副院长</td><td>审批（第 4 级）、本院数据完整权限</td><td>学院指定</td><td><span class="tag t-in">启用</span></td></tr>
+    <tr><td>R7</td><td>院长</td><td>最终审批、经费审批</td><td>学院指定</td><td><span class="tag t-in">启用</span></td></tr>
+    <tr><td>R8</td><td>评审专家</td><td>教师竞赛学术评审（可跳过）</td><td>管理员邀请</td><td><span class="tag t-out">V1.1</span></td></tr>
+    <tr><td>R9</td><td>管理员</td><td>系统管理、新闻审核发布、积分商品管理</td><td>系统内置</td><td><span class="tag t-in">启用（基础）</span></td></tr>
+  </table>
+</section>
+
+<!-- 4 流程图 -->
+<section>
+  <h2><span class="no">4</span>核心流程图</h2>
+  <p class="lead">教程产品视角：重点先画「打开 → 报名 → 审批 → 看到结果」这条主线，不追求面面俱到。</p>
+
+  <h3>4.1 V1.0 主线流程（用户视角）</h3>
+  <div class="svgbox">
+  <svg viewBox="0 0 980 900" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" style="min-width:880px;width:100%">
+    <defs>
+      <marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#8a93a6"/></marker>
+      <marker id="arG" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0aa870"/></marker>
+      <marker id="arO" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#e8734a"/></marker>
+    </defs>
+    <!-- 主线 -->
+    <g font-size="13">
+      <rect x="390" y="20"  width="200" height="42" rx="21" fill="#3a6df0"/><text x="490" y="46" fill="#fff" text-anchor="middle">打开小程序</text>
+      <rect x="390" y="92"  width="200" height="42" rx="10" fill="#eef3fe" stroke="#3a6df0"/><text x="490" y="118" fill="#1f2329" text-anchor="middle">微信一键登录（wx.login）</text>
+      <rect x="370" y="164" width="240" height="50" rx="10" fill="#fff" stroke="#d8dde8"/><text x="490" y="186" text-anchor="middle" fill="#1f2329">绑定身份：姓名 / 学号 / 专业</text><text x="490" y="204" text-anchor="middle" fill="#6b717c" font-size="11.5">选择并确认角色（10 种）</text>
+      <rect x="390" y="244" width="200" height="42" rx="10" fill="#fff" stroke="#d8dde8"/><text x="490" y="270" text-anchor="middle">进入首页（底部 5 Tab）</text>
+      <rect x="390" y="316" width="200" height="50" rx="10" fill="#fff" stroke="#d8dde8"/><text x="490" y="338" text-anchor="middle">竞赛大厅</text><text x="490" y="356" text-anchor="middle" fill="#6b717c" font-size="11.5">双赛道切换 + 状态 / 分类筛选</text>
+      <rect x="390" y="388" width="200" height="50" rx="10" fill="#fff" stroke="#d8dde8"/><text x="490" y="410" text-anchor="middle">竞赛详情</text><text x="490" y="428" text-anchor="middle" fill="#6b717c" font-size="11.5">信息 / 赛程 / 附件 / 已报名队伍</text>
+      <rect x="390" y="460" width="200" height="50" rx="10" fill="#fff" stroke="#d8dde8"/><text x="490" y="482" text-anchor="middle">填写报名表单</text><text x="490" y="500" text-anchor="middle" fill="#6b717c" font-size="11.5">个人 / 组队 · 选指导教师或辅导员</text>
+      <rect x="390" y="532" width="200" height="50" rx="10" fill="#eef3fe" stroke="#3a6df0"/><text x="490" y="554" text-anchor="middle">提交 → 生成审批单（V1）</text><text x="490" y="572" text-anchor="middle" fill="#6b717c" font-size="11.5">写入 registrations + approvals</text>
+      <rect x="390" y="604" width="200" height="42" rx="10" fill="#fff" stroke="#d8dde8"/><text x="490" y="630" text-anchor="middle">学生竞赛五级审批（见图 4.2）</text>
+      <!-- 判定 -->
+      <path d="M490 667 L490 700" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar)" fill="none"/>
+      <path d="M490 700 L560 745 L490 790 L420 745 Z" fill="#fff" stroke="#7a5af8" stroke-width="1.5"/>
+      <text x="490" y="750" text-anchor="middle" font-size="12.5" fill="#1f2329">审批结果</text>
+      <!-- 通过 -->
+      <rect x="680" y="724" width="220" height="42" rx="10" fill="#e8f7f0" stroke="#0aa870"/><text x="790" y="750" text-anchor="middle" fill="#0aa870" font-weight="600">报名成功 ✓ 状态可查</text>
+      <path d="M560 745 L676 745" stroke="#0aa870" stroke-width="1.5" marker-end="url(#arG)" fill="none"/>
+      <text x="618" y="736" text-anchor="middle" font-size="12" fill="#0aa870">通过</text>
+      <!-- 驳回 -->
+      <rect x="80" y="724" width="230" height="56" rx="10" fill="#fdf0ea" stroke="#e8734a"/><text x="195" y="748" text-anchor="middle" fill="#e8734a" font-weight="600">驳回 → 修改后重新提交</text><text x="195" y="766" text-anchor="middle" fill="#e8734a" font-size="11.5">版本号自动 +1（V2 / V3 …）</text>
+      <path d="M420 745 L314 745" stroke="#e8734a" stroke-width="1.5" marker-end="url(#arO)" fill="none"/>
+      <text x="368" y="736" text-anchor="middle" font-size="12" fill="#e8734a">驳回</text>
+      <path d="M195 724 L195 557 L386 557" stroke="#e8734a" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arO)" fill="none"/>
+      <text x="150" y="640" font-size="11.5" fill="#e8734a" transform="rotate(-90 150 640)" text-anchor="middle"></text>
+      <!-- 侧栏：我的 -->
+      <rect x="700" y="60" width="230" height="96" rx="12" fill="#f7f8fb" stroke="#d8dde8" stroke-dasharray="5 4"/>
+      <text x="815" y="88" text-anchor="middle" font-size="12.5" fill="#6b717c">「我的」页常驻入口</text>
+      <text x="815" y="110" text-anchor="middle" font-size="12.5" fill="#6b717c">我的报名（版本号 / 进度）</text>
+      <text x="815" y="132" text-anchor="middle" font-size="12.5" fill="#6b717c">我的审批（各级审批人）</text>
+      <path d="M590 625 L700 625 L700 158" stroke="#8a93a6" stroke-width="1.2" stroke-dasharray="4 4" fill="none"/>
+      <!-- 竖直箭头们 -->
+      <path d="M490 62 L490 88"  stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar)"/>
+      <path d="M490 134 L490 160" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar)"/>
+      <path d="M490 214 L490 240" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar)"/>
+      <path d="M490 286 L490 312" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar)"/>
+      <path d="M490 366 L490 384" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar)"/>
+      <path d="M490 438 L490 456" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar)"/>
+      <path d="M490 510 L490 528" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar)"/>
+      <path d="M490 582 L490 600" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar)"/>
+    </g>
+  </svg>
+  </div>
+
+  <h3>4.2 学生竞赛报名审批流（V1.0 核心引擎）</h3>
+  <p class="lead">五级链式审批，含驳回 / 撤回 / 版本号 / 超时催办四条特殊规则，是 V1.0 技术上最重的部分。</p>
+  <div class="svgbox">
+  <svg viewBox="0 0 980 720" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" style="min-width:880px;width:100%">
+    <defs>
+      <marker id="ar2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#8a93a6"/></marker>
+      <marker id="arO2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#e8734a"/></marker>
+      <marker id="arG2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0aa870"/></marker>
+    </defs>
+    <g font-size="13">
+      <!-- 发起 -->
+      <rect x="90" y="20" width="220" height="46" rx="23" fill="#3a6df0"/><text x="200" y="48" text-anchor="middle" fill="#fff">学生提交报名审批单（V1）</text>
+      <!-- L1 -->
+      <rect x="90" y="102" width="220" height="58" rx="10" fill="#fff" stroke="#d8dde8"/><text x="200" y="126" text-anchor="middle" font-weight="600">第 1 级：指导教师 / 辅导员</text><text x="200" y="146" text-anchor="middle" font-size="11.5" fill="#6b717c">必审 · 学生提交时选择（默认推荐）</text>
+      <!-- L2 -->
+      <rect x="90" y="192" width="220" height="58" rx="10" fill="#fff" stroke="#d8dde8"/><text x="200" y="216" text-anchor="middle" font-weight="600">第 2 级：学赛负责人</text><text x="200" y="236" text-anchor="middle" font-size="11.5" fill="#6b717c">必审</text>
+      <!-- L3 -->
+      <rect x="90" y="282" width="220" height="58" rx="10" fill="#fff" stroke="#d8dde8"/><text x="200" y="306" text-anchor="middle" font-weight="600">第 3 级：教研室主任</text><text x="200" y="326" text-anchor="middle" font-size="11.5" fill="#6b717c">校级及以上才触发</text>
+      <!-- L4 -->
+      <rect x="90" y="372" width="220" height="58" rx="10" fill="#fff" stroke="#d8dde8"/><text x="200" y="396" text-anchor="middle" font-weight="600">第 4 级：副院长</text><text x="200" y="416" text-anchor="middle" font-size="11.5" fill="#6b717c">省级及以上才触发</text>
+      <!-- L5 -->
+      <rect x="90" y="462" width="220" height="58" rx="10" fill="#fff" stroke="#d8dde8"/><text x="200" y="486" text-anchor="middle" font-weight="600">第 5 级：院长（终极）</text><text x="200" y="506" text-anchor="middle" font-size="11.5" fill="#6b717c">国家级触发 · 终极审批</text>
+      <!-- 成功 -->
+      <rect x="90" y="560" width="220" height="46" rx="23" fill="#e8f7f0" stroke="#0aa870"/><text x="200" y="588" text-anchor="middle" fill="#0aa870" font-weight="600">审批通过 → 报名成功 ✓</text>
+      <path d="M200 66 L200 98"  stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar2)"/>
+      <path d="M200 160 L200 188" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar2)"/>
+      <path d="M200 250 L200 278" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar2)"/>
+      <path d="M200 340 L200 368" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar2)"/>
+      <path d="M200 430 L200 458" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar2)"/>
+      <path d="M200 520 L200 556" stroke="#0aa870" stroke-width="1.8" marker-end="url(#arG2)"/><text x="212" y="544" font-size="11.5" fill="#0aa870">全链通过</text>
+      <!-- 驳回回路 -->
+      <path d="M310 131 L420 131" stroke="#e8734a" stroke-width="1.5" marker-end="url(#arO2)"/>
+      <text x="366" y="122" text-anchor="middle" font-size="12" fill="#e8734a">驳回</text>
+      <rect x="424" y="102" width="252" height="58" rx="10" fill="#fdf0ea" stroke="#e8734a"/>
+      <text x="550" y="126" text-anchor="middle" fill="#e8734a" font-weight="600">退回发起人 · 修改后重新提交</text><text x="550" y="146" text-anchor="middle" font-size="11.5" fill="#e8734a">版本号递增 V1→V2→V3…（任一级均含驳回）</text>
+      <path d="M424 131 L360 131 L360 43 L314 43" stroke="#e8734a" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arO2)" fill="none"/>
+      <!-- 撤回 -->
+      <rect x="424" y="200" width="252" height="74" rx="10" fill="#f1ecfe" stroke="#7a5af8"/>
+      <text x="550" y="226" text-anchor="middle" fill="#7a5af8" font-weight="600">撤回规则</text>
+      <text x="550" y="246" text-anchor="middle" font-size="11.5" fill="#6b717c">终极审批通过前：发起人可撤回</text>
+      <text x="550" y="264" text-anchor="middle" font-size="11.5" fill="#6b717c">终极审批通过后：不可撤回</text>
+      <path d="M310 221 L420 221" stroke="#7a5af8" stroke-width="1.2" stroke-dasharray="4 4" fill="none"/>
+      <!-- 超时 -->
+      <rect x="424" y="300" width="252" height="74" rx="10" fill="#f7f8fb" stroke="#d8dde8"/>
+      <text x="550" y="326" text-anchor="middle" fill="#1f2329" font-weight="600">超时处理（每一级相同）</text>
+      <text x="550" y="346" text-anchor="middle" font-size="11.5" fill="#6b717c">催办 ×3 → 自动上报</text>
+      <text x="550" y="364" text-anchor="middle" font-size="11.5" fill="#6b717c">云函数定时任务实现（阶段一预告）</text>
+      <path d="M310 311 L420 311" stroke="#8a93a6" stroke-width="1.2" stroke-dasharray="4 4" fill="none"/>
+      <!-- 手签字 -->
+      <rect x="424" y="400" width="252" height="60" rx="10" fill="#f7f8fb" stroke="#d8dde8"/>
+      <text x="550" y="424" text-anchor="middle" fill="#1f2329" font-weight="600">审批操作</text>
+      <text x="550" y="444" text-anchor="middle" font-size="11.5" fill="#6b717c">通过 / 驳回（填原因）+ 手写签名组件</text>
+      <path d="M310 411 L420 411" stroke="#8a93a6" stroke-width="1.2" stroke-dasharray="4 4" fill="none"/>
+      <!-- 一级匹配 -->
+      <rect x="424" y="486" width="252" height="60" rx="10" fill="#eef3fe" stroke="#3a6df0"/>
+      <text x="550" y="510" text-anchor="middle" fill="#3a6df0" font-weight="600">第 1 级审批人匹配</text>
+      <text x="550" y="530" text-anchor="middle" font-size="11.5" fill="#3a6df0">有指导教师→优先教师；无→辅导员</text>
+      <path d="M310 131 L370 131 L370 516 L420 516" stroke="#8a93a6" stroke-width="0" fill="none"/>
+      <!-- 底注 -->
+      <text x="90" y="660" font-size="12" fill="#6b717c">触发条件按竞赛级别自动裁剪链路：校级以下仅 1–2 级；国家级走满 5 级。</text>
+    </g>
+  </svg>
+  </div>
+
+  <h3>4.3 六阶段协作流程（谁先干什么）</h3>
+  <p class="lead">教程「六动」时间轴：产品先动、运维搭台、开发写码、测试找 Bug、产品+运维上线、产品+运营收反馈。</p>
+  <div class="svgbox">
+  <svg viewBox="0 0 980 250" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" style="min-width:880px;width:100%">
+    <defs><marker id="ar3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#8a93a6"/></marker></defs>
+    <line x1="60" y1="120" x2="930" y2="120" stroke="#d8dde8" stroke-width="3"/>
+    <g font-size="12.5" text-anchor="middle">
+      <circle cx="110" cy="120" r="26" fill="#3a6df0"/><text x="110" y="116" fill="#fff">① 产品</text><text x="110" y="132" fill="#fff" font-size="10.5">先动</text>
+      <rect x="40" y="160" width="140" height="58" rx="8" fill="#fff" stroke="#d8dde8"/><text x="110" y="182" font-size="11.5">定范围、画流程图</text><text x="110" y="200" font-size="11.5" fill="#6b717c">本计划 + 原型图</text>
+      <circle cx="260" cy="120" r="26" fill="#7a5af8"/><text x="260" y="116" fill="#fff">② 运维</text><text x="260" y="132" fill="#fff" font-size="10.5">搭台</text>
+      <rect x="190" y="160" width="140" height="58" rx="8" fill="#fff" stroke="#d8dde8"/><text x="260" y="182" font-size="11.5">装 WorkBuddy+技能包</text><text x="260" y="200" font-size="11.5" fill="#6b717c">注册小程序、开云开发</text>
+      <circle cx="410" cy="120" r="26" fill="#0aa870"/><text x="410" y="116" fill="#fff">③ 开发</text><text x="410" y="132" fill="#fff" font-size="10.5">写码</text>
+      <rect x="340" y="160" width="140" height="58" rx="8" fill="#fff" stroke="#d8dde8"/><text x="410" y="182" font-size="11.5">WorkBuddy 生成代码</text><text x="410" y="200" font-size="11.5" fill="#6b717c">按阶段一→二推进</text>
+      <circle cx="560" cy="120" r="26" fill="#e8734a"/><text x="560" y="116" fill="#fff">④ 测试</text><text x="560" y="132" fill="#fff" font-size="10.5">找 Bug</text>
+      <rect x="490" y="160" width="140" height="58" rx="8" fill="#fff" stroke="#d8dde8"/><text x="560" y="182" font-size="11.5">边界用例、控制台</text><text x="560" y="200" font-size="11.5" fill="#6b717c">报错排查（见 §9）</text>
+      <circle cx="710" cy="120" r="26" fill="#3a6df0"/><text x="710" y="112" fill="#fff" font-size="10.5">⑤ 产品</text><text x="710" y="126" fill="#fff" font-size="10.5">+运维</text><text x="710" y="140" fill="#fff" font-size="10.5">上线</text>
+      <rect x="640" y="160" width="140" height="58" rx="8" fill="#fff" stroke="#d8dde8"/><text x="710" y="182" font-size="11.5">协议/截图/类目</text><text x="710" y="200" font-size="11.5" fill="#6b717c">提审微信（见 §8）</text>
+      <circle cx="860" cy="120" r="26" fill="#7a5af8"/><text x="860" y="112" fill="#fff" font-size="10.5">⑥ 产品</text><text x="860" y="126" fill="#fff" font-size="10.5">+运营</text><text x="860" y="140" fill="#fff" font-size="10.5">反馈</text>
+      <rect x="790" y="160" width="140" height="58" rx="8" fill="#fff" stroke="#d8dde8"/><text x="860" y="182" font-size="11.5">收集反馈</text><text x="860" y="200" font-size="11.5" fill="#6b717c">规划 V1.1 需求池</text>
+      <path d="M136 120 L232 120" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar3)"/>
+      <path d="M286 120 L382 120" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar3)"/>
+      <path d="M436 120 L532 120" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar3)"/>
+      <path d="M586 120 L682 120" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar3)"/>
+      <path d="M736 120 L832 120" stroke="#8a93a6" stroke-width="1.5" marker-end="url(#ar3)"/>
+    </g>
+  </svg>
+  </div>
+</section>
+
+<!-- 5 原型图 -->
+<section>
+  <h2><span class="no">5</span>V1.0 页面原型图（小程序线框）</h2>
+  <p class="lead">先画主线页面：登录 → 首页 → 竞赛大厅 → 详情 → 报名 → 审批 → 我的，共 7 屏。样式细节交给 WorkBuddy 生成时再定。</p>
+  <div class="phones">
+
+    <!-- P1 登录 -->
+    <div class="phone">
+    <svg viewBox="0 0 240 480" width="220" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+      <rect x="0" y="0" width="240" height="480" rx="20" fill="#fff" stroke="#d8dde8"/>
+      <rect x="0" y="0" width="240" height="24" rx="20" fill="#f2f4f8"/><text x="120" y="16" font-size="9" fill="#6b717c" text-anchor="middle">9:41</text>
+      <circle cx="120" y="96" cy="96" r="30" fill="#eef3fe" stroke="#3a6df0"/>
+      <text x="120" y="104" font-size="20" text-anchor="middle" fill="#3a6df0">🏆</text>
+      <text x="120" y="152" font-size="14" text-anchor="middle" font-weight="600">竞赛一体化管理平台</text>
+      <text x="120" y="170" font-size="10" text-anchor="middle" fill="#6b717c">学院 · 学生/教师竞赛全流程管理</text>
+      <rect x="30" y="200" width="180" height="40" rx="20" fill="#07c160"/>
+      <text x="120" y="225" font-size="13" text-anchor="middle" fill="#fff">微信一键登录</text>
+      <text x="30" y="272" font-size="11" fill="#6b717c">请选择你的身份（首次登录）</text>
+      <rect x="30" y="284" width="180" height="30" rx="8" fill="#f7f8fb" stroke="#d8dde8"/><text x="40" y="304" font-size="11">👤 学生（队员/队长）</text>
+      <rect x="30" y="320" width="180" height="30" rx="8" fill="#f7f8fb" stroke="#d8dde8"/><text x="40" y="340" font-size="11">👨‍🏫 教师 / 辅导员</text>
+      <rect x="30" y="356" width="180" height="30" rx="8" fill="#f7f8fb" stroke="#d8dde8"/><text x="40" y="376" font-size="11">📋 学赛负责人/秘书/主任…</text>
+      <rect x="30" y="392" width="180" height="30" rx="8" fill="#f7f8fb" stroke="#d8dde8"/><text x="40" y="412" font-size="11">🛡 管理员</text>
+      <text x="120" y="452" font-size="9" text-anchor="middle" fill="#a0a6b3">登录后进入身份信息绑定（姓名/学号/专业）</text>
+    </svg>
+    <div class="cap">P1 登录 / 角色选择<small>微信登录 + 10 角色入口</small></div>
+    </div>
+
+    <!-- P2 首页 -->
+    <div class="phone">
+    <svg viewBox="0 0 240 480" width="220" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+      <rect x="0" y="0" width="240" height="480" rx="20" fill="#fff" stroke="#d8dde8"/>
+      <rect x="0" y="0" width="240" height="24" rx="20" fill="#f2f4f8"/><text x="120" y="16" font-size="9" fill="#6b717c" text-anchor="middle">9:41</text>
+      <text x="16" y="48" font-size="13" font-weight="600">你好，张同学 👋</text>
+      <text x="16" y="64" font-size="9" fill="#6b717c">计算机科学与技术专业 · 学生</text>
+      <rect x="16" y="74" width="208" height="30" rx="15" fill="#f7f8fb" stroke="#d8dde8"/><text x="28" y="93" font-size="10" fill="#a0a6b3">🔍 搜索竞赛 / 队伍 / 知识点</text>
+      <rect x="16" y="114" width="208" height="44" rx="10" fill="#eef3fe"/>
+      <text x="28" y="132" font-size="10" font-weight="600" fill="#3a6df0">📢 新闻动态（最新 5 条）</text>
+      <text x="28" y="148" font-size="9" fill="#6b717c">喜报：我院学子获蓝桥杯国赛一等奖 ›</text>
+      <g font-size="9.5" text-anchor="middle">
+        <rect x="16"  y="168" width="48" height="48" rx="10" fill="#f2f4f8"/><text x="40" y="190">🏟</text><text x="40" y="206" fill="#1f2329">竞赛大厅</text>
+        <rect x="72"  y="168" width="48" height="48" rx="10" fill="#f2f4f8"/><text x="96" y="190">✅</text><text x="96" y="206" fill="#1f2329">审批中心</text>
+        <rect x="128" y="168" width="48" height="48" rx="10" fill="#f2f4f8"/><text x="152" y="190">📝</text><text x="152" y="206" fill="#6b717c">签到</text>
+        <rect x="184" y="168" width="48" height="48" rx="10" fill="#f2f4f8"/><text x="208" y="190">⭐</text><text x="208" y="206" fill="#6b717c">积分</text>
+        <rect x="16"  y="224" width="48" height="48" rx="10" fill="#f2f4f8"/><text x="40" y="246">📚</text><text x="40" y="262" fill="#6b717c">知识广场</text>
+        <rect x="72"  y="224" width="48" height="48" rx="10" fill="#f2f4f8"/><text x="96" y="246">👥</text><text x="96" y="262" fill="#6b717c">我的队伍</text>
+        <rect x="128" y="224" width="48" height="48" rx="10" fill="#f2f4f8"/><text x="152" y="246">🎓</text><text x="152" y="262" fill="#6b717c">培训</text>
+        <rect x="184" y="224" width="48" height="48" rx="10" fill="#f2f4f8"/><text x="208" y="246">📊</text><text x="208" y="262" fill="#6b717c">统计</text>
+      </g>
+      <text x="16" y="296" font-size="11" font-weight="600">报名中的竞赛</text>
+      <rect x="16" y="304" width="208" height="52" rx="10" fill="#fff" stroke="#e5e6eb"/>
+      <text x="28" y="324" font-size="10.5" font-weight="600">蓝桥杯程序设计大赛</text>
+      <text x="28" y="340" font-size="9" fill="#6b717c">省级 · 团队赛 · 距报名截止 5 天</text>
+      <rect x="160" y="330" width="52" height="18" rx="9" fill="#e8f7f0"/><text x="186" y="343" font-size="8.5" fill="#0aa870" text-anchor="middle">报名中</text>
+      <rect x="16" y="364" width="208" height="52" rx="10" fill="#fff" stroke="#e5e6eb"/>
+      <text x="28" y="384" font-size="10.5" font-weight="600">全国大学生数学建模竞赛</text>
+      <text x="28" y="400" font-size="9" fill="#6b717c">国家级 · 团队赛 · 距报名截止 12 天</text>
+      <rect x="160" y="390" width="52" height="18" rx="9" fill="#e8f7f0"/><text x="186" y="403" font-size="8.5" fill="#0aa870" text-anchor="middle">报名中</text>
+      <!-- TabBar -->
+      <rect x="0" y="432" width="240" height="48" rx="0" fill="#fafbfc" stroke="#e5e6eb"/>
+      <g font-size="8.5" text-anchor="middle" fill="#a0a6b3">
+        <text x="26" y="452">🏠</text><text x="26" y="466">首页</text>
+        <text x="74" y="452">🏟</text><text x="74" y="466">竞赛</text>
+        <text x="122" y="452">📚</text><text x="122" y="466">学习</text>
+        <text x="170" y="452">👥</text><text x="170" y="466">队伍</text>
+        <text x="216" y="452">👤</text><text x="216" y="466">我的</text>
+      </g>
+      <text x="26" y="446" font-size="8.5" fill="#3a6df0" text-anchor="middle" font-weight="700">·</text>
+    </svg>
+    <div class="cap">P2 首页<small>新闻条 + 宫格 + 报名中列表</small></div>
+    </div>
+
+    <!-- P3 竞赛大厅 -->
+    <div class="phone">
+    <svg viewBox="0 0 240 480" width="220" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+      <rect x="0" y="0" width="240" height="480" rx="20" fill="#fff" stroke="#d8dde8"/>
+      <rect x="0" y="0" width="240" height="24" rx="20" fill="#f2f4f8"/><text x="120" y="16" font-size="9" fill="#6b717c" text-anchor="middle">9:41</text>
+      <text x="16" y="48" font-size="14" font-weight="600">竞赛大厅</text>
+      <rect x="16" y="58" width="208" height="30" rx="15" fill="#f2f4f8"/>
+      <rect x="18" y="60" width="100" height="26" rx="13" fill="#3a6df0"/><text x="68" y="77" font-size="10.5" fill="#fff" text-anchor="middle">学生竞赛</text>
+      <text x="178" y="77" font-size="10.5" fill="#6b717c" text-anchor="middle">教师竞赛</text>
+      <g font-size="9">
+        <rect x="16"  y="96" width="46" height="22" rx="11" fill="#eef3fe" stroke="#3a6df0"/><text x="39" y="110" text-anchor="middle" fill="#3a6df0">全部</text>
+        <rect x="68"  y="96" width="46" height="22" rx="11" fill="#f7f8fb" stroke="#e5e6eb"/><text x="91" y="110" text-anchor="middle" fill="#6b717c">报名中</text>
+        <rect x="120" y="96" width="46" height="22" rx="11" fill="#f7f8fb" stroke="#e5e6eb"/><text x="143" y="110" text-anchor="middle" fill="#6b717c">进行中</text>
+        <rect x="172" y="96" width="52" height="22" rx="11" fill="#f7f8fb" stroke="#e5e6eb"/><text x="198" y="110" text-anchor="middle" fill="#6b717c">已结束</text>
+      </g>
+      <g>
+        <rect x="16" y="130" width="208" height="86" rx="10" fill="#fff" stroke="#e5e6eb"/>
+        <rect x="26" y="140" width="188" height="30" rx="6" fill="#f2f4f8"/><text x="120" y="159" font-size="9" fill="#a0a6b3" text-anchor="middle">竞赛封面图</text>
+        <text x="26" y="188" font-size="11" font-weight="600">中国国际大学生创新大赛</text>
+        <text x="26" y="205" font-size="9" fill="#6b717c">国家级 · 团队赛 · 教育部名单赛事</text>
+        <rect x="160" y="196" width="56" height="18" rx="9" fill="#e8f7f0"/><text x="188" y="209" font-size="8.5" fill="#0aa870" text-anchor="middle">报名中</text>
+        <rect x="16" y="226" width="208" height="86" rx="10" fill="#fff" stroke="#e5e6eb"/>
+        <rect x="26" y="236" width="188" height="30" rx="6" fill="#f2f4f8"/><text x="120" y="255" font-size="9" fill="#a0a6b3" text-anchor="middle">竞赛封面图</text>
+        <text x="26" y="284" font-size="11" font-weight="600">ACM-ICPC 区域赛</text>
+        <text x="26" y="301" font-size="9" fill="#6b717c">省级 · 个人赛 · 计算机教研室主办</text>
+        <rect x="160" y="292" width="56" height="18" rx="9" fill="#eef3fe"/><text x="188" y="305" font-size="8.5" fill="#3a6df0" text-anchor="middle">进行中</text>
+        <rect x="16" y="322" width="208" height="86" rx="10" fill="#fff" stroke="#e5e6eb"/>
+        <rect x="26" y="332" width="188" height="30" rx="6" fill="#f2f4f8"/><text x="120" y="351" font-size="9" fill="#a0a6b3" text-anchor="middle">竞赛封面图</text>
+        <text x="26" y="380" font-size="11" font-weight="600">校级程序设计新生赛</text>
+        <text x="26" y="397" font-size="9" fill="#6b717c">校级 · 个人赛 · 距报名截止 3 天</text>
+        <rect x="160" y="388" width="56" height="18" rx="9" fill="#e8f7f0"/><text x="188" y="401" font-size="8.5" fill="#0aa870" text-anchor="middle">报名中</text>
+      </g>
+      <rect x="0" y="432" width="240" height="48" fill="#fafbfc" stroke="#e5e6eb"/>
+      <g font-size="8.5" text-anchor="middle" fill="#a0a6b3">
+        <text x="26" y="452">🏠</text><text x="26" y="466">首页</text>
+        <text x="74" y="452">🏟</text><text x="74" y="466">竞赛</text>
+        <text x="122" y="452">📚</text><text x="122" y="466">学习</text>
+        <text x="170" y="452">👥</text><text x="170" y="466">队伍</text>
+        <text x="216" y="452">👤</text><text x="216" y="466">我的</text>
+      </g>
+      <circle cx="74" cy="448" r="2" fill="#3a6df0"/>
+    </svg>
+    <div class="cap">P3 竞赛大厅<small>双赛道 Tab + 状态筛选</small></div>
+    </div>
+
+    <!-- P4 竞赛详情 -->
+    <div class="phone">
+    <svg viewBox="0 0 240 480" width="220" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+      <rect x="0" y="0" width="240" height="480" rx="20" fill="#fff" stroke="#d8dde8"/>
+      <rect x="0" y="0" width="240" height="24" rx="20" fill="#f2f4f8"/><text x="120" y="16" font-size="9" fill="#6b717c" text-anchor="middle">9:41</text>
+      <text x="16" y="20" font-size="12" fill="#6b717c">‹ 返回</text>
+      <rect x="16" y="30" width="208" height="90" rx="10" fill="#eef3fe"/>
+      <text x="120" y="80" font-size="24" text-anchor="middle">🏟</text>
+      <text x="120" y="102" font-size="9" fill="#6b717c" text-anchor="middle">竞赛封面</text>
+      <text x="16" y="142" font-size="13" font-weight="600">中国国际大学生创新大赛（2026）</text>
+      <g font-size="9.5" fill="#6b717c">
+        <rect x="16" y="152" width="46" height="20" rx="10" fill="#fdf0ea"/><text x="39" y="166" text-anchor="middle" fill="#e8734a">国家级</text>
+        <rect x="68" y="152" width="46" height="20" rx="10" fill="#eef3fe"/><text x="91" y="166" text-anchor="middle" fill="#3a6df0">团队赛</text>
+        <rect x="120" y="152" width="70" height="20" rx="10" fill="#e8f7f0"/><text x="155" y="166" text-anchor="middle" fill="#0aa870">教育部名单 ✓</text>
+      </g>
+      <text x="16" y="194" font-size="11" font-weight="600">赛程安排</text>
+      <rect x="16" y="202" width="208" height="70" rx="8" fill="#f7f8fb"/>
+      <text x="28" y="222" font-size="9.5">报名时间：09-01 ~ 09-20</text>
+      <text x="28" y="240" font-size="9.5">初赛：10-15（线上）</text>
+      <text x="28" y="258" font-size="9.5">决赛：11-20（线下 · 某某大学）</text>
+      <text x="16" y="294" font-size="11" font-weight="600">竞赛附件</text>
+      <rect x="16" y="302" width="208" height="28" rx="8" fill="#f7f8fb"/><text x="28" y="320" font-size="9.5">📎 2026大赛通知.pdf　⬇ 下载</text>
+      <text x="16" y="352" font-size="11" font-weight="600">已报名队伍（12）</text>
+      <rect x="16" y="360" width="100" height="40" rx="8" fill="#f2f4f8"/><text x="66" y="378" font-size="9" text-anchor="middle">「星火队」 5人</text><text x="66" y="392" font-size="8" text-anchor="middle" fill="#6b717c">指导教师：李老师</text>
+      <rect x="124" y="360" width="100" height="40" rx="8" fill="#f2f4f8"/><text x="174" y="378" font-size="9" text-anchor="middle">「破晓队」 4人</text><text x="174" y="392" font-size="8" text-anchor="middle" fill="#6b717c">指导教师：王老师</text>
+      <rect x="0" y="418" width="240" height="62" fill="#fff" stroke="#e5e6eb"/>
+      <rect x="16" y="432" width="88" height="34" rx="17" fill="#f7f8fb" stroke="#e5e6eb"/><text x="60" y="453" font-size="10" text-anchor="middle" fill="#6b717c">收藏 ⭐</text>
+      <rect x="112" y="432" width="112" height="34" rx="17" fill="#3a6df0"/><text x="168" y="453" font-size="11" text-anchor="middle" fill="#fff">立即报名</text>
+    </svg>
+    <div class="cap">P4 竞赛详情<small>信息 / 赛程 / 附件 / 队伍</small></div>
+    </div>
+
+    <!-- P5 报名表单 -->
+    <div class="phone">
+    <svg viewBox="0 0 240 480" width="220" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+      <rect x="0" y="0" width="240" height="480" rx="20" fill="#fff" stroke="#d8dde8"/>
+      <rect x="0" y="0" width="240" height="24" rx="20" fill="#f2f4f8"/><text x="120" y="16" font-size="9" fill="#6b717c" text-anchor="middle">9:41</text>
+      <text x="16" y="20" font-size="12" fill="#6b717c">‹ 返回</text>
+      <text x="16" y="52" font-size="14" font-weight="600">竞赛报名</text>
+      <text x="16" y="68" font-size="9" fill="#6b717c">中国国际大学生创新大赛（2026）· 团队赛</text>
+      <text x="16" y="96" font-size="11" font-weight="600">报名方式</text>
+      <rect x="16" y="104" width="96" height="30" rx="8" fill="#eef3fe" stroke="#3a6df0"/><text x="64" y="123" font-size="10" text-anchor="middle" fill="#3a6df0">● 组队报名</text>
+      <rect x="120" y="104" width="104" height="30" rx="8" fill="#f7f8fb" stroke="#e5e6eb"/><text x="172" y="123" font-size="10" text-anchor="middle" fill="#6b717c">○ 个人报名</text>
+      <text x="16" y="158" font-size="11" font-weight="600">队伍信息</text>
+      <rect x="16" y="166" width="208" height="30" rx="8" fill="#f7f8fb" stroke="#e5e6eb"/><text x="28" y="185" font-size="10">队伍名称：星火队</text>
+      <rect x="16" y="202" width="208" height="44" rx="8" fill="#f7f8fb" stroke="#e5e6eb"/>
+      <text x="28" y="220" font-size="10">队员（3/5）：张三 · 李四 · 王五</text>
+      <text x="28" y="238" font-size="9" fill="#3a6df0">+ 邀请队员（成员上限 5 人）</text>
+      <text x="16" y="272" font-size="11" font-weight="600">第一级审批人（必选其一）</text>
+      <rect x="16" y="280" width="208" height="30" rx="8" fill="#eef3fe" stroke="#3a6df0"/><text x="28" y="299" font-size="10">● 指导教师：李老师（推荐）</text>
+      <rect x="16" y="316" width="208" height="30" rx="8" fill="#f7f8fb" stroke="#e5e6eb"/><text x="28" y="335" font-size="10">○ 辅导员：赵老师</text>
+      <text x="16" y="362" font-size="9" fill="#6b717c">系统默认推荐：有指导教师→优先教师；无→辅导员</text>
+      <rect x="16" y="374" width="16" height="16" rx="4" fill="#eef3fe" stroke="#3a6df0"/><path d="M20 381 l4 4 l7 -8" stroke="#3a6df0" stroke-width="2" fill="none"/>
+      <text x="40" y="387" font-size="9.5">已阅读并同意《参赛承诺书》《用户协议》《隐私政策》</text>
+      <rect x="16" y="408" width="208" height="40" rx="20" fill="#3a6df0"/><text x="120" y="433" font-size="12" text-anchor="middle" fill="#fff">提交报名</text>
+      <text x="120" y="466" font-size="9" text-anchor="middle" fill="#a0a6b3">提交后进入五级审批，可在「我的-报名记录」查看进度</text>
+    </svg>
+    <div class="cap">P5 报名表单<small>组队 / 个人 + 一级审批人选择</small></div>
+    </div>
+
+    <!-- P6 审批中心 -->
+    <div class="phone">
+    <svg viewBox="0 0 240 480" width="220" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+      <rect x="0" y="0" width="240" height="480" rx="20" fill="#fff" stroke="#d8dde8"/>
+      <rect x="0" y="0" width="240" height="24" rx="20" fill="#f2f4f8"/><text x="120" y="16" font-size="9" fill="#6b717c" text-anchor="middle">9:41</text>
+      <text x="16" y="48" font-size="14" font-weight="600">审批中心</text>
+      <text x="196" y="48" font-size="9.5" fill="#3a6df0">学赛负责人 · 李老师</text>
+      <g font-size="10">
+        <rect x="16" y="60" width="64" height="24" rx="12" fill="#eef3fe" stroke="#3a6df0"/><text x="48" y="76" text-anchor="middle" fill="#3a6df0">待审批 3</text>
+        <rect x="86" y="60" width="64" height="24" rx="12" fill="#f7f8fb" stroke="#e5e6eb"/><text x="118" y="76" text-anchor="middle" fill="#6b717c">已审批</text>
+        <rect x="156" y="60" width="68" height="24" rx="12" fill="#f7f8fb" stroke="#e5e6eb"/><text x="190" y="76" text-anchor="middle" fill="#6b717c">我发起的</text>
+      </g>
+      <rect x="16" y="96" width="208" height="88" rx="10" fill="#fff" stroke="#e5e6eb"/>
+      <text x="28" y="118" font-size="11" font-weight="600">张三 · 「星火队」报名</text>
+      <text x="28" y="134" font-size="9.5" fill="#6b717c">中国国际大学生创新大赛 · V1（第 2 级待审）</text>
+      <text x="28" y="150" font-size="9" fill="#e8734a">⏰ 停留 36 小时 · 已催办 1 次</text>
+      <rect x="28" y="158" width="60" height="20" rx="10" fill="#e8f7f0"/><text x="58" y="172" font-size="9" fill="#0aa870" text-anchor="middle">通过</text>
+      <rect x="96" y="158" width="60" height="20" rx="10" fill="#fdf0ea"/><text x="126" y="172" font-size="9" fill="#e8734a" text-anchor="middle">驳回</text>
+      <rect x="164" y="158" width="48" height="20" rx="10" fill="#f2f4f8"/><text x="188" y="172" font-size="9" fill="#6b717c" text-anchor="middle">详情</text>
+      <rect x="16" y="194" width="208" height="88" rx="10" fill="#fff" stroke="#e5e6eb"/>
+      <text x="28" y="216" font-size="11" font-weight="600">李四 · 个人报名</text>
+      <text x="28" y="232" font-size="9.5" fill="#6b717c">ACM-ICPC 区域赛 · V2（第 2 级待审）</text>
+      <text x="28" y="248" font-size="9" fill="#7a5af8">↺ V1 被驳回后修改重新提交</text>
+      <rect x="28" y="256" width="60" height="20" rx="10" fill="#e8f7f0"/><text x="58" y="270" font-size="9" fill="#0aa870" text-anchor="middle">通过</text>
+      <rect x="96" y="256" width="60" height="20" rx="10" fill="#fdf0ea"/><text x="126" y="270" font-size="9" fill="#e8734a" text-anchor="middle">驳回</text>
+      <rect x="164" y="256" width="48" height="20" rx="10" fill="#f2f4f8"/><text x="188" y="270" font-size="9" fill="#6b717c" text-anchor="middle">详情</text>
+      <rect x="16" y="292" width="208" height="128" rx="10" fill="#fafbff" stroke="#d8dde8" stroke-dasharray="5 4"/>
+      <text x="28" y="314" font-size="11" font-weight="600">审批详情（点开卡片）</text>
+      <text x="28" y="332" font-size="9" fill="#6b717c">审批轨迹：L1 指导教师 ✓ → L2 待审 → L3 L4 L5</text>
+      <text x="28" y="348" font-size="9" fill="#6b717c">版本：V1 · 提交时间 09-01 10:24</text>
+      <rect x="28" y="358" width="184" height="40" rx="8" fill="#fff" stroke="#e5e6eb"/>
+      <text x="36" y="374" font-size="9" fill="#6b717c">手写签名区（canvas 签字板）</text>
+      <path d="M50 390 q8 -10 16 0 q6 -8 14 0" stroke="#3a6df0" stroke-width="1.5" fill="none"/>
+      <text x="28" y="412" font-size="9" fill="#a0a6b3">驳回时必须填写原因；通过需签名确认</text>
+      <rect x="0" y="432" width="240" height="48" fill="#fafbfc" stroke="#e5e6eb"/>
+      <g font-size="8.5" text-anchor="middle" fill="#a0a6b3">
+        <text x="26" y="452">🏠</text><text x="26" y="466">首页</text>
+        <text x="74" y="452">🏟</text><text x="74" y="466">竞赛</text>
+        <text x="122" y="452">📚</text><text x="122" y="466">学习</text>
+        <text x="170" y="452">👥</text><text x="170" y="466">队伍</text>
+        <text x="216" y="452">👤</text><text x="216" y="466">我的</text>
+      </g>
+    </svg>
+    <div class="cap">P6 审批中心<small>待办列表 + 轨迹 + 手签字</small></div>
+    </div>
+
+    <!-- P7 我的 -->
+    <div class="phone">
+    <svg viewBox="0 0 240 480" width="220" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+      <rect x="0" y="0" width="240" height="480" rx="20" fill="#fff" stroke="#d8dde8"/>
+      <rect x="0" y="0" width="240" height="24" rx="20" fill="#f2f4f8"/><text x="120" y="16" font-size="9" fill="#6b717c" text-anchor="middle">9:41</text>
+      <circle cx="48" cy="64" r="22" fill="#eef3fe"/><text x="48" y="70" font-size="16" text-anchor="middle">👤</text>
+      <text x="80" y="58" font-size="12" font-weight="600">张三</text>
+      <text x="80" y="74" font-size="9" fill="#6b717c">2023级 · 计算机科学与技术 · 学生</text>
+      <rect x="80" y="80" width="60" height="16" rx="8" fill="#eef3fe"/><text x="110" y="92" font-size="8" fill="#3a6df0" text-anchor="middle">已实名认证</text>
+      <text x="16" y="120" font-size="11" font-weight="600">我的报名（审批进度）</text>
+      <rect x="16" y="128" width="208" height="66" rx="10" fill="#fff" stroke="#e5e6eb"/>
+      <text x="28" y="148" font-size="10.5" font-weight="600">中国国际大学生创新大赛 · 星火队</text>
+      <text x="28" y="164" font-size="9" fill="#6b717c">V1 · L2 学赛负责人审批中 · 已 36h</text>
+      <rect x="28" y="170" width="184" height="8" rx="4" fill="#f2f4f8"/><rect x="28" y="170" width="74" height="8" rx="4" fill="#3a6df0"/>
+      <text x="196" y="178" font-size="8" fill="#6b717c" text-anchor="end">2/5 级</text>
+      <rect x="16" y="204" width="208" height="52" rx="10" fill="#fff" stroke="#e5e6eb"/>
+      <text x="28" y="224" font-size="10.5" font-weight="600">ACM-ICPC 区域赛 · 个人</text>
+      <text x="28" y="240" font-size="9" fill="#e8734a">V2 · L1 被驳回：附件材料不全（点击修改重报）</text>
+      <g font-size="10">
+        <rect x="16" y="268" width="208" height="40" rx="10" fill="#f7f8fb"/><text x="32" y="292">✅ 我的审批（待办 3）</text><text x="216" y="292" fill="#a0a6b3" text-anchor="end">›</text>
+        <rect x="16" y="314" width="208" height="40" rx="10" fill="#f7f8fb"/><text x="32" y="338">👥 我的队伍（V1.2 开放）</text><text x="216" y="338" fill="#a0a6b3" text-anchor="end">›</text>
+        <rect x="16" y="360" width="208" height="40" rx="10" fill="#f7f8fb"/><text x="32" y="384">⭐ 我的积分（V1.3 开放）</text><text x="216" y="384" fill="#a0a6b3" text-anchor="end">›</text>
+        <rect x="16" y="406" width="208" height="40" rx="10" fill="#f7f8fb"/><text x="32" y="430">⚙ 设置 · 协议 · 联系我们</text><text x="216" y="430" fill="#a0a6b3" text-anchor="end">›</text>
+      </g>
+      <rect x="0" y="456" width="240" height="24" fill="#fafbfc" stroke="#e5e6eb"/>
+      <text x="120" y="472" font-size="8" text-anchor="middle" fill="#a0a6b3">TabBar 仅示意 · 当前页高亮「我的」</text>
+    </svg>
+    <div class="cap">P7 我的<small>报名进度 + 版本号提示</small></div>
+    </div>
+  </div>
+
+  <h3>页面路由清单（app.json）</h3>
+  <table>
+    <tr><th>页面路径</th><th>名称</th><th>关键组件</th></tr>
+    <tr><td>pages/login/index</td><td>登录 / 角色选择</td><td>微信登录按钮、角色列表</td></tr>
+    <tr><td>pages/profile-bind/index</td><td>身份信息绑定</td><td>表单（姓名/学号/专业）</td></tr>
+    <tr><td>pages/home/index</td><td>首页</td><td>新闻条、宫格、报名中列表</td></tr>
+    <tr><td>pages/competition/list</td><td>竞赛大厅</td><td>赛道 Tab、筛选 chips、卡片列表</td></tr>
+    <tr><td>pages/competition/detail</td><td>竞赛详情</td><td>赛程时间轴、附件下载、队伍预览</td></tr>
+    <tr><td>pages/competition/enroll</td><td>报名表单</td><td>个人/组队切换、队员邀请、审批人选择</td></tr>
+    <tr><td>pages/approval/center</td><td>审批中心</td><td>待审/已审/我发起的 Tab、卡片操作</td></tr>
+    <tr><td>pages/approval/detail</td><td>审批详情</td><td>审批轨迹、签名板（canvas）、驳回原因</td></tr>
+    <tr><td>pages/my/registrations</td><td>我的报名记录</td><td>进度条、版本号、撤回按钮</td></tr>
+    <tr><td>pages/my/index</td><td>我的</td><td>个人信息、功能入口</td></tr>
+  </table>
+</section>
+
+<!-- 6 数据库 -->
+<section>
+  <h2><span class="no">6</span>云开发数据库设计（V1.0 集合）</h2>
+  <p class="lead">教程运维视角：直接用微信云开发，前端即可操作数据库，免服务器。</p>
+  <table>
+    <tr><th>集合</th><th>关键字段</th><th>说明</th></tr>
+    <tr><td><b>users</b></td><td>_id, openid, name, student_no, major, role, college, status, created_at</td><td>角色 role 取值 R1~R9；status 控制禁用/启用</td></tr>
+    <tr><td><b>competitions</b></td><td>_id, title, track(学生/教师), level(校/省/国家), category, cover, schedule, attachments, status, publisher_id, deadline</td><td>竞赛信息 + 附件（云存储 fileID）</td></tr>
+    <tr><td><b>registrations</b></td><td>_id, comp_id, applicant_id, team_name, members[], first_approver_id, version, status, created_at</td><td>一条报名记录；version 即版本号 V1/V2…</td></tr>
+    <tr><td><b>approval_records</b></td><td>_id, registration_id, level, approver_role, approver_id, action(通过/驳回/撤回), reason, signature_url, acted_at, reminded_count</td><td>每次审批动作一条；reminded_count 支撑催办×3</td></tr>
+    <tr><td><b>operation_logs</b></td><td>_id, operator_id, action, target, detail, created_at</td><td>所有关键操作留痕（阶段一要求）</td></tr>
+    <tr><td>（预留）teams / leaves / trainings / checkins / points / knowledge / news / fundings</td><td>—</td><td>V1.2 起逐版本启用</td></tr>
+  </table>
+  <div class="callout"><b>审批链路裁剪规则：</b>提交时按 competitions.level 生成审批链——校级以下 2 级、校级 3 级、省级 4 级、国家级 5 级，与需求文档触发条件表一致。</div>
+</section>
+
+<!-- 7 里程碑 -->
+<section>
+  <h2><span class="no">7</span>V1.0 开发里程碑（4 周）</h2>
+  <p class="lead">对应需求文档「第一阶段 + 第二阶段」的 14 项任务，压缩为 4 个周里程碑；每阶段完成即 git 提交并打 Tag。</p>
+  <div class="km">
+    <div class="card"><b>W1 · 环境与框架</b><span>装 WorkBuddy + 技能包；微信开发者工具；项目目录；微信登录 + 角色选择；底部 5 Tab；users 集合；角色权限路由<br><br><b>产出：</b>可登录可导航的空壳 App</span></div>
+    <div class="card"><b>W2 · 竞赛与报名</b><span>竞赛大厅（双赛道/筛选/列表）；竞赛详情（赛程/附件/队伍）；报名表单（个人/组队、审批人选择）；数据收集字段入库<br><br><b>产出：</b>学生可完成一次报名提交</span></div>
+    <div class="card"><b>W3 · 审批引擎（重点）</b><span>审批中心列表/详情；通过/驳回 + 原因；手签字 canvas；版本号机制；撤回机制；超时催办云函数（定时触发器）；操作日志<br><br><b>产出：</b>五级审批全链路可跑</span></div>
+    <div class="card"><b>W4 · 测试与上线</b><span>全流程自测（见 §9 用例）；权限路由核对；用户协议/隐私政策；4 张功能截图；服务类目「教育>院校教务」；提交审核<br><br><b>产出：</b>提审版本 v1.0.0</span></div>
+  </div>
+  <table>
+    <tr><th>里程碑</th><th>git Tag</th><th>验收标准</th></tr>
+    <tr><td>W1 完成</td><td>v0.1.0-frame</td><td>3 种角色登录后看到不同首页入口</td></tr>
+    <tr><td>W2 完成</td><td>v0.2.0-enroll</td><td>报名记录正确写入 registrations，含版本号 V1</td></tr>
+    <tr><td>W3 完成</td><td>v0.3.0-approval</td><td>驳回→修改→重报（V2）、通过→报名成功、超时催办触发</td></tr>
+    <tr><td>W4 完成</td><td>v1.0.0-release</td><td>自测用例 100% 通过，提审材料齐全</td></tr>
+  </table>
+</section>
+
+<!-- 8 上线 -->
+<section>
+  <h2><span class="no">8</span>上线准备清单（过审材料）</h2>
+  <ul class="tight">
+    <li>☐ <b>用户协议 + 隐私政策</b>：网上模板改名称，放「设置」页可达（教程盲区三）。</li>
+    <li>☐ <b>功能截图 ≥ 4 张</b>：竞赛大厅、报名表单、审批中心、我的报名。</li>
+    <li>☐ <b>服务类目</b>：选择「教育 > 院校教务」或学院相应类目，避免驳回。</li>
+    <li>☐ <b>自检清单</b>：首页加载 &lt; 3 秒；有「联系我们/反馈」入口；所有按钮点击有反馈（loading/成功/失败提示）。</li>
+    <li>☐ <b>数据合规</b>：涉及姓名/学号/手机号收集，隐私政策中如实声明用途。</li>
+    <li>☐ <b>GitHub 仓库 + README</b>：项目介绍、运行方式、技术栈、分工（面试资产）。</li>
+  </ul>
+</section>
+
+<!-- 9 自测 -->
+<section>
+  <h2><span class="no">9</span>V1.0 自测用例（测试视角）</h2>
+  <p class="lead">教程测试视角：假设用户「不会正确操作」。空文本、超长文本、连续点击，都要试。</p>
+  <table>
+    <tr><th>#</th><th>测试项</th><th>操作步骤</th><th>预期结果</th></tr>
+    <tr><td>1</td><td>登录</td><td>非首次登录再次打开</td><td>免角色选择直接进首页</td></tr>
+    <tr><td>2</td><td>报名-空队伍名</td><td>组队报名不填队伍名提交</td><td>按钮置灰或 toast 提示</td></tr>
+    <tr><td>3</td><td>报名-超长文本</td><td>队伍名输入 100 字符</td><td>截断或提示超限</td></tr>
+    <tr><td>4</td><td>报名-重复提交</td><td>快速连续点「提交报名」</td><td>防抖，仅生成 1 条 V1 记录</td></tr>
+    <tr><td>5</td><td>审批-驳回</td><td>L1 驳回并填原因</td><td>状态退回发起人，版本号变 V2 可修改重报</td></tr>
+    <tr><td>6</td><td>审批-撤回</td><td>L3 审批中发起人撤回</td><td>审批单关闭；终极通过后撤回按钮消失</td></tr>
+    <tr><td>7</td><td>审批-越权</td><td>普通学生访问审批中心接口</td><td>返回无权限错误</td></tr>
+    <tr><td>8</td><td>签名</td><td>签名板不签名直接通过</td><td>提示需要签名（按需配置）</td></tr>
+    <tr><td>9</td><td>催办</td><td>审批停留超阈值</td><td>催办计数 +1，3 次后自动上报标记</td></tr>
+    <tr><td>10</td><td>弱网</td><td>开发者工具切「弱网」</td><td>加载态提示，不白屏不崩溃</td></tr>
+  </table>
+</section>
+
+<!-- 10 路线图 -->
+<section>
+  <h2><span class="no">10</span>后续版本路线图（V1.1 → V3.0）</h2>
+  <p class="lead">把需求文档阶段三~七整体排入后续迭代，每版打一个 Tag，形成可讲述的「需求变更史」。</p>
+  <table>
+    <tr><th>版本</th><th>内容</th><th>对应需求文档</th></tr>
+    <tr><td><b>V1.0（本计划）</b></td><td>登录框架 + 竞赛大厅/详情/报名 + 学生竞赛五级审批</td><td>阶段一、二</td></tr>
+    <tr><td>V1.1</td><td>教师竞赛审批流（4 级 + 评审专家可跳过）、数据收集管理、Excel 导出、教师/辅导员双向只读</td><td>阶段二收尾</td></tr>
+    <tr><td>V1.2</td><td>队伍空间（队员管理/学习日志/资料共享/讨论墙）、请假管理、六条审批流补全</td><td>阶段三</td></tr>
+    <tr><td>V1.3</td><td>培训中心、培训发布、签到打卡（定位+拍照）、积分账户与兑换</td><td>阶段四</td></tr>
+    <tr><td>V2.0</td><td>知识广场、发布知识点、互动（评论/点赞/收藏）、置顶、精选推荐</td><td>阶段五</td></tr>
+    <tr><td>V2.1</td><td>新闻动态（审核/定时发布）、手机端图表、可视化大屏、经费 Excel 归档</td><td>阶段六</td></tr>
+    <tr><td>V3.0</td><td>系统管理：审批流配置、学校/专业管理、专家库、积分商品、完整权限隔离</td><td>阶段七</td></tr>
+  </table>
+  <div class="callout green"><b>下一步行动（今天就做，5 分钟）：</b>按教程「第一个任务」，回答三个问题并写入项目 README——① V1.0 一句话定义（可直接抄 §1）；② 你的角色分工是什么；③ W1 里程碑你负责哪几项。然后就可以把 §7 的 W1 任务直接粘贴给 WorkBuddy 开始生成代码。</div>
+</section>
+
+<footer>竞赛一体化管理平台 · 第一版搭建计划 V1.0 · 依据《WorkBuddy 搭建小程序教程》与《竞赛一体化管理平台》需求文档生成 · 2026-09-01</footer>
+</div>
+</body>
+</html>

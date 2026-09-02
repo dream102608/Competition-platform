@@ -1,0 +1,39 @@
+{
+  "compileType": "miniprogram",
+  "appid": "wxf3184277f1aaf0ed",
+  "projectname": "jingsai-v1",
+  "setting": {
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "urlCheck": false,
+    "autoAudits": false,
+    "compileHotReLoad": false,
+    "compileWorklet": false,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "enhance": false,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "condition": false,
+    "swc": false,
+    "disableSWC": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
+  },
+  "condition": {},
+  "simulatorPluginLibVersion": {},
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "editorSetting": {}
+}

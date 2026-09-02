@@ -1,0 +1,67 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="p-head">
+  <view class="t serif">竞赛大厅</view>
+  <text class="h-ic">⌕</text>
+  <text class="h-ic">◔</text>
+</view>
+
+<!-- 双赛道活字 Tab -->
+<view class="hall-tabs">
+  <view
+    wx:for="{{trackTabs}}" wx:key="key"
+    class="ht {{track === item.key ? 'on' : ''}}"
+    bindtap="switchTrack" data-key="{{item.key}}">{{item.name}}</view>
+</view>
+
+<!-- 搜索条 -->
+<view class="searchbar">
+  <text class="s-ic">⌕</text>
+  <input class="s-input mono" placeholder="搜索竞赛 / 赛项编号…" placeholder-class="ph"
+         value="{{keyword}}" bindinput="onSearch" confirm-type="search"/>
+</view>
+
+<!-- 筛选片 -->
+<view class="filter-chips">
+  <view
+    wx:for="{{filters}}" wx:key="*this"
+    class="fchip {{filter === item ? 'on' : ''}}"
+    bindtap="setFilter" data-f="{{item}}">{{item}}</view>
+</view>
+
+<!-- 重点推荐位 -->
+<view wx:if="{{promo}}" class="promo" bindtap="goDetail" data-id="{{promo._id}}">
+  <image src="https://images.pexels.com/photos/6146971/pexels-photo-6146971.jpeg?auto=compress&cs=tinysrgb&w=800" mode="aspectFill"/>
+  <view class="pm">
+    <b>{{promo.title}}</b>
+    <small>赛道重点推荐 · 校选拔 9 月 20 日启动 · 报名进行中</small>
+    <view class="bar-prog"><i></i></view>
+  </view>
+</view>
+
+<!-- 竞赛卡片（分类小广告） -->
+<view
+  wx:for="{{comps}}" wx:key="_id"
+  class="comp-card {{item.closed ? 'closed' : ''}}"
+  bindtap="goDetail" data-id="{{item._id}}">
+  <view class="lvl {{item.level}}">{{item.levelName}}</view>
+  <view class="thumb">
+    <image src="{{item.cover}}" mode="aspectFill"/>
+  </view>
+  <view class="info">
+    <view class="r1">
+      <text class="pill mono">NO.{{item.no}}</text>
+      <text class="team-size mono">{{item.teamSize}}</text>
+    </view>
+    <b class="ct serif">{{item.title}}</b>
+    <p class="cdesc">{{item.deadline}} 截止报名 · {{item.level === 'A' ? '五级' : item.level === 'B' ? '三级' : '一级'}}审批</p>
+    <view class="meta">
+      <text class="ddl mono">DDL ·{{item.deadline.slice(5)}}</text>
+      <text wx:if="{{item.closed}}" class="hand ddl-hand">已截止</text>
+      <text wx:elif="{{item.ddlDays <= 15}}" class="hand ddl-hand">还剩 {{item.ddlDays}} 天！</text>
+      <text wx:else class="hand ddl-hand">时间充裕</text>
+    </view>
+  </view>
+</view>
+
+<view class="hall-foot hand">—— 本期共 {{comps.length + (promo ? 1 : 0)}} 个赛项，往下还有故事 ——</view>
