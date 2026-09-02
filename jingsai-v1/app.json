@@ -6,7 +6,9 @@
     "pages/approval/approval",
     "pages/profile/profile",
     "pages/detail/detail",
-    "pages/form/form"
+    "pages/form/form",
+    "pages/messages/messages",
+    "pages/settings/settings"
   ],
   "window": {
     "navigationStyle": "custom",

@@ -13,8 +13,9 @@
         <text class="me-name">{{user.name || '未登录'}}</text>
         <text class="me-pencil">✎</text>
       </view>
-      <view class="me-sid">学号 {{user.sid || '——'}} · {{user.college || '——'}}</view>
-      <view class="me-role-tag">{{user.role === 'teacher' ? '指导教师' : (user.role === 'admin' ? '教务管理员' : '在校学生')}}</view>
+      <view class="me-sid">{{isApprover ? '工号' : '学号'}} {{user.sid || user.empId || '——'}} · {{user.college || '——'}}</view>
+      <view class="me-role-tag">{{roleLabel}}</view>
+      <view wx:if="{{user.tagline}}" class="me-tagline hand">{{user.tagline}}</view>
     </view>
     <view class="me-corner">卷宗一号</view>
   </view>
@@ -23,21 +24,22 @@
   <view class="me-stats card">
     <view class="stat-cell">
       <view class="stat-num">{{stats.total}}</view>
-      <view class="stat-label">累计报名</view>
+      <view class="stat-label">{{statsLabels[0]}}</view>
     </view>
     <view class="stat-div"></view>
     <view class="stat-cell">
       <view class="stat-num stat-verm">{{stats.active}}</view>
-      <view class="stat-label">进行中</view>
+      <view class="stat-label">{{statsLabels[1]}}</view>
     </view>
     <view class="stat-div"></view>
     <view class="stat-cell">
       <view class="stat-num">{{stats.awards}}</view>
-      <view class="stat-label">历史获奖</view>
+      <view class="stat-label">{{statsLabels[2]}}</view>
     </view>
   </view>
 
-  <!-- 我的报名（卷宗条目） -->
+  <!-- 我的报名（卷宗条目；教师视角隐藏） -->
+  <block wx:if="{{!isApprover}}">
   <view class="sec-band">
     <text>我的报名</text>
     <text class="sec-en">REGISTRATIONS</text>
@@ -76,6 +78,13 @@
     <view class="hand cert-hand">获奖证书还在印刷厂排队的路上……</view>
     <view class="btn-line btn-s" bindtap="goHall">去争取第一张</view>
   </view>
+  </block>
+
+  <!-- 教师快捷入口 -->
+  <view wx:if="{{isApprover}}" class="card cert-box tea-box" bindtap="goApproval">
+    <view class="hand cert-hand">待我审批 {{stats.active}} 件 · 我处理过的 {{stats.total}} 件</view>
+    <view class="btn-verm btn-s">进入审批中心 →</view>
+  </view>
 
   <!-- 菜单 -->
   <view class="sec-band">
@@ -83,28 +92,35 @@
     <text class="sec-en">MANAGE</text>
   </view>
   <view class="card me-menu">
-    <view class="menu-row" bindtap="showLogs">
+    <view class="menu-row" bindtap="goMessages">
       <text class="menu-idx">01</text>
+      <text class="menu-name">消息与催办</text>
+      <text class="menu-arrow">
+        <text wx:if="{{unread}}" class="menu-badge mono">{{unread}} 未读</text>→
+      </text>
+    </view>
+    <view class="menu-row" bindtap="showLogs">
+      <text class="menu-idx">02</text>
       <text class="menu-name">操作记录</text>
       <text class="menu-arrow">→</text>
     </view>
     <view class="menu-row">
-      <text class="menu-idx">02</text>
+      <text class="menu-idx">03</text>
       <text class="menu-name">收藏夹</text>
       <text class="menu-arrow">{{favCount}} 项 →</text>
     </view>
     <view class="menu-row" bindtap="settings">
-      <text class="menu-idx">03</text>
+      <text class="menu-idx">04</text>
       <text class="menu-name">账号设置</text>
       <text class="menu-arrow">→</text>
     </view>
     <view class="menu-row" bindtap="resetDemo">
-      <text class="menu-idx">04</text>
+      <text class="menu-idx">05</text>
       <text class="menu-name">重置演示数据</text>
       <text class="menu-arrow">恢复初始 →</text>
     </view>
     <view class="menu-row menu-danger" bindtap="logout">
-      <text class="menu-idx">05</text>
+      <text class="menu-idx">06</text>
       <text class="menu-name">退出登录</text>
       <text class="menu-arrow">→</text>
     </view>
