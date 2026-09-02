@@ -330,12 +330,6 @@ module.exports = {
 
   getMyRegistrations() { return read(K.REGS, seedRegistrations); },
 
-  /* V1.1：消息 / 教师队列 / 设置 */
-  getMessages, pushMsg, unreadCount, markAllRead,
-  getTeacherQueue, getPrefs, savePrefs, saveUser, clearCache,
-  /* V1.2：队伍 / 导出 / 附件 */
-  updateTeam, exportCSV, previewPlan,
-
   /** 提交报名：生成 v1 报名单，系统初审自动通过 */
   submitRegistration(payload) {
     const regs = this.getMyRegistrations();

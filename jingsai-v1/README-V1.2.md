@@ -58,6 +58,10 @@
 ### 兼容性
 V1.0 / V1.1 已写入的 Storage 可直接升级（V1.2 不新增键、不破坏旧结构）；种子修正仅影响重置后首次初始化。重置路径：我的 → 重置演示数据。
 
+### Hotfix（2026-09-02）
+- **修复启动即崩**：`utils/data.js` 的 `module.exports` 内残留一段属性简写列表（`getMessages, pushMsg, ...`），但这些名字只以对象方法形式定义在对象内部——简写求值引用不存在的自由变量 → 模块加载即抛 `ReferenceError: getMessages is not defined`（login 页 require 时报错）。已删除冗余简写（方法与导出本就同体，删除无副作用）。
+- **新增回归工具**：mock wx/App/Page 后逐个 require 全部业务 js 的冒烟脚本，并全量验证 data.js 关键 API（消息引擎 / 教师·评审队列 / act 签名 / 队伍管理 / CSV 导出），全部通过。
+
 ---
 
 ## 三、下一版本迭代功能（V1.3）
