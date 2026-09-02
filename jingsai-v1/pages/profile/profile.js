@@ -1,35 +1,70 @@
-// pages/profile/profile.js —— S7 我的（档案柜版式）
+// pages/profile/profile.js —— S7 我的（档案柜版式 · V1.2 支持全部评审角色）
 const app = getApp();
 const data = require('../../utils/data');
+
+const ROLE_LABEL = {
+  teacher: '指导教师', dept: '系级评审', college: '院级评审', school: '校级终审',
+  admin: '教务管理员', student: '在校学生'
+};
 
 Page({
   data: {
     sbh: 24,
     user: null,
     regs: [],
+    isApprover: false,
+    roleLabel: '',
     stats: { total: 0, active: 0, awards: 0 },
-    favCount: 0
+    statsLabels: ['累计报名', '进行中', '历史获奖'],
+    favCount: 0,
+    unread: 0
   },
 
   onLoad() { this.setData({ sbh: app.globalData.sbh }); },
 
   onShow() {
     const user = app.globalData.user || data.mockUser();
+    const favs = wx.getStorageSync('js_favs') || [];
+    const isApprover = !!(user && data.APPROVER_ROLES.indexOf(user.role) > -1);
+
+    if (isApprover) {
+      // 审批人档案：统计改为审批数据
+      const q = data.getTeacherQueue(user.name);
+      this.setData({
+        user,
+        regs: [],
+        isApprover: true,
+        roleLabel: ROLE_LABEL[user.role] || user.role,
+        unread: data.unreadCount(),
+        favCount: favs.length,
+        stats: {
+          total: q.processed.length,            // 累计审批
+          active: q.pending.length,             // 待我审批
+          awards: 6                             // 已带赛届数（演示）
+        },
+        statsLabels: ['累计审批', '待我审批', '已带赛届']
+      });
+      return;
+    }
+
     const regs = data.getMyRegistrations().map(r => ({
       _id: r._id, compTitle: r.compTitle, teamName: r.teamName,
       version: r.version, status: r.status, deadline: r.deadline,
       trackFlags: r.nodes.map(n => n.status === 'pass')
     }));
-    const favs = wx.getStorageSync('js_favs') || [];
     this.setData({
       user,
       regs,
+      isApprover: false,
+      roleLabel: ROLE_LABEL[user.role] || '在校学生',
+      unread: data.unreadCount(),
       favCount: favs.length,
       stats: {
         total: regs.length,
         active: regs.filter(r => r.status === 'approving').length,
         awards: 1   // 演示：历史获奖 1 项
-      }
+      },
+      statsLabels: ['累计报名', '进行中', '历史获奖']
     });
   },
 
@@ -37,6 +72,8 @@ Page({
     app.globalData.currentReg = { _id: e.currentTarget.dataset.id };
     wx.switchTab({ url: '/pages/approval/approval' });
   },
+
+  goMessages() { wx.navigateTo({ url: '/pages/messages/messages' }); },
 
   goHall() { wx.switchTab({ url: '/pages/hall/hall' }); },
 
@@ -52,10 +89,10 @@ Page({
   },
 
   editName() {
-    wx.showToast({ title: '档案编辑将在 V1.1 开放', icon: 'none' });
+    wx.navigateTo({ url: '/pages/settings/settings' });
   },
 
-  settings() { wx.showToast({ title: '账号设置将在 V1.1 开放', icon: 'none' }); },
+  settings() { wx.navigateTo({ url: '/pages/settings/settings' }); },
 
   resetDemo() {
     wx.showModal({

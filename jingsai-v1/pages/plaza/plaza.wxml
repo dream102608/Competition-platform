@@ -1,0 +1,154 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<!-- 页头 -->
+<view class="pl-head">
+  <view class="pl-back" bindtap="back">‹</view>
+  <view class="pl-t serif">知 识 广 场</view>
+  <text class="pl-en mono">PLAZA EXCHANGE</text>
+</view>
+<view class="pl-lead hand">把踩过的坑、拿过的奖、用过的模板，留给下一支队伍。</view>
+
+<!-- 栏目页签 -->
+<view class="pl-tabs">
+  <view wx:for="{{tabs}}" wx:key="key"
+        class="pl-tab {{tab === item.key ? 'on' : ''}}"
+        data-tab="{{item.key}}" bindtap="setTab">
+    <text class="pl-tab-cn">{{item.label}}</text>
+    <text class="pl-tab-en mono">{{item.en}}</text>
+    <text class="pl-tab-n mono">{{counts[item.key]}}</text>
+  </view>
+</view>
+
+<!-- ========== 栏目一：经验帖 ========== -->
+<block wx:if="{{tab === 'posts'}}">
+  <!-- V1.5：我要发帖 + 我的投稿 -->
+  <view class="ps-tools">
+    <button class="ps-pub" bindtap="openPub">✎ 我要发帖</button>
+    <view class="ps-my mono" bindtap="openMy">我的投稿{{myPosts.length ? '（' + myPosts.length + '）' : ''}}</view>
+  </view>
+  <view wx:if="{{pubTip}}" class="pub-banner hand">投稿已收到 · {{pubTip}} 篇审核中，通过后将展示在下方列表。</view>
+
+  <view wx:for="{{posts}}" wx:key="_id" class="card ps-card" data-id="{{item._id}}" bindtap="openPost">
+    <view class="ps-top">
+      <text class="ps-comp mono">{{item.track}} · {{item.comp}}</text>
+      <text class="ps-date mono">{{item.date}}</text>
+    </view>
+    <view class="ps-title serif"><text class="ps-quo">「</text>{{item.title}}</view>
+    <view class="ps-brief">{{item.brief}}</view>
+    <view class="ps-foot">
+      <view class="ps-author hand">{{item.author}} · {{item.from}}</view>
+      <view class="ps-acts">
+        <view class="ps-act {{item.isFaved ? 'on' : ''}}" catchtap="favPost" data-id="{{item._id}}">♥ {{item.isFaved ? '已收藏' : '收藏'}}</view>
+        <view class="ps-act {{item.isLiked ? 'on' : ''}}" catchtap="likePost" data-id="{{item._id}}">▲ {{item.likesN}}</view>
+        <text class="ps-go">读全文 →</text>
+      </view>
+    </view>
+  </view>
+</block>
+
+<!-- ========== 栏目二：获奖名单 ========== -->
+<block wx:if="{{tab === 'winners'}}">
+  <view wx:for="{{winners}}" wx:key="_id" class="card wl-card">
+    <view class="wl-head">
+      <view class="wl-season serif">{{item.season}}</view>
+      <text class="wl-comp mono">{{item.comp}}</text>
+    </view>
+    <view wx:for="{{item.rows}}" wx:for-item="row" wx:key="team" class="wl-row">
+      <view class="wl-prize {{row.grade === 'gold' ? 'g-gold' : (row.grade === 'silver' ? 'g-silver' : 'g-bronze')}}">{{row.prize}}</view>
+      <view class="wl-info">
+        <b class="serif">{{row.team}}</b>
+        <small class="mono">{{row.members}}</small>
+      </view>
+      <view class="wl-tea mono">指导 {{row.teacher}}</view>
+    </view>
+  </view>
+  <view class="pl-note mono">* 名单为演示样例数据，正式部署后由获奖库同步。</view>
+</block>
+
+<!-- ========== 栏目三：模板库 ========== -->
+<block wx:if="{{tab === 'templates'}}">
+  <view wx:for="{{templates}}" wx:key="_id" class="card tpl-card">
+    <view class="tpl-top">
+      <b class="serif">{{item.name}}</b>
+      <text class="tpl-tag mono">{{item.tag}}</text>
+    </view>
+    <view class="tpl-desc">{{item.desc}}</view>
+    <button class="tpl-copy" data-id="{{item._id}}" bindtap="copyTpl">✂ 复制模板要点</button>
+  </view>
+  <view class="pl-note mono">模板为纯文本要点，复制后可直接粘贴进 Word / WPS 使用；正式版将接入附件下载。</view>
+</block>
+
+<view class="pl-foot mono">竞赛一体化管理平台 · V1.5 · 知识广场副刊</view>
+
+<!-- ========== 经验帖全文弹层 ========== -->
+<view wx:if="{{postShow}}" class="pl-mask" bindtap="closePost">
+  <view class="pl-modal" catchtap="noop">
+    <view class="pm-top">
+      <text class="pm-comp mono">{{post.track}} · {{post.comp}}</text>
+      <text class="pm-date mono">{{post.date}}</text>
+    </view>
+    <scroll-view scroll-y class="pm-scroll">
+      <view class="pm-title serif">「{{post.title}}」</view>
+      <view class="pm-author hand">{{post.author}} · {{post.from}}</view>
+      <view class="pm-rule"></view>
+      <view wx:for="{{post.body}}" wx:for-item="para" wx:key="index" class="pm-para">{{para}}</view>
+      <view class="pm-end serif">—— 完 ——</view>
+    </scroll-view>
+    <button class="pm-close" bindtap="closePost">收起</button>
+  </view>
+</view>
+
+<!-- ========== V1.5：我要发帖弹层 ========== -->
+<view wx:if="{{pubShow}}" class="pl-mask" bindtap="closePub">
+  <view class="pl-modal pub-modal" catchtap="noop">
+    <view class="pm-top">
+      <text class="pm-comp mono">PLAZA · 我要发帖</text>
+      <text class="pm-date mono" bindtap="closePub">关闭 ✕</text>
+    </view>
+    <scroll-view scroll-y class="pub-scroll">
+      <view class="pub-row">
+        <text class="pub-label">标题</text>
+        <input class="pub-input" placeholder="一句话讲清你的经验（40 字内）" maxlength="40"
+               value="{{pubTitle}}" bindinput="onTitle" />
+      </view>
+      <view class="pub-row">
+        <text class="pub-label">赛事</text>
+        <picker class="pub-picker" range="{{comps}}" value="{{pubCompIdx}}" bindchange="onComp">
+          <view class="pub-pick {{pubComp ? '' : 'ph'}}">{{pubComp || '选择所属赛事'}} ▾</view>
+        </picker>
+      </view>
+      <view class="pub-row col">
+        <text class="pub-label">正文</text>
+        <textarea class="pub-ta" placeholder="把踩过的坑、有用的方法写下来（至少 20 字）"
+                  maxlength="600" value="{{pubBody}}" bindinput="onBody"></textarea>
+        <text class="pub-count mono">{{pubBody.length}} / 600</text>
+      </view>
+      <view class="pub-note hand">提交后进入审核队列，审核通过后以你的名义展示在「经验帖」栏目。</view>
+    </scroll-view>
+    <button class="pm-close verm" bindtap="submitPub">提交审核</button>
+  </view>
+</view>
+
+<!-- ========== V1.5：我的投稿弹层 ========== -->
+<view wx:if="{{myShow}}" class="pl-mask" bindtap="closeMy">
+  <view class="pl-modal my-modal" catchtap="noop">
+    <view class="pm-top">
+      <text class="pm-comp mono">PLAZA · 我的投稿</text>
+      <text class="pm-date mono" bindtap="closeMy">关闭 ✕</text>
+    </view>
+    <scroll-view scroll-y class="pub-scroll">
+      <block wx:if="{{myPosts.length}}">
+        <view wx:for="{{myPosts}}" wx:key="_id" class="my-item">
+          <view class="my-row">
+            <view class="my-title serif">{{item.title}}</view>
+            <view class="my-st {{item.status === 'pending' ? 'st-p' : 'st-w'}}">{{item.status === 'pending' ? '审核中' : '已撤回'}}</view>
+          </view>
+          <view class="my-sub mono">{{item.comp}} · {{item.date}} 投稿</view>
+          <view class="my-brief">{{item.brief}}</view>
+          <view wx:if="{{item.status === 'pending'}}" class="my-act mono" data-id="{{item._id}}" catchtap="withdrawMy">撤回这篇投稿</view>
+        </view>
+      </block>
+      <view wx:else class="my-empty hand">还没有投稿。点「我要发帖」，把经验留给下一支队伍。</view>
+    </scroll-view>
+  </view>
+</view>

@@ -1,0 +1,97 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="p-head">
+  <view class="t serif">消息与催办</view>
+  <view class="head-acts">
+    <view wx:if="{{!manage && rows.length}}" class="head-act ghost" bindtap="toggleManage">整 理</view>
+    <view wx:if="{{!manage && unread}}" class="head-act" bindtap="markAll">全部已读</view>
+    <view wx:if="{{manage}}" class="head-act on" bindtap="toggleManage">完 成</view>
+  </view>
+</view>
+
+<view class="inbox-sub mono" wx:if="{{!manage && unread}}">
+  <view class="dot-live"></view>您有 {{unread}} 封未读来函，请查收
+</view>
+
+<!-- V1.4：来函分组页签 -->
+<view class="inbox-tabs">
+  <view wx:for="{{tabs}}" wx:key="key"
+        class="itab {{tab === item.key ? 'on' : ''}}"
+        data-tab="{{item.key}}" bindtap="setTab">
+    {{item.label}}<text class="itab-n mono">{{item.n}}</text>
+    <text wx:if="{{item.key !== 'all' && unreadTab[item.key]}}" class="itab-dot"></text>
+  </view>
+</view>
+
+<!-- 空态 -->
+<view wx:if="{{!rows.length}}" class="card empty-box">
+  <view class="hand">收件箱空空如也，暂无来函。</view>
+  <view class="btn-line btn-s" bindtap="goHome">回首页</view>
+</view>
+
+<!-- V1.5：rows 渲染模型（单条消息 / 同报名单聚合卷宗） -->
+<block wx:for="{{rows}}" wx:key="key" wx:for-item="row">
+  <!-- ====== 单条消息 ====== -->
+  <view wx:if="{{row.kind === 'msg'}}"
+        class="msg card {{row.m.read ? 'read' : ''}} {{row.checked ? 'picked' : ''}}"
+        data-id="{{row.m._id}}" data-regid="{{row.m.regId}}" data-read="{{row.m.read}}"
+        bindtap="open" bindlongpress="msgActs">
+    <view wx:if="{{manage}}" class="pick-box {{row.checked ? 'on' : ''}}">✓</view>
+    <view class="msg-stamp {{row.m.cls}}">{{row.m.label}}</view>
+    <view class="msg-body">
+      <view class="msg-row">
+        <text class="msg-title serif">{{row.m.title}}</text>
+        <text wx:if="{{!row.m.read}}" class="unread-dot"></text>
+      </view>
+      <view class="msg-body-txt">{{row.m.body}}</view>
+      <view class="msg-meta mono">
+        {{row.m.time}}
+        <text wx:if="{{row.m.regId}}" class="msg-go">查看报名单 →</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ====== 同报名单聚合卷宗 ====== -->
+  <view wx:else class="msg card th-card {{row.open ? 'on' : ''}} {{row.checked ? 'picked' : ''}}">
+    <view wx:if="{{manage}}" class="pick-box {{row.checked ? 'on' : ''}}"
+          data-regid="{{row.regId}}" catchtap="pickThread">✓</view>
+    <view class="th-main">
+      <view class="th-head" data-regid="{{row.regId}}" bindtap="onThreadHead">
+        <view class="th-top">
+          <text class="th-ic serif">卷</text>
+          <view class="th-tt">
+            <view class="th-title serif">{{row.titleText}}</view>
+            <view class="th-sub mono">{{row.regNo}} · 动态 {{row.items.length}} 条<text wx:if="{{row.unreadN}}"> · {{row.unreadN}} 封未读</text></view>
+          </view>
+        </view>
+        <view class="th-arrow mono">{{row.open ? '收起 ▲' : '时间线 ▼'}}</view>
+      </view>
+
+      <!-- 展开：该报名单的审批时间线 -->
+      <block wx:if="{{row.open}}">
+        <view class="th-rule"></view>
+        <view wx:for="{{row.items}}" wx:for-item="m" wx:key="_id"
+              class="th-item {{m.read ? '' : 'unread'}}"
+              data-id="{{m._id}}" data-regid="{{m.regId}}" data-read="{{m.read}}"
+              catchtap="onThItem">
+          <view class="th-dot {{m.cls}}"></view>
+          <view class="th-body">
+            <view class="th-row">
+              <text class="th-title-s serif">{{m.title}}</text>
+              <text wx:if="{{!m.read}}" class="unread-dot"></text>
+            </view>
+            <view class="th-txt">{{m.body}}</view>
+            <view class="th-meta mono">{{m.time}}<text class="msg-go">查看报名单 →</text></view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+</block>
+
+<!-- V1.5：整理模式底部操作条 -->
+<view wx:if="{{manage && rows.length}}" class="ms-bar">
+  <view class="ms-cell" bindtap="selectAll">{{allChecked ? '取消全选' : '全选'}}</view>
+  <view class="ms-mid mono">已选 {{picked.length}} 封</view>
+  <view class="ms-del {{picked.length ? 'on' : ''}}" bindtap="delPicked">删 除</view>
+</view>

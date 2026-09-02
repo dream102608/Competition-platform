@@ -3,7 +3,13 @@
 <!-- 报头 -->
 <view class="paper-mast">
   <view class="date mono"><span>{{dateText}}</span><span>{{issue}}</span></view>
-  <view class="mast-title serif">竞赛早报</view>
+  <view class="mast-row">
+    <view class="mast-title serif">竞赛早报</view>
+    <view class="bell" bindtap="goMessages">
+      <text class="bell-ic">◔</text>
+      <text wx:if="{{unread}}" class="bell-badge mono">{{unread}}</text>
+    </view>
+  </view>
   <view class="slogan mono">JINGSAI DAILY · 一站式竞赛管理</view>
 </view>
 
@@ -13,53 +19,85 @@
   <view class="ticker-box"><text class="txt">{{news}}</text></view>
 </view>
 
-<!-- 头版 Banner（Pexels 实拍） -->
-<view class="home-banner" bindtap="goHall">
-  <image src="https://images.pexels.com/photos/5940828/pexels-photo-5940828.jpeg?auto=compress&cs=tinysrgb&w=800" mode="aspectFill"/>
-  <view class="flag serif">国赛冲刺</view>
-  <view class="cap">
-    <b>组队冲国赛，现在报名</b>
-    <text class="cap-arrow">▸</text>
-  </view>
-</view>
-
-<!-- 功能宫格 -->
-<view class="grid-nav">
-  <view class="g-item" bindtap="goHall">
-    <text class="g-ic verm">▤</text><b>竞赛大厅</b><small>双赛道 · 5 项在报</small>
-  </view>
-  <view class="g-item" bindtap="goApproval">
-    <text class="g-ic verm">▤</text><b>我的报名</b><small>{{activeCount}} 支队伍 · 审批中</small>
-  </view>
-  <view class="g-item" bindtap="goApproval">
-    <text class="g-ic verm">▤</text><b>审批中心</b><small>轨迹 · 签批 · 催办</small>
-  </view>
-  <view class="g-item off" bindtap="soon">
-    <text class="soon mono">V2.0</text>
-    <text class="g-ic">▤</text><b>知识广场</b><small>经验帖 · 空状态</small>
-  </view>
-</view>
-
-<!-- 报名进度 -->
-<view class="prog-card card">
-  <view class="pc-t">
-    <b class="serif">报 名 进 度</b>
-    <text class="pill mono">{{activeCount}} ACTIVE</text>
-  </view>
-  <view class="pc-body">
-    <view class="pc-row" wx:for="{{regs}}" wx:key="_id" bindtap="goApproval">
-      <text class="num mono">{{index + 1 < 10 ? '0' : ''}}{{index + 1}}</text>
-      <view class="pc-info">
-        <b>{{item.compTitle}} · {{item.teamName}}队</b>
-        <small class="mono">{{item.regNo}}</small>
+<!-- ========== 审批人视图（教师 / 系级 / 院级 / 校级） ========== -->
+<block wx:if="{{isApprover}}">
+  <view class="card tea-card">
+    <view class="tea-hi">
+      <view class="tea-ava serif">{{userName[0]}}</view>
+      <view class="tea-txt">
+        <b class="serif">{{userName}}，上午好</b>
+        <small class="mono">{{userEmp}} · {{roleLabel}}</small>
       </view>
-      <view class="pc-track">
-        <block wx:for="{{item.track}}" wx:for-item="done" wx:key="index">
-          <text class="dot {{done ? 'done' : ''}}"></text>
-        </block>
-      </view>
-      <text class="ver mono">v{{item.version}}</text>
     </view>
-    <view wx:if="{{regs.length === 0}}" class="pc-empty hand">还没报名？大厅里转转，总有一场适合你。</view>
+    <view class="tea-stats">
+      <view class="ts-cell">
+        <view class="ts-num verm mono">{{tPending}}</view>
+        <view class="ts-label">待我审批</view>
+      </view>
+      <view class="ts-div"></view>
+      <view class="ts-cell">
+        <view class="ts-num mono">{{tDone}}</view>
+        <view class="ts-label">我处理过的</view>
+      </view>
+    </view>
+    <button class="btn btn-verm tea-btn" bindtap="goApproval">进入审批中心 →</button>
+    <view class="tea-links">
+      <view class="tl" bindtap="goReports">⌑ 统计报表</view>
+      <view class="tl" bindtap="goMessages">◔ 消息中心<text wx:if="{{unread}}" class="tl-bdg mono">{{unread}}</text></view>
+    </view>
+    <view class="tea-tip hand">签批实时写入哈希加封链，可防伪校验；申请人在「我的报名」立即可见。</view>
   </view>
-</view>
+</block>
+
+<!-- ========== 学生视图 ========== -->
+<block wx:else>
+  <!-- 头版 Banner（Pexels 实拍） -->
+  <view class="home-banner" bindtap="goHall">
+    <image src="https://images.pexels.com/photos/5940828/pexels-photo-5940828.jpeg?auto=compress&cs=tinysrgb&w=800" mode="aspectFill"/>
+    <view class="flag serif">国赛冲刺</view>
+    <view class="cap">
+      <b>组队冲国赛，现在报名</b>
+      <text class="cap-arrow">▸</text>
+    </view>
+  </view>
+
+  <!-- 功能宫格 -->
+  <view class="grid-nav">
+    <view class="g-item" bindtap="goHall">
+      <text class="g-ic verm">▤</text><b>竞赛大厅</b><small>双赛道 · 5 项在报</small>
+    </view>
+    <view class="g-item" bindtap="goApproval">
+      <text class="g-ic verm">▤</text><b>我的报名</b><small>{{activeCount}} 支队伍 · 审批中</small>
+    </view>
+    <view class="g-item" bindtap="goApproval">
+      <text class="g-ic verm">▤</text><b>审批中心</b><small>轨迹 · 签批 · 催办</small>
+    </view>
+    <view class="g-item" bindtap="goPlaza">
+      <text class="g-ic verm">▤</text><b>知识广场</b><small>经验帖 · 获奖名单 · 模板库</small>
+    </view>
+  </view>
+
+  <!-- 报名进度 -->
+  <view class="prog-card card">
+    <view class="pc-t">
+      <b class="serif">报 名 进 度</b>
+      <text class="pill mono">{{activeCount}} ACTIVE</text>
+    </view>
+    <view class="pc-body">
+      <view class="pc-row" wx:for="{{regs}}" wx:key="_id" bindtap="goApproval">
+        <text class="num mono">{{index + 1 < 10 ? '0' : ''}}{{index + 1}}</text>
+        <view class="pc-info">
+          <b>{{item.compTitle}} · {{item.teamName}}队</b>
+          <small class="mono">{{item.regNo}}</small>
+        </view>
+        <view class="pc-track">
+          <block wx:for="{{item.track}}" wx:for-item="done" wx:key="index">
+            <text class="dot {{done ? 'done' : ''}}"></text>
+          </block>
+        </view>
+        <text class="ver mono">v{{item.version}}</text>
+      </view>
+      <view wx:if="{{regs.length === 0}}" class="pc-empty hand">还没报名？大厅里转转，总有一场适合你。</view>
+    </view>
+  </view>
+</block>
