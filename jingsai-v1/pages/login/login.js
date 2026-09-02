@@ -8,7 +8,8 @@ Page({
     role: 'student',
     roles: [
       { key: 'student', name: '学生票根', desc: '报名 · 组队 · 查进度', ver: 'V1.0', on: true },
-      { key: 'teacher', name: '教师票根', desc: '审批 · 带队 · 数据收集', ver: 'V1.1', on: false },
+      { key: 'teacher', name: '教师票根', desc: '审批 · 带队 · 数据收集', ver: 'V1.1', on: true },
+      { key: 'dept', name: '评审票根', desc: '系级 · 院级 · 校级签批', ver: 'V1.2', on: true },
       { key: 'admin', name: '管理员票根', desc: '系统配置 · 全局监控', ver: 'V3.0', on: false }
     ]
   },

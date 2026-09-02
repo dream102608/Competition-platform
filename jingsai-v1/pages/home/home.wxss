@@ -1,8 +1,51 @@
 /* S2 首页 · 早报版式 */
 .paper-mast { padding: 26rpx 28rpx 18rpx; border-bottom: 4rpx solid var(--ink); }
 .paper-mast .date { display: flex; justify-content: space-between; font-size: 19rpx; letter-spacing: 3rpx; color: var(--ink-soft); }
+.mast-row { display: flex; align-items: flex-end; justify-content: space-between; }
 .paper-mast .mast-title { font-size: 76rpx; font-weight: 900; letter-spacing: 6rpx; margin: 14rpx 0 8rpx; }
 .paper-mast .slogan { font-size: 18rpx; letter-spacing: 6rpx; color: var(--ink-fade); }
+
+/* 铃铛（消息入口） */
+.bell { position: relative; width: 72rpx; height: 72rpx; display: flex; align-items: center; justify-content: center; }
+.bell-ic { font-size: 44rpx; color: var(--ink); }
+.bell-badge {
+  position: absolute; top: -4rpx; right: -8rpx;
+  min-width: 34rpx; height: 34rpx; padding: 0 6rpx; box-sizing: border-box;
+  background: var(--verm); color: var(--paper);
+  font-size: 20rpx; line-height: 34rpx; text-align: center;
+  border: 2rpx solid var(--ink); border-radius: 6rpx;
+}
+
+/* 教师工作台卡片 */
+.tea-card { margin: 24rpx 28rpx 0; padding: 36rpx 32rpx; }
+.tea-hi { display: flex; align-items: center; gap: 24rpx; }
+.tea-ava {
+  width: 108rpx; height: 108rpx; flex-shrink: 0;
+  background: var(--ink); color: var(--paper);
+  font-size: 48rpx; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  transform: rotate(-3deg);
+}
+.tea-txt b { display: block; font-size: 34rpx; color: var(--ink); }
+.tea-txt small { font-size: 20rpx; color: var(--ink-fade); letter-spacing: 1rpx; }
+.tea-stats { display: flex; align-items: center; margin-top: 30rpx; }
+.ts-cell { flex: 1; text-align: center; }
+.ts-num { font-size: 56rpx; font-weight: 700; line-height: 1; }
+.ts-label { font-size: 22rpx; color: var(--ink-soft); margin-top: 12rpx; letter-spacing: 4rpx; }
+.ts-div { width: 2rpx; height: 60rpx; background: var(--ink-fade); opacity: .4; }
+.tea-btn { margin-top: 32rpx; }
+/* V1.3：工作台快捷入口（报表 / 消息） */
+.tea-links { display: flex; margin-top: 24rpx; border-top: 2rpx dashed var(--paper-4); }
+.tl {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 8rpx;
+  padding-top: 16rpx; font-size: 23rpx; color: var(--ink-soft); letter-spacing: 2rpx;
+}
+.tl + .tl { border-left: 2rpx dashed var(--paper-4); }
+.tl-bdg {
+  font-size: 17rpx; color: var(--paper); background: var(--verm);
+  padding: 0 10rpx; border-radius: 30rpx;
+}
+.tea-tip { text-align: center; font-size: 22rpx; color: var(--ink-fade); margin-top: 20rpx; }
 
 /* 跑马灯 */
 .ticker { display: flex; align-items: center; border-bottom: 2rpx solid var(--ink); background: var(--cream); }
@@ -48,12 +91,6 @@
 .g-item .g-ic.verm { color: var(--verm); }
 .g-item b { font-size: 30rpx; font-weight: 900; letter-spacing: 2rpx; }
 .g-item small { font-size: 20rpx; color: var(--ink-fade); letter-spacing: 1rpx; }
-.g-item.off { border-style: dashed; box-shadow: none; opacity: .6; }
-.g-item .soon {
-  position: absolute; top: 12rpx; right: 12rpx;
-  font-size: 16rpx; color: var(--verm); border: 2rpx solid var(--verm);
-  padding: 0 8rpx; transform: rotate(6deg);
-}
 
 /* 报名进度卡 */
 .prog-card { margin: 30rpx 28rpx 40rpx; padding: 24rpx; }

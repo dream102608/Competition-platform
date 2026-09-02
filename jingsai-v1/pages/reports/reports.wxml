@@ -1,0 +1,182 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="p-head rp-head">
+  <view class="rp-back" bindtap="back">‹</view>
+  <view class="t serif">统 计 报 表</view>
+  <text class="mono en">REPORT DESK</text>
+</view>
+
+<!-- 学生守卫 -->
+<view wx:if="{{guard}}" class="card empty-box">
+  <view class="hand">报表中心仅对评审台开放（教师 / 系级 / 院级 / 校级）。</view>
+  <view class="btn-line btn-s" bindtap="goHome">回首页</view>
+</view>
+
+<block wx:else>
+  <!-- 总览票 -->
+  <view class="sec-band"><view class="sq"></view><b>总 览</b><view class="ln"></view><text class="en mono">TOTALS</text></view>
+  <view class="card rp-over">
+    <view class="rp-ov-cell">
+      <view class="rp-ov-n verm mono">{{total}}</view>
+      <view class="rp-ov-l">报名总量</view>
+    </view>
+    <view class="rp-ov-div"></view>
+    <view class="rp-ov-cell">
+      <view class="rp-ov-n mono">{{approving}}</view>
+      <view class="rp-ov-l">审批中</view>
+    </view>
+    <view class="rp-ov-div"></view>
+    <view class="rp-ov-cell">
+      <view class="rp-ov-n mono">{{rejected}}</view>
+      <view class="rp-ov-l">已驳回</view>
+    </view>
+    <view class="rp-ov-div"></view>
+    <view class="rp-ov-cell">
+      <view class="rp-ov-n mono">{{passed}}</view>
+      <view class="rp-ov-l">已通过</view>
+    </view>
+  </view>
+  <view class="rp-sub mono">通过率 {{passRate}}% · 覆盖 {{members}} 名队员 · 平均每队 {{avgTeam}} 人 · 已撤回 {{withdrawn}}</view>
+
+  <!-- V1.5：赛项筛选（联动全部图表与导出） -->
+  <view class="sec-band"><view class="sq"></view><b>按赛项筛选</b><view class="ln"></view><text class="en mono">FILTER</text></view>
+  <view class="card rp-card">
+    <view class="rp-comps">
+      <view class="rp-comp {{compFilter === 'all' ? 'on' : ''}}" data-comp="all" bindtap="setCompFilter">
+        全部<text class="mono">{{compAllTotal}}</text>
+      </view>
+      <view wx:for="{{compFilters}}" wx:key="k"
+            class="rp-comp {{compFilter === item.k ? 'on' : ''}}"
+            data-comp="{{item.k}}" bindtap="setCompFilter">
+        {{item.short}}<text class="mono">{{item.v}}</text>
+      </view>
+    </view>
+    <view wx:if="{{compFilter !== 'all'}}" class="rp-cur mono" bindtap="clearComp">当前筛选：{{compName}} · 点此清除 ✕</view>
+  </view>
+
+  <!-- 按赛项 -->
+  <view class="sec-band"><view class="sq"></view><b>按赛项</b><view class="ln"></view><text class="en mono">BY COMPETITION</text></view>
+  <view class="card rp-card">
+    <view wx:if="{{!compBars.length}}" class="hand rp-empty">暂无报名数据，去大厅看看？</view>
+    <view wx:for="{{compBars}}" wx:key="k" class="rp-bar-row">
+      <text class="rp-bar-k">{{item.k}}</text>
+      <view class="rp-bar">
+        <view class="rp-bar-fill" style="width: {{item.w}}%;"></view>
+      </view>
+      <text class="rp-bar-v mono">{{item.v}}</text>
+    </view>
+  </view>
+
+  <!-- 状态分布 -->
+  <view class="sec-band"><view class="sq"></view><b>状态分布</b><view class="ln"></view><text class="en mono">STATUS</text></view>
+  <view class="card rp-card">
+    <view wx:if="{{!stack.length}}" class="hand rp-empty">暂无数据</view>
+    <block wx:else>
+      <view class="rp-stack">
+        <view wx:for="{{stack}}" wx:key="key" class="rp-stack-seg"
+              style="width: {{item.pct}}%; background: {{item.color}};"></view>
+      </view>
+      <view class="rp-legend">
+        <view wx:for="{{stack}}" wx:key="key" class="rp-leg">
+          <text class="rp-leg-dot" style="background: {{item.color}};"></text>
+          <text class="rp-leg-t">{{item.label}} · {{item.v}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 赛道构成 -->
+  <view class="sec-band"><view class="sq"></view><b>赛道构成</b><view class="ln"></view><text class="en mono">TRACK</text></view>
+  <view class="card rp-card">
+    <view wx:if="{{!trackBars.length}}" class="hand rp-empty">暂无数据</view>
+    <view wx:for="{{trackBars}}" wx:key="k" class="rp-track">
+      <view class="rp-track-h">
+        <text class="serif">{{item.k}}</text>
+        <text class="mono">{{item.v}} 项</text>
+      </view>
+      <view class="rp-bar">
+        <view class="rp-bar-fill ind" style="width: {{item.w}}%;"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 指导教师负载 -->
+  <view class="sec-band"><view class="sq"></view><b>指导教师负载</b><view class="ln"></view><text class="en mono">BY TEACHER</text></view>
+  <view class="card rp-card">
+    <view wx:if="{{!teacherBars.length}}" class="hand rp-empty">暂无数据</view>
+    <view wx:for="{{teacherBars}}" wx:key="k" class="rp-bar-row">
+      <text class="rp-bar-k">{{item.k}}</text>
+      <view class="rp-bar">
+        <view class="rp-bar-fill tea" style="width: {{item.w}}%;"></view>
+      </view>
+      <text class="rp-bar-v mono">{{item.v}}</text>
+    </view>
+  </view>
+
+  <!-- 评审绩效（V1.4 / V1.5：行可点下钻明细） -->
+  <view class="sec-band"><view class="sq"></view><b>评审绩效</b><view class="ln"></view><text class="en mono">APPROVER</text></view>
+  <view class="card rp-card">
+    <view wx:if="{{!perf.length}}" class="hand rp-empty">暂无评审动作</view>
+    <view wx:for="{{perf}}" wx:key="name" class="rp-perf-row" data-name="{{item.name}}" bindtap="openDrill">
+      <view class="rp-perf-h">
+        <view class="rp-perf-l">
+          <text class="serif">{{item.name}}</text>
+          <text class="rp-perf-meta mono">已办 {{item.done}} 件</text>
+          <text wx:if="{{item.pending}}" class="rp-perf-pend mono">待审 {{item.pending}}</text>
+        </view>
+        <text class="rp-perf-rate mono">{{item.rateTxt}}</text>
+      </view>
+      <view wx:if="{{item.done}}" class="rp-mini">
+        <view class="rp-mini-w" style="width: {{item.w}}%;">
+          <view class="rp-mini-p" style="width: {{item.passW}}%;"></view>
+          <view class="rp-mini-r" style="width: {{item.rejectW}}%;"></view>
+        </view>
+      </view>
+      <view wx:else class="rp-mini-empty mono">暂无已办记录 · 待审 {{item.pending}} 件待处理</view>
+      <view class="rp-drill mono">↘ 逐单明细</view>
+    </view>
+    <view class="rp-leg-2 mono"><text class="lg-p"></text>通过 <text class="lg-r"></text>驳回 <text class="lg-hint">点审批人行查看明细</text></view>
+  </view>
+
+  <!-- 筛选导出 -->
+  <view class="sec-band"><view class="sq"></view><b>导出</b><view class="ln"></view><text class="en mono">EXPORT</text></view>
+  <view class="card rp-card">
+    <view class="rp-filters">
+      <view wx:for="{{filters}}" wx:key="key"
+            class="rp-fil {{filter === item.key ? 'on' : ''}}"
+            data-f="{{item.key}}" bindtap="setFilter">
+        {{item.label}}<text class="mono">{{item.v}}</text>
+      </view>
+    </view>
+    <button class="btn btn-verm rp-exp" bindtap="exportCSV">↧ 导出 CSV（{{exportHint}}）</button>
+    <view class="rp-note mono">数据实时聚合自本地卷宗；筛选含「状态 × 赛项」双维，导出行数与当前视图一致。</view>
+  </view>
+
+  <view class="foot-note">竞赛一体化管理平台 · {{version}} · 墨纸编辑部</view>
+</block>
+
+<!-- V1.5：评审绩效下钻弹层 -->
+<view wx:if="{{drillShow}}" class="drill-mask" bindtap="closeDrill">
+  <view class="drill-modal" catchtap="noop">
+    <view class="drill-head">
+      <view class="drill-hl">
+        <text class="serif drill-name">{{drill.name}}</text>
+        <text class="drill-sub mono">审批明细 · {{drill.rows.length}} 条节点记录</text>
+      </view>
+      <text class="mono drill-x" bindtap="closeDrill">关闭 ✕</text>
+    </view>
+    <scroll-view scroll-y class="drill-scroll">
+      <view wx:if="{{!drill.rows.length}}" class="hand rp-empty">该审批人暂无审批记录</view>
+      <view wx:for="{{drill.rows}}" wx:key="index" class="drill-item">
+        <view class="drill-l1">
+          <view class="drill-act {{item.act === '通过' ? 'a-pass' : (item.act === '驳回' ? 'a-rej' : 'a-wait')}}">{{item.act}}</view>
+          <text class="serif drill-team">{{item.teamName}}</text>
+          <text class="mono drill-v">v{{item.version}} · {{item.regNo}}</text>
+        </view>
+        <view class="drill-l2 mono">{{item.compTitle}}</view>
+        <view class="drill-l3 mono">{{item.time}}</view>
+        <view wx:if="{{item.note}}" class="drill-note">批语：{{item.note}}</view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

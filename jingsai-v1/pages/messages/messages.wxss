@@ -1,0 +1,147 @@
+/* pages/messages/messages.wxss —— S8 消息与催办中心（来函版式）
+   V1.5：单条操作 / 整理多选 / 同报名单聚合卷宗 */
+.page { min-height: 100vh; background: var(--paper); padding: 0 32rpx 180rpx; box-sizing: border-box; }
+
+.p-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24rpx 8rpx 20rpx; border-bottom: 2rpx solid var(--ink);
+}
+.t { font-size: 44rpx; font-weight: 900; letter-spacing: 4rpx; color: var(--ink); }
+.head-acts { display: flex; align-items: center; gap: 14rpx; }
+.head-act {
+  font-size: 23rpx; color: var(--verm); border: 2rpx solid var(--verm);
+  padding: 6rpx 16rpx; font-weight: 700;
+}
+.head-act.ghost { color: var(--ink); border-color: var(--ink-fade); background: var(--paper-2); }
+.head-act.on { background: var(--ink); border-color: var(--ink); color: var(--cream); }
+
+.inbox-sub {
+  display: flex; align-items: center; gap: 12rpx;
+  font-size: 20rpx; color: var(--ink-soft); padding: 20rpx 8rpx 4rpx;
+}
+.dot-live {
+  width: 16rpx; height: 16rpx; border-radius: 50%;
+  background: var(--verm); animation: blink 1.2s infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+
+/* V1.4：来函分组页签 */
+.inbox-tabs { display: flex; gap: 14rpx; padding: 18rpx 8rpx 0; }
+.itab {
+  display: flex; align-items: center; gap: 8rpx;
+  padding: 12rpx 20rpx; border: 2rpx solid var(--ink-fade);
+  font-size: 24rpx; color: var(--ink-fade); font-weight: 700;
+  position: relative;
+}
+.itab-n { font-size: 17rpx; }
+.itab.on {
+  background: var(--ink); border-color: var(--ink); color: var(--cream);
+}
+.itab-dot {
+  width: 12rpx; height: 12rpx; border-radius: 50%;
+  background: var(--verm); border: 2rpx solid var(--cream);
+  position: absolute; top: -6rpx; right: -6rpx;
+}
+
+/* 来函卡片 */
+.msg { display: flex; gap: 22rpx; padding: 26rpx 28rpx; margin-top: 22rpx; }
+.msg.read { opacity: .62; }
+.msg.picked { border-color: var(--verm); background: #FBF3EA; }
+.msg-stamp {
+  flex-shrink: 0; width: 76rpx; height: 76rpx;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24rpx; font-weight: 900; letter-spacing: 2rpx;
+  transform: rotate(-6deg);
+}
+.t-notice  { background: var(--ind); color: var(--cream); border: 2rpx solid var(--ink); }
+.t-approval{ background: var(--verm); color: var(--cream); border: 2rpx solid var(--verm-deep); }
+.t-urge    { background: var(--marker); color: var(--ink); border: 2rpx solid var(--ink); }
+
+.msg-body { flex: 1; min-width: 0; }
+.msg-row { display: flex; align-items: center; gap: 12rpx; }
+.msg-title { font-size: 30rpx; font-weight: 700; color: var(--ink); }
+.unread-dot { width: 14rpx; height: 14rpx; border-radius: 50%; background: var(--verm); }
+.msg-body-txt { font-size: 24rpx; color: var(--ink-soft); margin-top: 8rpx; line-height: 1.6; }
+.msg-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 19rpx; color: var(--ink-fade); margin-top: 14rpx;
+}
+.msg-go { color: var(--verm); font-weight: 700; }
+
+.empty-box { padding: 60rpx 40rpx; text-align: center; margin-top: 24rpx; }
+.empty-box .hand { font-size: 28rpx; color: var(--ink-soft); margin-bottom: 32rpx; }
+.btn-s { display: inline-block; }
+
+/* ---- V1.5：勾选框 ---- */
+.pick-box {
+  flex-shrink: 0; width: 40rpx; height: 40rpx; margin-top: 4rpx;
+  border: 2rpx solid var(--ink-fade); background: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24rpx; color: var(--cream); line-height: 1;
+}
+.pick-box.on { background: var(--verm); border-color: var(--verm-deep); }
+
+/* ---- V1.5：同报名单聚合卷宗卡 ---- */
+.th-card { padding: 0; flex-direction: column; gap: 0; }
+.th-card.on { background: var(--paper-2); }
+.th-card .th-main { width: 100%; }
+.th-head { padding: 24rpx 28rpx 20rpx; display: flex; align-items: center; justify-content: space-between; gap: 16rpx; }
+.th-card.picked { border-color: var(--verm); background: #FBF3EA; }
+.th-card.on.picked { background: #FBF3EA; }
+.th-top { display: flex; align-items: center; gap: 16rpx; min-width: 0; flex: 1; }
+.th-ic {
+  flex-shrink: 0; width: 56rpx; height: 56rpx;
+  background: var(--ink); color: var(--cream);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30rpx; transform: rotate(-8deg);
+}
+.th-tt { min-width: 0; }
+.th-title {
+  font-size: 29rpx; font-weight: 900; color: var(--ink);
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.th-sub { font-size: 17rpx; color: var(--ink-fade); margin-top: 4rpx; }
+.th-arrow { flex-shrink: 0; font-size: 18rpx; color: var(--verm); font-weight: 700; }
+.th-rule { height: 2rpx; background: var(--ink); opacity: .85; }
+
+.th-item {
+  display: flex; gap: 16rpx; padding: 20rpx 28rpx;
+  border-bottom: 1rpx dashed var(--ink-fade);
+}
+.th-item.unread { background: #FBF6EC; }
+.th-item:last-child { border-bottom: none; }
+.th-dot {
+  flex-shrink: 0; width: 14rpx; height: 14rpx; margin-top: 10rpx;
+  border-radius: 50%; background: var(--ink-fade);
+}
+.th-dot.t-approval { background: var(--verm); }
+.th-dot.t-notice { background: var(--ind); }
+.th-dot.t-urge { background: var(--marker); border: 2rpx solid var(--ink); }
+.th-body { flex: 1; min-width: 0; }
+.th-row { display: flex; align-items: center; gap: 10rpx; }
+.th-title-s { font-size: 26rpx; font-weight: 700; color: var(--ink); }
+.th-txt {
+  font-size: 22rpx; color: var(--ink-soft); line-height: 1.6; margin-top: 6rpx;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+}
+.th-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 17rpx; color: var(--ink-fade); margin-top: 10rpx;
+}
+
+/* ---- V1.5：整理模式底部操作条 ---- */
+.ms-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+  height: 108rpx; background: var(--cream);
+  border-top: 2rpx solid var(--ink);
+  display: flex; align-items: center;
+  padding: 0 40rpx; box-sizing: border-box;
+  box-shadow: 0 -8rpx 0 rgba(26, 24, 21, .06);
+}
+.ms-cell { font-size: 26rpx; font-weight: 700; color: var(--ink); border: 2rpx solid var(--ink); padding: 10rpx 22rpx; }
+.ms-mid { flex: 1; text-align: center; font-size: 22rpx; color: var(--ink-soft); }
+.ms-del {
+  font-size: 26rpx; font-weight: 700; padding: 10rpx 30rpx;
+  border: 2rpx solid var(--ink-fade); color: var(--ink-fade);
+}
+.ms-del.on { background: var(--verm); border-color: var(--verm-deep); color: var(--cream); }
