@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>竞赛一体化管理平台 · 反主流重设计版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4EDDF; --paper-2:#EDE4CE; --paper-3:#E4D9BE; --paper-4:#DCD2BC;
+    --ink:#1A1815; --ink-soft:#4A443A; --ink-fade:#8A8172;
+    --verm:#C8442A; --verm-deep:#A03521;
+    --marker:#F5D547;
+    --serif:"Noto Serif SC","Source Han Serif SC","STZhongsong","SimSun",serif;
+    --sans:"Noto Sans SC","Microsoft YaHei","PingFang SC",sans-serif;
+    --hand:"Zhi Mang Xing","KaiTi","STKaiti","Kaiti SC",cursive;
+    --mono:"JetBrains Mono",Consolas,"Courier New",monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{background:var(--paper-2)}
+  body{
+    font-family:var(--sans); color:var(--ink); background:var(--paper);
+    max-width:1240px;margin:0 auto;padding:0 28px 90px;
+    position:relative;
+  }
+  /* 纸张颗粒 */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ============ 页眉 ============ */
+  .masthead{padding:56px 0 30px;border-bottom:3px solid var(--ink);position:relative}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.35em;color:var(--verm);text-transform:uppercase}
+  .masthead h1{font-family:var(--serif);font-weight:900;font-size:clamp(40px,6.4vw,74px);line-height:1.08;margin:14px 0 10px;letter-spacing:.02em}
+  .masthead h1 em{font-style:normal;color:var(--verm)}
+  .masthead .sub{font-size:15px;color:var(--ink-soft);max-width:640px;line-height:1.9}
+  .masthead-rule{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--ink-soft);border-top:1px solid var(--ink);margin-top:24px;padding-top:10px}
+  .bigmark{position:absolute;right:0;top:48px;width:118px;height:118px;border:3px solid var(--verm);border-radius:50%;display:flex;align-items:center;justify-content:center;transform:rotate(12deg);color:var(--verm);opacity:.9;mix-blend-mode:multiply}
+  .bigmark .seal-inner{font-family:var(--serif);font-weight:900;font-size:15px;text-align:center;line-height:1.5;letter-spacing:.2em;padding:6px}
+  .bigmark svg{width:22px;height:22px;margin:0 auto 4px;display:block}
+
+  /* ============ 通用版式 ============ */
+  section{margin-top:64px}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:26px;flex-wrap:wrap}
+  .sec-num{font-family:var(--serif);font-weight:900;font-size:44px;color:var(--verm);line-height:1}
+  .sec-head h2{font-family:var(--serif);font-weight:900;font-size:27px;letter-spacing:.06em}
+  .sec-head .en{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--ink-fade);text-transform:uppercase}
+  .sec-rule{flex:1;border-bottom:1.5px solid var(--ink);min-width:60px;transform:translateY(-6px)}
+
+  .card{background:#FBF7EC;border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);padding:26px}
+  .paper-tint{background:var(--paper-2)}
+
+  /* 胶带 */
+  .tape{position:absolute;width:92px;height:26px;background:rgba(224,203,150,.75);box-shadow:0 1px 2px rgba(0,0,0,.12);transform:rotate(-4deg);z-index:5;
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='92' height='26'%3E%3Cpath d='M0 3 Q12 0 24 3 T48 3 T72 3 T92 3 L92 23 Q80 26 68 23 T44 23 T20 23 L0 23 Z' fill='black'/%3E%3C/svg%3E");
+    mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='92' height='26'%3E%3Cpath d='M0 3 Q12 0 24 3 T48 3 T72 3 T92 3 L92 23 Q80 26 68 23 T44 23 T20 23 L0 23 Z' fill='black'/%3E%3C/svg%3E");}
+  .tape.t2{transform:rotate(3deg)}
+
+  /* 印章 */
+  .seal{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:74px;height:74px;border:2.5px solid rgba(200,68,42,.85);border-radius:50%;color:var(--verm);font-family:var(--serif);font-weight:900;transform:rotate(-11deg);mix-blend-mode:multiply;flex-shrink:0}
+  .seal small{font-size:8px;letter-spacing:.14em}
+  .seal span{font-size:13px;letter-spacing:.08em;line-height:1.25;text-align:center}
+  .seal .ic{width:16px;height:16px;margin-bottom:2px}
+
+  /* 手写批注 */
+  .handnote{font-family:var(--hand);color:var(--verm);font-size:17px;line-height:1.7}
+
+  /* 荧光笔标记 */
+  .mark{background:linear-gradient(transparent 42%, var(--marker) 42%, var(--marker) 92%, transparent 92%);padding:0 3px}
+
+  /* 条形码 */
+  .barcode{height:26px;width:88px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 5px,transparent 5px 9px,var(--ink) 9px 12px,transparent 12px 14px);position:relative}
+  .barcode::after{content:attr(data-no);position:absolute;inset:28px 0 0;font-family:var(--mono);font-size:8px;letter-spacing:.3em;color:var(--ink-soft);text-align:center}
+
+  /* 图标基座 */
+  .ic{display:inline-block;width:20px;height:20px;flex-shrink:0;vertical-align:-4px}
+  .ic svg{width:100%;height:100%;display:block}
+  .udr{width:100%}
+  .udr svg{width:100%;height:auto;display:block}
+
+  /* ============ 宣言 ============ */
+  .manifesto{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+  .manifesto .no-list,.manifesto .yes-list{border:2px solid var(--ink);padding:24px 26px;background:#FBF7EC;box-shadow:5px 5px 0 var(--ink)}
+  .manifesto h3{font-family:var(--serif);font-weight:900;font-size:20px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+  .manifesto ul{list-style:none}
+  .manifesto li{padding:8px 0;border-bottom:1px dashed var(--paper-4);font-size:14.5px;line-height:1.75;color:var(--ink-soft)}
+  .manifesto li:last-child{border-bottom:none}
+  .manifesto .no-list h3{text-decoration:line-through;text-decoration-color:var(--verm);text-decoration-thickness:3px}
+  .yes-list li::before{content:"✓ ";color:var(--verm);font-weight:700}
+  .no-list li::before{content:"✗ ";color:var(--ink-fade)}
+
+  /* ============ 视觉系统 ============ */
+  .vs-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;align-items:start}
+  .swatch-row{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 18px}
+  .swatch{width:104px;border:2px solid var(--ink);background:#FBF7EC}
+  .swatch .chip{height:56px;border-bottom:2px solid var(--ink)}
+  .swatch .lab{padding:8px 10px;font-family:var(--mono);font-size:10px;line-height:1.7;color:var(--ink-soft)}
+  .swatch .lab b{display:block;font-family:var(--sans);font-size:12.5px;color:var(--ink)}
+  .type-demo{margin-top:8px}
+  .type-demo .row{padding:10px 0;border-bottom:1px dashed var(--paper-4);display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .type-demo .tag{font-family:var(--mono);font-size:10px;color:var(--verm);letter-spacing:.1em;min-width:118px}
+  .t-display{font-family:var(--serif);font-weight:900;font-size:30px}
+  .t-title{font-family:var(--serif);font-weight:600;font-size:19px}
+  .t-body{font-size:14px;color:var(--ink-soft)}
+  .t-hand{font-family:var(--hand);font-size:19px;color:var(--verm)}
+  .t-mono{font-family:var(--mono);font-size:13px}
+  .comp-demo{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-top:14px}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;padding:11px 22px;border:2px solid var(--ink);cursor:pointer;user-select:none}
+  .btn-ink{background:var(--ink);color:var(--paper);box-shadow:4px 4px 0 rgba(200,68,42,.9)}
+  .btn-line{background:#FBF7EC;color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+  .btn-verm{background:var(--verm);color:#FBF7EC;border-color:var(--verm-deep);box-shadow:4px 4px 0 var(--ink)}
+  .btn-ghost{background:transparent;border-style:dashed;color:var(--ink-soft)}
+  .chip-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;border:1.5px solid currentColor;padding:3px 8px}
+  .lvlA{color:var(--verm)} .lvlB{color:#2A5A8F} .lvlC{color:var(--ink-soft)}
+
+  /* ============ 手机样机 ============ */
+  .stage-wrap{display:flex;flex-direction:column;gap:70px}
+  .stage{display:flex;gap:44px;align-items:flex-start;flex-wrap:wrap}
+  .stage.rev{flex-direction:row-reverse}
+  .phone{width:328px;background:var(--paper);border:2.5px solid var(--ink);border-radius:30px;box-shadow:8px 8px 0 var(--ink);overflow:hidden;position:relative;flex-shrink:0}
+  .phone .notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:88px;height:22px;background:var(--ink);border-radius:12px;z-index:20}
+  .statusbar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px 6px;font-family:var(--mono);font-size:11px;color:var(--ink)}
+  .statusbar .right{display:flex;gap:5px;align-items:center}
+  .screen{height:600px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+  .screen-scroll{flex:1;overflow-y:auto;scrollbar-width:thin;padding-bottom:14px}
+  .tabbar{display:flex;background:var(--ink);padding:9px 6px 11px}
+  .tabbar .tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#8f887a;font-size:10.5px;letter-spacing:.12em}
+  .tabbar .tb .ic{width:21px;height:21px;vertical-align:0}
+  .tabbar .tb.on{color:var(--paper)}
+  .tabbar .tb.on::after{content:"";width:16px;height:3px;background:var(--verm);margin-top:2px}
+  .tabbar .tb .ic.on-ic{filter:drop-shadow(0 0 0 var(--paper))}
+
+  .stage-note{max-width:330px;padding-top:16px}
+  .stage-note h3{font-family:var(--serif);font-weight:900;font-size:23px;line-height:1.4;margin-bottom:6px}
+  .stage-note .en{font-family:var(--mono);font-size:10px;color:var(--ink-fade);letter-spacing:.28em;text-transform:uppercase;margin-bottom:14px}
+  .stage-note p{font-size:13.5px;line-height:2;color:var(--ink-soft);margin-bottom:10px}
+  .stage-note .handnote{display:block;margin-top:10px;padding-left:12px;border-left:2px solid var(--verm)}
+  .spec{margin-top:16px;border:1.5px dashed var(--ink-fade);padding:13px 15px;font-size:11.5px;line-height:2;color:var(--ink-soft);background:rgba(251,247,236,.7)}
+  .spec b{color:var(--verm);font-family:var(--mono);font-size:10.5px;letter-spacing:.1em}
+
+  /* 手机内通用 */
+  .p-head{display:flex;align-items:center;justify-content:space-between;padding:10px 18px 12px;border-bottom:2px solid var(--ink);background:var(--paper)}
+  .p-head .t{font-family:var(--serif);font-weight:900;font-size:18px;letter-spacing:.08em}
+  .p-head .ic{width:19px;height:19px}
+  .pill{display:inline-block;font-family:var(--mono);font-size:9.5px;border:1.2px solid var(--ink);padding:2px 7px;letter-spacing:.12em}
+  .pill.red{border-color:var(--verm);color:var(--verm)}
+
+  /* ---- S1 登录 ---- */
+  .login-hero{padding:26px 24px 8px;text-align:center;position:relative}
+  .vtext{position:absolute;left:14px;top:26px;writing-mode:vertical-rl;font-family:var(--serif);font-weight:900;font-size:13px;letter-spacing:.4em;color:var(--ink);border-left:2px solid var(--verm);padding-left:8px;height:180px}
+  .login-hero .udr{width:190px;margin:6px auto 0}
+  .login-title{font-family:var(--serif);font-weight:900;font-size:34px;letter-spacing:.1em;margin-top:2px}
+  .login-title em{font-style:normal;color:var(--verm)}
+  .login-sub{font-family:var(--mono);font-size:9.5px;letter-spacing:.34em;color:var(--ink-fade);margin-top:6px}
+  .login-btn{margin:20px 22px 8px;position:relative}
+  .login-btn .btn{width:100%;justify-content:center;font-size:15.5px;letter-spacing:.24em}
+  .role-tickets{margin:20px 14px 24px;border:2px solid var(--ink);background:#FBF7EC;box-shadow:4px 4px 0 var(--ink)}
+  .role-tickets .rt-t{font-family:var(--serif);font-weight:900;font-size:13px;letter-spacing:.3em;padding:10px 14px;border-bottom:1.5px dashed var(--ink-fade);display:flex;justify-content:space-between;align-items:center}
+  .role-row{display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1.5px dashed var(--paper-4)}
+  .role-row:last-child{border-bottom:none}
+  .role-row .ic{width:26px;height:26px;color:var(--ink)}
+  .role-row b{font-size:14.5px;font-family:var(--serif)}
+  .role-row small{display:block;font-size:10.5px;color:var(--ink-fade);margin-top:2px;letter-spacing:.05em}
+  .role-row .pick{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--ink-fade)}
+  .role-row.on{background:var(--marker);box-shadow:inset 0 0 0 1.5px var(--ink)}
+  .role-row.on .pick{color:var(--verm);font-weight:700}
+
+  /* ---- S2 首页 ---- */
+  .paper-mast{padding:12px 18px 10px;border-bottom:3px double var(--ink)}
+  .paper-mast .date{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--ink-soft);display:flex;justify-content:space-between}
+  .paper-mast h4{font-family:var(--serif);font-weight:900;font-size:24px;text-align:center;letter-spacing:.34em;margin:6px 0 4px}
+  .paper-mast .slogan{text-align:center;font-size:9.5px;color:var(--verm);letter-spacing:.3em}
+  .ticker{display:flex;align-items:center;gap:8px;border-bottom:1.5px solid var(--ink);padding:7px 14px;overflow:hidden}
+  .ticker .tag{background:var(--verm);color:#FBF7EC;font-size:9px;font-weight:700;padding:2px 6px;letter-spacing:.15em;flex-shrink:0}
+  .ticker .txt{font-size:11px;color:var(--ink-soft);white-space:nowrap;letter-spacing:.05em}
+  .home-banner{margin:14px;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);position:relative;overflow:hidden}
+  .home-banner img{width:100%;height:150px;object-fit:cover;display:block;filter:saturate(.82) contrast(1.02)}
+  .home-banner .cap{position:absolute;left:0;right:0;bottom:0;background:rgba(26,24,21,.88);color:var(--paper);padding:9px 12px;display:flex;justify-content:space-between;align-items:center}
+  .home-banner .cap b{font-family:var(--serif);font-size:13.5px;letter-spacing:.06em}
+  .home-banner .flag{position:absolute;top:10px;left:-34px;background:var(--verm);color:#FBF7EC;font-size:10px;font-weight:700;letter-spacing:.22em;padding:4px 40px;transform:rotate(-38deg)}
+  .grid-nav{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:6px 14px}
+  .g-item{border:2px solid var(--ink);background:#FBF7EC;padding:13px 12px;display:flex;flex-direction:column;gap:7px;position:relative;box-shadow:3px 3px 0 var(--ink)}
+  .g-item .ic{width:25px;height:25px}
+  .g-item b{font-size:13.5px;font-family:var(--serif);letter-spacing:.05em}
+  .g-item small{font-size:9.5px;color:var(--ink-fade);letter-spacing:.05em}
+  .g-item.off{background:var(--paper-2);box-shadow:none;border-style:dashed;color:var(--ink-fade)}
+  .g-item.off .ic{opacity:.35}
+  .g-item .soon{position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:8px;color:var(--verm);border:1px solid var(--verm);padding:1px 4px;transform:rotate(6deg)}
+  .prog-card{margin:14px;border:2px solid var(--ink);background:#FBF7EC}
+  .prog-card .pc-t{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1.5px dashed var(--paper-4)}
+  .prog-card .pc-t b{font-family:var(--serif);font-size:13.5px;letter-spacing:.1em}
+  .pc-body{padding:12px}
+  .pc-row{display:flex;align-items:center;gap:10px;padding:7px 0}
+  .pc-row .num{font-family:var(--serif);font-weight:900;font-size:17px;color:var(--verm);min-width:26px}
+  .pc-row b{font-size:12px}
+  .pc-row small{display:block;font-family:var(--mono);font-size:8.5px;color:var(--ink-fade);margin-top:2px}
+  .pc-track{margin-left:auto;display:flex;align-items:center;gap:0}
+  .pc-track i{width:16px;height:16px;border:1.5px solid var(--ink);border-radius:50%;background:var(--paper)}
+  .pc-track i.done{background:var(--verm);border-color:var(--verm)}
+  .pc-track s{width:10px;height:1.5px;background:var(--ink);text-decoration:none}
+  .pc-track s.done{background:var(--verm)}
+  .pc-row .ver{font-family:var(--mono);font-size:8.5px;color:var(--verm);border:1px solid var(--verm);padding:1px 4px}
+
+  /* ---- S3 大厅 ---- */
+  .hall-tabs{display:flex;margin:12px 14px 0;border:2px solid var(--ink)}
+  .hall-tabs .ht{flex:1;text-align:center;font-family:var(--serif);font-weight:900;font-size:13.5px;letter-spacing:.14em;padding:9px 0}
+  .hall-tabs .ht.on{background:var(--ink);color:var(--paper)}
+  .hall-tabs .ht.on::before{content:"▍";color:var(--verm)}
+  .searchbar{display:flex;align-items:center;gap:8px;margin:12px 14px 0;border:1.5px dashed var(--ink-fade);padding:8px 12px;color:var(--ink-fade);font-size:11.5px;background:rgba(251,247,236,.6)}
+  .searchbar .ic{width:15px;height:15px}
+  .filter-chips{display:flex;gap:8px;margin:12px 14px 0;flex-wrap:wrap}
+  .fchip{font-size:10px;border:1.2px solid var(--ink);padding:3px 9px;letter-spacing:.08em}
+  .fchip.on{background:var(--marker);box-shadow:2px 2px 0 var(--ink);font-weight:700}
+  .promo{margin:14px;border:2px solid var(--ink);position:relative;box-shadow:4px 4px 0 var(--ink)}
+  .promo img{width:100%;height:118px;object-fit:cover;display:block;filter:saturate(.85)}
+  .promo .pm{padding:10px 12px;background:#FBF7EC}
+  .promo .pm b{font-family:var(--serif);font-size:14px}
+  .promo .pm small{display:block;font-size:10px;color:var(--ink-soft);margin-top:3px;letter-spacing:.04em}
+  .comp-card{margin:12px 14px;display:flex;border:2px solid var(--ink);background:#FBF7EC;position:relative}
+  .comp-card .thumb{width:92px;flex-shrink:0;border-right:1.5px dashed var(--ink-fade);overflow:hidden}
+  .comp-card .thumb img{width:100%;height:100%;object-fit:cover;filter:saturate(.8)}
+  .comp-card .info{padding:10px 12px;flex:1;min-width:0}
+  .comp-card .info .r1{display:flex;gap:6px;align-items:center;margin-bottom:5px}
+  .comp-card .info b{font-family:var(--serif);font-size:13px;line-height:1.4;display:block;margin-bottom:4px}
+  .comp-card .info p{font-size:9.5px;color:var(--ink-soft);line-height:1.7}
+  .comp-card .meta{display:flex;justify-content:space-between;align-items:center;margin-top:7px;padding-top:7px;border-top:1px dashed var(--paper-4)}
+  .comp-card .meta .ddl{font-family:var(--mono);font-size:8.5px;color:var(--verm);display:flex;align-items:center;gap:4px}
+  .comp-card .meta .ddl .ic{width:11px;height:11px}
+  .bar-prog{height:5px;background:var(--paper-3);border:1px solid var(--ink);margin-top:6px;position:relative}
+  .bar-prog i{position:absolute;inset:0;right:auto;width:62%;background:var(--verm)}
+  .lvl{position:absolute;top:-1px;right:-1px;font-size:8px;font-weight:700;letter-spacing:.1em;color:#FBF7EC;padding:3px 7px}
+  .lvl.A{background:var(--verm)} .lvl.B{background:#2A5A8F} .lvl.C{background:var(--ink-soft)}
+  .hall-foot{margin:14px;text-align:center;font-family:var(--hand);color:var(--ink-fade);font-size:13px}
+
+  /* ---- S4 详情 ---- */
+  .detail-hero{position:relative;border-bottom:2px solid var(--ink)}
+  .detail-hero img{width:100%;height:158px;object-fit:cover;display:block;filter:saturate(.75) contrast(1.05)}
+  .detail-hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,24,21,.05) 30%,rgba(26,24,21,.82))}
+  .detail-hero .dt{position:absolute;left:16px;right:16px;bottom:12px;color:var(--paper)}
+  .detail-hero .dt .pill{border-color:var(--paper);color:var(--paper);margin-bottom:7px}
+  .detail-hero .dt h5{font-family:var(--serif);font-weight:900;font-size:19px;line-height:1.5;letter-spacing:.04em}
+  .detail-hero .dt .org{font-family:var(--mono);font-size:9px;letter-spacing:.14em;opacity:.85;margin-top:5px}
+  .sec-band{display:flex;align-items:center;gap:10px;margin:16px 16px 10px}
+  .sec-band .sq{width:11px;height:11px;background:var(--verm);flex-shrink:0}
+  .sec-band b{font-family:var(--serif);font-weight:900;font-size:14.5px;letter-spacing:.2em}
+  .sec-band .ln{flex:1;border-top:1.5px solid var(--ink)}
+  .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:0 16px}
+  .meta-cell{border:1.5px solid var(--ink);padding:9px 10px;background:#FBF7EC}
+  .meta-cell small{font-family:var(--mono);font-size:8px;color:var(--ink-fade);letter-spacing:.2em;display:block;margin-bottom:4px}
+  .meta-cell b{font-size:12px}
+  .meta-cell b.red{color:var(--verm)}
+  .tl{margin:0 16px;border-left:2px solid var(--ink);padding-left:0}
+  .tl .node{display:flex;gap:12px;position:relative;padding:0 0 15px 16px}
+  .tl .node::before{content:"";position:absolute;left:-6.5px;top:3px;width:9px;height:9px;background:var(--paper);border:2px solid var(--ink);border-radius:50%}
+  .tl .node.done::before{background:var(--verm);border-color:var(--verm)}
+  .tl .node.now::before{background:var(--marker);border-color:var(--ink)}
+  .tl .node b{font-size:12px;display:block}
+  .tl .node small{font-family:var(--mono);font-size:8.5px;color:var(--ink-fade)}
+  .team-req{margin:0 16px;display:flex;gap:10px;align-items:stretch}
+  .tr-card{flex:1;border:1.5px dashed var(--ink-fade);padding:10px;display:flex;flex-direction:column;gap:5px;align-items:center;text-align:center}
+  .tr-card .ic{width:24px;height:24px}
+  .tr-card b{font-size:12px;font-family:var(--serif)}
+  .tr-card small{font-size:9px;color:var(--ink-fade);line-height:1.6}
+  .notice{margin:12px 16px;background:var(--paper-2);border:1.5px solid var(--ink);padding:11px 13px;font-size:10.5px;line-height:1.9;color:var(--ink-soft);position:relative}
+  .notice b{color:var(--verm)}
+  .detail-foot{display:flex;gap:12px;margin:14px 16px 16px;align-items:center}
+  .fav-btn{width:46px;height:46px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;background:#FBF7EC;box-shadow:3px 3px 0 var(--ink);flex-shrink:0}
+  .apply-btn{flex:1;justify-content:center;font-size:15px;letter-spacing:.3em;font-family:var(--serif);font-weight:900}
+  .detail-foot .barcode{margin-left:2px;transform:scale(.86);transform-origin:right}
+
+  /* ---- S5 表单 ---- */
+  .form-sheet{margin:14px;border:2px solid var(--ink);background:#FBF7EC;box-shadow:4px 4px 0 var(--ink);position:relative}
+  .form-head{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 14px 10px;border-bottom:2px solid var(--ink)}
+  .form-head b{font-family:var(--serif);font-weight:900;font-size:17px;letter-spacing:.16em}
+  .form-head small{display:block;font-family:var(--mono);font-size:8.5px;color:var(--ink-fade);letter-spacing:.18em;margin-top:4px}
+  .f-sec{padding:13px 14px;border-bottom:1.5px dashed var(--paper-4)}
+  .f-sec:last-child{border-bottom:none}
+  .f-label{font-size:10.5px;font-weight:700;letter-spacing:.14em;color:var(--ink-soft);margin-bottom:7px;display:flex;gap:6px;align-items:center}
+  .f-label .ic{width:13px;height:13px}
+  .f-label i{font-family:var(--mono);font-size:8px;color:var(--verm);font-style:normal;border:1px solid var(--verm);padding:0 3px}
+  .f-input{border:none;border-bottom:1.5px solid var(--ink);background:transparent;font-size:13px;padding:7px 2px 5px;width:100%;font-family:var(--sans);color:var(--ink)}
+  .f-input.handf{font-family:var(--hand);font-size:16px;color:var(--verm)}
+  .f-input::placeholder{color:#b7ae9c}
+  .f-hint{font-size:9px;color:var(--ink-fade);margin-top:5px;letter-spacing:.05em}
+  .radio-row{display:flex;gap:9px}
+  .radio-row .rc{flex:1;border:1.5px solid var(--ink);text-align:center;font-size:11px;padding:7px 0;letter-spacing:.1em}
+  .radio-row .rc.on{background:var(--ink);color:var(--paper);font-weight:700}
+  .radio-row .rc.on::after{content:" ·已选";font-size:8px;color:var(--marker)}
+  .member-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .m-ava{width:42px;height:42px;border:2px solid var(--ink);overflow:hidden;position:relative}
+  .m-ava img{width:100%;height:100%;object-fit:cover;filter:saturate(.8)}
+  .m-ava .lead{position:absolute;bottom:0;left:0;right:0;background:var(--verm);color:#FBF7EC;font-size:7.5px;text-align:center;letter-spacing:.1em}
+  .m-add{width:42px;height:42px;border:2px dashed var(--ink-fade);display:flex;align-items:center;justify-content:center;color:var(--ink-fade)}
+  .m-add .ic{width:15px;height:15px}
+  .m-tag{font-family:var(--mono);font-size:8.5px;color:var(--ink-fade)}
+  .approver-card{display:flex;gap:10px;align-items:center;border:2px solid var(--ink);padding:9px 11px;background:var(--paper)}
+  .approver-card .av{width:36px;height:36px;border:1.5px solid var(--ink);overflow:hidden;flex-shrink:0}
+  .approver-card .av img{width:100%;height:100%;object-fit:cover;filter:saturate(.8)}
+  .approver-card b{font-size:12px;display:block}
+  .approver-card small{font-size:9px;color:var(--ink-fade)}
+  .approver-card .pick-me{margin-left:auto;font-size:9px;color:var(--verm);font-weight:700;letter-spacing:.1em}
+  .submit-note{margin:0 14px 16px;text-align:center;font-family:var(--hand);color:var(--ink-soft);font-size:13px}
+  .submit-btn{width:100%;justify-content:center;font-size:15px;letter-spacing:.34em;font-family:var(--serif);font-weight:900}
+
+  /* ---- S6 审批 ---- */
+  .ap-tabs{display:flex;margin:12px 14px 0;border:2px solid var(--ink)}
+  .ap-tabs .at{flex:1;text-align:center;font-size:12px;font-weight:700;letter-spacing:.12em;padding:8px 0;position:relative}
+  .ap-tabs .at.on{background:var(--ink);color:var(--paper)}
+  .ap-tabs .at .bdg{position:absolute;top:-7px;right:10px;background:var(--verm);color:#FBF7EC;font-family:var(--mono);font-size:8px;padding:1px 5px;border-radius:8px}
+  .ap-item{margin:12px 14px;border:2px solid var(--ink);background:#FBF7EC;box-shadow:3px 3px 0 var(--ink)}
+  .ap-item .ai-h{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1.5px dashed var(--paper-4)}
+  .ap-item .ai-h b{font-family:var(--serif);font-size:13px}
+  .ap-item .ai-h .who{font-family:var(--mono);font-size:8.5px;color:var(--ink-fade);margin-top:3px}
+  .ap-track{padding:11px 12px}
+  .ap-step{display:flex;gap:9px;align-items:flex-start;padding:5px 0}
+  .ap-step .st{width:20px;height:20px;border:1.8px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--paper);margin-top:1px}
+  .ap-step .st .ic{width:11px;height:11px}
+  .ap-step.ok .st{background:var(--verm);border-color:var(--verm)}
+  .ap-step.rej .st{background:var(--ink)}
+  .ap-step b{font-size:11.5px;display:block}
+  .ap-step small{font-size:9px;color:var(--ink-fade);display:block;line-height:1.6}
+  .ap-step .tm{margin-left:auto;font-family:var(--mono);font-size:8px;color:var(--ink-fade);white-space:nowrap}
+  .rej-note{margin:4px 0 2px;background:rgba(200,68,42,.08);border-left:3px solid var(--verm);padding:7px 9px;font-family:var(--hand);color:var(--verm);font-size:13px;line-height:1.5}
+  .sign-area{margin:12px 14px;border:2px dashed var(--ink);background:var(--paper);position:relative;padding:12px 12px 10px}
+  .sign-area .udr{width:104px;position:absolute;right:10px;bottom:6px;opacity:.9}
+  .sign-area .sh{font-size:10px;letter-spacing:.2em;color:var(--ink-soft);font-weight:700;margin-bottom:8px}
+  .sign-area .sig{font-family:var(--hand);font-size:24px;color:var(--ink);border-bottom:1.5px solid var(--ink-fade);width:120px;padding-bottom:2px}
+  .sign-area .mark{font-size:11px}
+  .ap-actions{display:flex;gap:11px;margin:6px 14px 16px}
+  .ap-actions .btn{flex:1;justify-content:center;font-size:13.5px}
+  .overtime{margin:0 14px 4px;display:flex;gap:7px;align-items:center;border:1.5px solid var(--verm);background:rgba(200,68,42,.07);padding:7px 10px;font-size:10px;color:var(--verm)}
+  .overtime .ic{width:13px;height:13px}
+
+  /* ---- S7 我的 ---- */
+  .me-head{display:flex;gap:14px;align-items:center;padding:18px;border-bottom:2px solid var(--ink);background:var(--paper)}
+  .me-ava{width:62px;height:62px;border:2.5px solid var(--ink);overflow:hidden;box-shadow:3px 3px 0 var(--verm);flex-shrink:0}
+  .me-ava img{width:100%;height:100%;object-fit:cover;filter:saturate(.8)}
+  .me-head .info b{font-family:var(--serif);font-weight:900;font-size:17px;display:flex;align-items:center;gap:8px}
+  .me-head .info .sid{font-family:var(--mono);font-size:9px;color:var(--ink-fade);letter-spacing:.14em;margin-top:5px}
+  .me-head .info .tagline{display:inline-block;font-size:9.5px;background:var(--marker);border:1.2px solid var(--ink);padding:2px 7px;margin-top:7px;letter-spacing:.06em}
+  .me-stats{display:flex;border-bottom:2px solid var(--ink)}
+  .me-stats .st{flex:1;text-align:center;padding:11px 0;border-right:1.5px dashed var(--paper-4)}
+  .me-stats .st:last-child{border-right:none}
+  .me-stats .st b{font-family:var(--serif);font-weight:900;font-size:19px;color:var(--verm)}
+  .me-stats .st small{display:block;font-size:9px;color:var(--ink-fade);letter-spacing:.14em;margin-top:3px}
+  .me-list{margin:14px}
+  .me-item{border:2px solid var(--ink);background:#FBF7EC;margin-bottom:11px}
+  .mi-h{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;border-bottom:1.5px dashed var(--paper-4)}
+  .mi-h b{font-family:var(--serif);font-size:12.5px}
+  .mi-h .st-pill{font-size:8.5px;font-weight:700;letter-spacing:.1em;padding:2.5px 8px;border:1.2px solid currentColor}
+  .st-run{color:#2A5A8F} .st-rej{color:var(--verm)} .st-ok{color:#3d6b3f} .st-lock{color:var(--ink-fade)}
+  .mi-b{padding:9px 12px;display:flex;align-items:center;gap:8px}
+  .mi-b .ddl{font-family:var(--mono);font-size:8.5px;color:var(--ink-fade);display:flex;align-items:center;gap:4px}
+  .mi-b .ddl .ic{width:11px;height:11px}
+  .mi-b .mini-track{margin-left:auto;display:flex;align-items:center}
+  .mi-b .mini-track i{width:12px;height:12px;border:1.3px solid var(--ink);border-radius:50%}
+  .mi-b .mini-track i.d{background:var(--verm);border-color:var(--verm)}
+  .mi-b .mini-track s{width:8px;height:1.3px;background:var(--ink)}
+  .empty-state{margin:14px;border:1.5px dashed var(--ink-fade);padding:20px 14px;text-align:center;background:rgba(251,247,236,.6)}
+  .empty-state .udr{width:130px;margin:0 auto 8px}
+  .empty-state p{font-size:11px;color:var(--ink-soft);line-height:1.9}
+  .empty-state .go{margin-top:10px;display:inline-block;font-size:11px;font-weight:700;border:1.5px solid var(--ink);padding:6px 16px;letter-spacing:.2em}
+  .me-menu{margin:0 14px 14px;border:2px solid var(--ink)}
+  .me-menu .mm{display:flex;align-items:center;gap:10px;padding:11px 13px;border-bottom:1.5px dashed var(--paper-4);background:#FBF7EC;font-size:12.5px}
+  .me-menu .mm:last-child{border-bottom:none}
+  .me-menu .mm .ic{width:17px;height:17px}
+  .me-menu .mm .arr{margin-left:auto}
+  .me-menu .mm .arr .ic{width:13px;height:13px}
+
+  /* ============ 资源清单 ============ */
+  .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+  .res-card{border:2px solid var(--ink);background:#FBF7EC;box-shadow:5px 5px 0 var(--ink);padding:22px 24px}
+  .res-card h3{font-family:var(--serif);font-weight:900;font-size:18px;display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .res-card .src{font-family:var(--mono);font-size:10px;color:var(--verm);letter-spacing:.1em;margin-bottom:14px}
+  .res-card table{width:100%;border-collapse:collapse;font-size:12px}
+  .res-card th{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--ink-fade);text-align:left;padding:6px 4px;border-bottom:1.5px solid var(--ink)}
+  .res-card td{padding:7px 4px;border-bottom:1px dashed var(--paper-4);vertical-align:top;line-height:1.7;color:var(--ink-soft)}
+  .res-card td b{color:var(--ink)}
+  .res-card .mono{font-family:var(--mono);font-size:10.5px}
+  .credit{font-size:10.5px;color:var(--ink-fade);margin-top:12px;line-height:1.8;font-family:var(--mono)}
+
+  /* ============ 落地 ============ */
+  .deploy-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+  pre.code{background:var(--ink);color:#E9E0CC;font-family:var(--mono);font-size:11.5px;line-height:1.85;padding:20px 22px;overflow-x:auto;border:2px solid var(--ink)}
+  pre.code .c{color:#8A8172}
+  pre.code .k{color:var(--marker)}
+  pre.code .v{color:#F0A48E}
+  .tips li{font-size:13.5px;line-height:2.1;color:var(--ink-soft);padding:9px 0;border-bottom:1px dashed var(--paper-4);list-style:none;display:flex;gap:12px}
+  .tips li:last-child{border-bottom:none}
+  .tips li .ic{width:17px;height:17px;margin-top:7px}
+  .tips li b{color:var(--ink)}
+
+  footer{margin-top:80px;border-top:3px solid var(--ink);padding-top:18px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}
+  footer .l{font-family:var(--serif);font-weight:900;font-size:17px;letter-spacing:.1em}
+  footer .r{font-family:var(--mono);font-size:10px;color:var(--ink-fade);letter-spacing:.14em;text-align:right;line-height:2}
+
+  @media (max-width:900px){
+    .manifesto,.vs-grid,.res-grid,.deploy-grid{grid-template-columns:1fr}
+    .stage,.stage.rev{flex-direction:column}
+    .stage-note{max-width:328px}
+    .bigmark{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== 页眉 ===================== -->
+<header class="masthead">
+  <div class="kicker">ANTI-MAINSTREAM REDESIGN · V2.0 DESIGN DRAFT</div>
+  <h1>竞赛一体化平台<br><em>墨纸版</em> · 前端视觉重设计</h1>
+  <p class="sub">把 SaaS 模板的脸打掉。这是一版用<b>报纸编辑部的逻辑</b>做的小程序界面：纸张底色、油墨边框、朱砂印章、票据撕边、手写批注。软件不该只有一种好看的方式。</p>
+  <div class="masthead-rule">
+    <span>DESIGN LANGUAGE: INK &amp; PAPER EDITORIAL</span>
+    <span>2026-09-01 · 第一版重设计</span>
+  </div>
+  <div class="bigmark">
+    <div class="seal-inner">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 21h8m-4-4v4M7 4h10m0 0v8a5 5 0 0 1-10 0V4M3 9a2 2 0 1 0 4 0a2 2 0 1 0-4 0m14 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/></svg><br>
+      竞赛管理<br>专用章
+    </div>
+  </div>
+</header>
+
+<!-- ===================== 01 宣言 ===================== -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">01</span>
+    <h2>设计宣言</h2>
+    <span class="en">Manifesto</span>
+    <span class="sec-rule"></span>
+  </div>
+  <div class="manifesto">
+    <div class="no-list">
+      <h3>我们反对的</h3>
+      <ul>
+        <li>圆角大卡片 + 浅灰背景 + 蓝紫渐变按钮的「AI 三件套」</li>
+        <li>什么都发光：阴影、描边、玻璃拟态，一屏十种特效</li>
+        <li>黑白灰里点一个亮蓝就敢叫「品牌色」</li>
+        <li>图标独角兽：一个界面混用五种图标风格</li>
+        <li>没有触感：摸上去像玻璃，不像纸</li>
+      </ul>
+    </div>
+    <div class="yes-list">
+      <h3>我们坚持的</h3>
+      <ul>
+        <li>一套墨色走天下：纸、墨、朱砂、荧光笔，四种材料说完所有事</li>
+        <li>2px 油墨边框 + 硬投影——像盖章盖出来的，不是浮在空中的</li>
+        <li>衬线大字做标题，像报纸头版一样有版面秩序</li>
+        <li>票据、印章、胶带、条形码：把「办事」的仪式感做进界面</li>
+        <li>手写批注留给关键提示——机器说人话，人才愿意读</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 02 视觉系统 ===================== -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">02</span>
+    <h2>视觉系统</h2>
+    <span class="en">Design Tokens</span>
+    <span class="sec-rule"></span>
+  </div>
+  <div class="vs-grid">
+    <div class="card">
+      <div class="swatch-row">
+        <div class="swatch"><div class="chip" style="background:#F4EDDF"></div><div class="lab"><b>纸 · Paper</b>#F4EDDF 页面底</div></div>
+        <div class="swatch"><div class="chip" style="background:#1A1815"></div><div class="lab"><b>墨 · Ink</b>#1A1815 主文字/边框</div></div>
+        <div class="swatch"><div class="chip" style="background:#C8442A"></div><div class="lab"><b>朱砂 · Verm</b>#C8442A 唯一强调色</div></div>
+        <div class="swatch"><div class="chip" style="background:#F5D547"></div><div class="lab"><b>荧光 · Marker</b>#F5D547 选中/高亮</div></div>
+        <div class="swatch"><div class="chip" style="background:#2A5A8F"></div><div class="lab"><b>靛蓝 · Indigo</b>#2A5A8F 省级B标签专用</div></div>
+      </div>
+      <div class="type-demo">
+        <div class="row"><span class="tag">DISPLAY 900</span><span class="t-display">竞赛大厅 · 第肆拾期</span></div>
+        <div class="row"><span class="tag">TITLE 600</span><span class="t-title">全国大学生数学建模竞赛</span></div>
+        <div class="row"><span class="tag">BODY 400</span><span class="t-body">报名截止前 3 天，系统将自动发送站内提醒。</span></div>
+        <div class="row"><span class="tag">HAND 手写</span><span class="t-hand">此处签名 → 提交后锁定为 v1 版本</span></div>
+        <div class="row"><span class="tag">MONO 编号</span><span class="t-mono">NO.2026-MCM-0817 · VER v2</span></div>
+      </div>
+    </div>
+    <div class="card paper-tint">
+      <h3 style="font-family:var(--serif);font-weight:900;font-size:16px;letter-spacing:.1em">组件语言</h3>
+      <div class="comp-demo">
+        <span class="btn btn-ink"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 20h4L18.5 9.5a2.828 2.828 0 1 0-4-4L4 16zm9.5-13.5l4 4"/></svg> 立即报名</span>
+        <span class="btn btn-verm"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.46 20.846A12 12 0 0 1 3.5 6A12 12 0 0 0 12 3a12 12 0 0 0 8.5 3a12 12 0 0 1-.09 7.06M15 19l2 2l4-4"/></svg> 通过审批</span>
+        <span class="btn btn-line"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0-18 0"/><path d="M12 7v5l3 3"/></g></svg> 撤回</span>
+        <span class="btn btn-ghost">知识广场 V2.0</span>
+      </div>
+      <div class="comp-demo">
+        <span class="chip-tag lvlA">国家级 A</span>
+        <span class="chip-tag lvlB">省级 B</span>
+        <span class="chip-tag lvlC">校级 C</span>
+        <span class="mark" style="font-size:13px">驳回需退回上一级节点</span>
+      </div>
+      <div class="comp-demo" style="align-items:flex-end">
+        <span class="seal"><small>竞赛管理</small><span>审批<br>专用章</span></span>
+        <span class="barcode" data-no="2026·09·01"></span>
+        <span class="handnote">素材元件：胶带 / 印章 / 条形码 / 票根撕边 ↷</span>
+      </div>
+      <p style="font-size:12px;color:var(--ink-soft);line-height:2;margin-top:10px">
+        图标全部来自 <b>Iconify（Tabler 线性图标 + Lucide）</b>，统一 2px 描边粗细，与油墨边框同构；实拍图统一降低饱和度并压 2px 墨边，插画统一重着色为纸墨色系，拒绝默认紫。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 03 原型 ===================== -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">03</span>
+    <h2>七屏原型</h2>
+    <span class="en">Prototype · WeChat Mini Program</span>
+    <span class="sec-rule"></span>
+  </div>
+
+  <div class="stage-wrap">
+
+    <!-- S1 登录 -->
+    <div class="stage">
+      <div class="phone">
+        <div class="tape" style="top:-12px;left:118px"></div>
+        <div class="notch"></div>
+        <div class="statusbar"><span>20:58</span><span class="right"><span>墨纸 5G</span><span>▮▮▮▯</span><span>82%</span></span></div>
+        <div class="screen"><div class="screen-scroll">
+          <div class="login-hero">
+            <div class="vtext">以纸为面 · 以墨为骨</div>
+            <div class="udr"><?xml version="1.0" encoding="UTF-8"?><svg id="uuid-ebdabd1d-22d3-4cae-80ed-716d849b0d3a" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 731.67004 625.99672"><path id="uuid-5ef434d5-ec3b-4be2-96d4-c13c471d6de8" d="M376.76337,311.69684c2.62042,10.50058-.88501,20.35364-7.82874,22.00711-6.9437,1.6535-14.69479-5.51819-17.31467-16.02283-1.10635-4.18195-1.15591-8.56552-.14453-12.784l-10.51895-44.63046,21.86432-4.45937,8.04852,44.47118c2.88568,3.29129,4.90674,7.20667,5.89404,11.41837,0,0,0,.00003,0,0Z" fill="#fdadb0"/><g><polygon points="285.09476 566.89746 286.44183 596.14917 285.0928 604.24353 289.81448 613.68689 326.91345 617.73407 328.93704 600.19635 309.37576 590.07843 308.80716 573.55005 285.09476 566.89746" fill="#fdadb0"/><path d="M324.21533,610.98877l-2.02359,2.69812-38.85165-11.19604s1.75269,17.26678,1.75269,20.63947,64.08002,3.37262,73.72256,2.02356,6.54608-10.11792,6.54608-10.11792l-39.9877-18.92865-1.15842,14.88147h.00003Z" fill="#1A1815"/></g><g><polygon points="188.43921 545.36505 180.3541 573.50946 176.48561 580.7464 177.93686 591.20416 211.78952 606.91113 219.31921 590.94342 204.0247 575.09747 213.6188 550.21924 188.43921 545.36505" fill="#fdadb0"/><path d="M211.39197,599.65723l-2.78062,1.90863-33.22536-23.04083s-3.86533,16.91962-4.94466,20.11487,59.63062,23.70258,69.19777,25.51038,9.43983-7.49084,9.43983-7.49084l-31.82701-30.73029-5.85995,13.72815h.00002l-.00002-.00006Z" fill="#1A1815"/></g><polygon points="287.70996 83.9671 289.12659 106.97251 246.16866 109.15169 259.47134 78.84175 287.70996 83.9671" fill="#fdadb0"/><path d="M290.22263,103.53149c-11.5144,5.13574-29.93115,3.73068-50.80225,0l-3.26205,144.59672s65.2879,13.12622,87.73538-11.0934l-11.81445-118.14453-21.85663-15.3588s0,.00002,0,.00002Z" fill="#E9E0CC"/><polygon points="316.80505 240.57915 224.63489 249.689 179.1496 558.53558 214.00221 558.53558 273.68228 346.90921 278.40808 586.74255 310.3071 586.74255 337.48035 293.15347 316.80505 240.57915" fill="#1A1815"/><path d="M252.52422,94.67065l-30.96834,18.32601c-11.73149,6.9423-17.26108,20.9566-13.43071,34.03909l23.9342,81.74651s-38.97484,66.95746-26.31018,72.86465c28.4593,13.27441,70.92659,10.04227,70.92659,10.04227l-9.49146-160.30917-14.66013-56.70937,.00002,.00002s0-.00002,0-.00002Z" fill="#1A1815"/><path d="M288.87726,102.92358l35.01645,13.60382,8.27011,101.01359,23.16013,81.37585c-39.22784,14.31915-35.56531,7.64648-35.56531,7.64648l-6.49796-140.41524-24.38345-63.22452,.00003,.00002s0-.00002,0-.00002Z" fill="#1A1815"/><path d="M340.03061,297.19608l-.11996-.5528-35.79376-165.55103c-1.00015-4.62562,.2789-9.2623,3.50848-12.72181,3.22968-3.46,7.76883-5.05348,12.453-4.37245,5.77716,.83993,10.4024,5.04821,11.7822,10.72128l39.31598,161.6061-31.1459,10.8707h-.00003Z" fill="#1A1815"/><circle cx="269.06998" cy="55.22682" r="34.85209" fill="#fdadb0"/><path d="M285.65121,10.07328c7.67664,2.69811,12.06934,4.24203,16.09317,8.11845,6.7966,6.5479,7.9184,15.29825,8.96057,23.4287,.8154,6.36049,1.86963,14.5842-1.85501,23.97997-1.27109,3.20641-7.43674,17.49225-19.23843,19.29762-2.31772,.3545-7.75916,.44773-6.19073-.71022,14.51544-10.71641,20.71027-17.18593,20.20239-33.70173-.31549-10.26221-15.99649-21.34199-25.30756-23.33377-3.92233-.83893-9.14426-.07252-12.88876,3.00152-7.82565,6.42446-7.49179,32.99092-15.74361,38.5444-3.39352,2.2839-1.13228-13.79295-3.52356-11.18581-4.71809,5.14422-1.69165,13.02216-.84383,16.02233,4.02164,14.23081,11.60382,15.62369,15.53183,27.77607,4.24091,13.12018-1.09653,25.47273-2.3623,28.40192-2.20163,5.0956-5.98048,13.84068-14.61356,18.03613-10.95815,5.32527-19.59561-1.60928-24.69019,4.33572-2.84799,3.32346-1.30746,6.84323-6.45113,17.1805-1.67912,3.37442-2.51868,5.06184-3.26193,5.00195-3.51727-.2832-9.21196-28.43777-.00171-54.65797,3.86536-11.00368,7.65221-21.78448,17.80276-30.21467,5.36661-4.45687,9.86757-6.0607,11.14871-11.2654,1.83022-7.4356-5.76976-10.60925-7.29326-22.3414-1.04176-8.02364-1.77267-19.49902,1.06029-26.85414,2.67509-6.94578,4.99741-12.97519,11.076-18.44197,1.4599-1.31307,13.24496-10.23845,25.7406-10.49022,5.75281-.11574,9.97934,7.72783,16.64917,10.072h.00006Z" fill="#1A1815"/><g><circle cx="359.29443" cy="229.27966" r="85.24289" fill="#C8442A"/><g><path d="M337.72504,284.89374c5.17474-18.66635,10.34946-37.3327,15.52423-55.99905,1.10168-3.97395,1.95407-8.3876,4.47568-11.76016,1.94949-2.60733,5.01575-4.31322,8.26102-3.24098,7.7373,2.55643,7.61206,13.72102,7.47461,20.23466-.20746,9.83305-2.42706,19.64349-6.51288,28.59372-.56033,1.22742-.35031,2.69101,.89688,3.42047,1.07474,.6286,2.85709,.33725,3.42047-.89688,4.09116-8.96194,6.52292-18.55484,7.08868-28.39792,.48813-8.49306,.52472-19.69337-6.83652-25.48187-3.59787-2.82918-8.19009-3.66963-12.40845-1.71413-4.16846,1.93239-6.71384,5.93346-8.31454,10.0761-1.77991,4.60645-2.83997,9.54617-4.15762,14.29919l-4.24594,15.31598c-3.16235,11.40723-6.32468,22.81442-9.487,34.22165-.86093,3.10547,3.96158,4.43073,4.82141,1.32919h0v.00003h-.00003Z" fill="#fff"/><path d="M359.89587,258.89703c3.20197-12.01877,4.83801-24.44736,4.85159-36.88538,.00351-3.21741-4.99649-3.22243-5,0-.01312,12.01666-1.57947,23.94449-4.67297,35.55618-.82922,3.11255,3.99252,4.44043,4.82141,1.32919h-.00003Z" fill="#fff"/><path d="M308.49368,258.7525c3.35089-16.15695,6.97797-32.36552,11.62894-48.20441,3.77136-12.84329,10.27396-27.39745,23.99814-32.05405,6.81589-2.31264,14.20358-1.94012,21.17993-.59821,6.91779,1.33066,13.92474,3.31119,20.30063,6.34035,6.03555,2.86748,11.61917,6.81976,15.59235,12.26434,3.92212,5.37459,6.36456,11.61198,7.68094,18.10706,3.05499,15.07307-.54111,30.47136-4.56973,44.9991-.53616,1.93353-1.08441,3.86365-1.63303,5.79367-.88138,3.10052,3.94162,4.4241,4.82141,1.32919,4.45242-15.66275,9.07721-32.02472,7.00284-48.46307-.89713-7.10921-2.89136-14.09305-6.4451-20.35001-3.6416-6.41167-8.896-11.65268-15.19507-15.46211-6.35269-3.84186-13.5043-6.28763-20.66531-8.12315-7.60632-1.94968-15.52185-3.14977-23.35599-2.06024-7.3873,1.02737-14.04276,4.52979-19.2739,9.81796-5.35913,5.41759-8.98306,12.18707-11.65723,19.26202-2.94922,7.80266-4.87515,15.99947-6.90399,24.07716-2.14438,8.53775-4.14493,17.11163-6.0004,25.71681-.45087,2.09097-.89249,4.18393-1.32687,6.27838-.27393,1.32083,.38547,2.70145,1.74609,3.07529,1.23889,.34042,2.79984-.41788,3.07529-1.74609h.00006Z" fill="#fff"/><path d="M334.26349,207.06648c3.89905-11.83141,16.45471-19.15616,28.61121-18.34444,13.4747,.89973,25.15411,10.74054,29.88474,23.12387,2.811,7.35831,3.6362,15.45682,2.45441,23.24283-.20236,1.33325,.33603,2.68785,1.74609,3.0753,1.18198,.32478,2.87146-.40312,3.07529-1.74609,2.36209-15.56232-1.97873-32.51962-14.22617-43.04318-5.7431-4.93472-12.77701-8.35027-20.30704-9.37296-7.24118-.98344-14.5412,.35677-20.95197,3.8819-7.03223,3.86688-12.58749,10.20531-15.108,17.85359-1.00946,3.06313,3.81729,4.37608,4.82141,1.32919h0l.00003-.00002Z" fill="#fff"/><path d="M323.62473,229.9975c-1.07385,12.82616-4.30664,25.50906-9.53668,37.27271-.5481,1.23282-.35834,2.68628,.89688,3.42047,1.06537,.62314,2.8692,.34311,3.42047-.89688,5.61353-12.62622,9.06622-26.02362,10.2193-39.7963,.11279-1.34721-1.22977-2.5-2.5-2.5-1.44635,0-2.3869,1.14893-2.5,2.5h.00003Z" fill="#fff"/><path d="M384.02057,244.31487c-1.07385,12.82616-4.30664,25.50905-9.53668,37.27272-.5481,1.23282-.35834,2.68628,.89688,3.42047,1.06537,.62314,2.8692,.34311,3.42047-.89688,5.61353-12.62622,9.06622-26.02362,10.2193-39.7963,.11279-1.34721-1.22977-2.5-2.5-2.5-1.44635,0-2.3869,1.14893-2.5,2.5h0l.00003-.00002Z" fill="#fff"/><path d="M336.20508,234.36423c3.21506-12.74895,8.54202-24.83105,15.76917-35.81441,1.77386-2.6958-2.55405-5.20335-4.31735-2.52361-7.44406,11.313-12.96176,23.87781-16.27319,37.0088-.78705,3.12094,4.03378,4.45233,4.82141,1.32919h0v.00002h-.00003Z" fill="#fff"/></g></g><path d="M0,624.38336c0,.66003,.53003,1.19,1.19006,1.19H730.48004c.65997,0,1.19-.52997,1.19-1.19,0-.65997-.53003-1.19-1.19-1.19H1.19006c-.66003,0-1.19006,.53003-1.19006,1.19Z" fill="#1A1815"/><path id="uuid-ed8d5917-2465-4251-8a73-24d647765b28" d="M287.3429,211.89523c10.76318-1.13242,20.03201,3.71107,20.70233,10.81741,.67032,7.10631-7.51099,13.78305-18.27817,14.91438-4.29523,.51312-8.64301-.04831-12.67953-1.63736l-45.66046,4.20064-1.37079-22.27231,45.15866-1.77646c3.66113-2.39919,7.81982-3.85522,12.12796-4.24631,0,0,.00003,0,0,0Z" fill="#fdadb0"/><path d="M231.71271,114.05334h-.00005c-11.05269-1.55672-21.42206,5.71055-23.71935,16.63335-8.01482,38.10753-22.39742,119.28123,.19211,120.63661,29.53613,1.77217,57.89081-5.3165,57.89081-5.3165l-7.08868-40.75986-23.03818-2.36288,13.55157-63.38637c2.5731-12.03547-5.60107-23.72783-17.78825-25.44434l.00002-.00002Z" fill="#1A1815"/></svg></div>
+            <div class="login-title">竞赛<em>·</em>墨纸</div>
+            <div class="login-sub">JINGSAI INK&amp;PAPER · V1.0</div>
+          </div>
+          <div class="login-btn">
+            <span class="btn btn-ink"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M5 12H3l9-9l9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/><path d="M10 12h4v4h-4z"/></g></svg>&nbsp; 微信一键登录</span>
+          </div>
+          <div class="role-tickets">
+            <div class="rt-t"><span>选 择 身 份</span><span class="pill red">3 ROLES</span></div>
+            <div class="role-row on">
+              <span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0-4 0m-2 8v-1a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1M15 5a2 2 0 1 0 4 0a2 2 0 0 0-4 0m2 5h2a2 2 0 0 1 2 2v1M5 5a2 2 0 1 0 4 0a2 2 0 0 0-4 0m-2 8v-1a2 2 0 0 1 2-2h2"/></svg></span>
+              <div><b>学生</b><small>报名 · 组队 · 追踪审批</small></div>
+              <span class="pick">✓ 已选 / ROUTE-A</span>
+            </div>
+            <div class="role-row">
+              <span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2M9 9h1m-1 4h6m-6 4h6"/></g></svg></span>
+              <div><b>教师</b><small>审批 · 数据收集</small></div>
+              <span class="pick">V1.1 开放</span>
+            </div>
+            <div class="role-row">
+              <span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37c1 .608 2.296.07 2.572-1.065"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0-6 0"/></g></svg></span>
+              <div><b>管理员</b><small>全量配置 · 审计日志</small></div>
+              <span class="pick">V3.0 开放</span>
+            </div>
+          </div>
+        </div></div>
+        <div class="tabbar">
+          <div class="tb on"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M5 12H3l9-9l9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/><path d="M10 12h4v4h-4z"/></g></svg></span>首页</div>
+          <div class="tb"><span class="ic" style="opacity:.45"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zM4 15a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z"/></svg></span>大厅</div>
+          <div class="tb"><span class="ic" style="opacity:.45"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0"/><path d="M9 10a3 3 0 1 0 6 0a3 3 0 1 0-6 0m-2.832 8.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"/></g></svg></span>我的</div>
+        </div>
+      </div>
+      <div class="stage-note">
+        <h3>S1 · 登录与角色路由</h3>
+        <div class="en">LOGIN &amp; ROLE ROUTING</div>
+        <p>首屏不放轮播图，放「刊号」。微信登录走 <span class="mono" style="font-family:var(--mono);font-size:11px">wx.login → 云函数换 openid → users 集合查角色</span>，三种身份做成可撕的票根，选中态用荧光黄拍上「已选」。</p>
+        <span class="handnote">教师端和管理员端在 V1.0 置灰，不删——让用户知道平台会长成什么样。</span>
+        <div class="spec">
+          <b>DESIGN SPEC</b><br>
+          · 插画：unDraw「Fingerprint login」，重着色为纸墨朱砂<br>
+          · 身份票根：2px 墨边 + 虚线分隔 + 荧光黄选中<br>
+          · 竖排标语：writing-mode: vertical-rl
+        </div>
+      </div>
+    </div>
+
+    <!-- S2 首页 -->
+    <div class="stage rev">
+      <div class="phone">
+        <div class="tape t2" style="top:-12px;right:96px"></div>
+        <div class="notch"></div>
+        <div class="statusbar"><span>20:58</span><span class="right"><span>墨纸 5G</span><span>▮▮▮▯</span><span>82%</span></span></div>
+        <div class="screen"><div class="screen-scroll">
+          <div class="paper-mast">
+            <div class="date"><span>农历七月二十 · 星期二</span><span>第 2026-35 期</span></div>
+            <h4>竞赛早报</h4>
+            <div class="slogan">JINGSAI DAILY · 一站式竞赛管理</div>
+          </div>
+          <div class="ticker">
+            <span class="tag">快讯</span>
+            <span class="txt">数学建模国赛报名 9 月 15 日截止 —— “互联网+” 校选拔赛名单已公示 ——</span>
+          </div>
+          <div class="home-banner">
+            <img src="https://images.pexels.com/photos/5940828/pexels-photo-5940828.jpeg?auto=compress&cs=tinysrgb&w=800" alt="团队协作实拍">
+            <span class="flag">国赛冲刺</span>
+            <div class="cap"><b>组队冲国赛，现在报名</b><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#F4EDDF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 6l6 6l-6 6"/></svg></span></div>
+          </div>
+          <div class="grid-nav">
+            <div class="g-item">
+              <span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zM4 15a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z"/></svg></span><b>竞赛大厅</b><small>双赛道 · 46 项在报</small>
+            </div>
+            <div class="g-item">
+              <span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2M9 9h1m-1 4h6m-6 4h6"/></g></svg></span><b>我的报名</b><small>2 支队伍 · v2 审批中</small>
+            </div>
+            <div class="g-item">
+              <span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.46 20.846A12 12 0 0 1 3.5 6A12 12 0 0 0 12 3a12 12 0 0 0 8.5 3a12 12 0 0 1-.09 7.06M15 19l2 2l4-4"/></svg></span><b>审批中心</b><small>教师端 · 签字盖章</small>
+            </div>
+            <div class="g-item off">
+              <span class="soon">V2.0</span>
+              <span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11v.01M8 11v.01m8-.01v.01M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-5l-5 3v-3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3z"/></svg></span><b>知识广场</b><small>经验帖 · 空状态</small>
+            </div>
+          </div>
+          <div class="prog-card">
+            <div class="pc-t"><b>报 名 进 度</b><span class="pill">2 ACTIVE</span></div>
+            <div class="pc-body">
+              <div class="pc-row">
+                <span class="num">01</span>
+                <div><b>数学建模国赛 · 夜航西飞队</b><small>NO.2026-MCM-0817</small></div>
+                <div class="pc-track"><i class="done"></i><s class="done"></s><i class="done"></i><s class="done"></s><i></i></div>
+                <span class="ver">v2</span>
+              </div>
+              <div class="pc-row">
+                <span class="num">02</span>
+                <div><b>互联网+ 校赛 · 白鹭队</b><small>NO.2026-IE-0042</small></div>
+                <div class="pc-track"><i class="done"></i><s class="done"></s><i></s><i></i></div>
+                <span class="ver">v1</span>
+              </div>
+            </div>
+          </div>
+        </div></div>
+        <div class="tabbar">
+          <div class="tb on"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M5 12H3l9-9l9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/><path d="M10 12h4v4h-4z"/></g></svg></span>首页</div>
+          <div class="tb"><span class="ic" style="opacity:.45"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zM4 15a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z"/></svg></span>大厅</div>
+          <div class="tb"><span class="ic" style="opacity:.45"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0"/><path d="M9 10a3 3 0 1 0 6 0a3 3 0 1 0-6 0m-2.832 8.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"/></g></svg></span>我的</div>
+        </div>
+      </div>
+      <div class="stage-note">
+        <h3>S2 · 首页（早报版式）</h3>
+        <div class="en">HOME AS FRONT PAGE</div>
+        <p>首页做成报纸头版：日期栏 + 刊名 + 快讯跑马灯。Banner 用 <span class="mark">Pexels 真实团队实拍</span>（降饱和 + 墨边 + 朱砂斜标），功能入口是 2×2 油墨卡片，未上线功能用虚线「白票」置灰而不是隐藏。</p>
+        <span class="handnote">报名进度直接给五节点圆点 + 版本号，学生不用点进去就知道走到哪了。</span>
+        <div class="spec">
+          <b>DESIGN SPEC</b><br>
+          · 跑马灯：CSS animation 横向滚动，可点击跳详情<br>
+          · Banner 图：Pexels №5940828（Kampus 拍摄）<br>
+          · 进度圆点：已完成 = 朱砂实心，未到 = 空心墨圈
+        </div>
+      </div>
+    </div>
+
+    <!-- S3 竞赛大厅 -->
+    <div class="stage">
+      <div class="phone">
+        <div class="tape" style="top:-12px;left:200px;transform:rotate(5deg)"></div>
+        <div class="notch"></div>
+        <div class="statusbar"><span>20:58</span><span class="right"><span>墨纸 5G</span><span>▮▮▮▯</span><span>82%</span></span></div>
+        <div class="screen"><div class="screen-scroll">
+          <div class="p-head">
+            <span class="t">竞赛大厅</span>
+            <span style="display:flex;gap:10px">
+              <span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0-14 0m18 11l-6-6"/></svg></span>
+              <span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3H4a4 4 0 0 0 2-3v-3a7 7 0 0 1 4-6M9 17v1a3 3 0 0 0 6 0v-1"/></svg></span>
+            </span>
+          </div>
+          <div class="hall-tabs">
+            <span class="ht on">学科竞赛</span>
+            <span class="ht">创新创业</span>
+          </div>
+          <div class="searchbar"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0-14 0m18 11l-6-6"/></svg></span>搜索竞赛 / 赛项编号…</div>
+          <div class="filter-chips">
+            <span class="fchip on">全部</span><span class="fchip">可报名</span><span class="fchip">国家级</span><span class="fchip">已截止</span>
+          </div>
+          <div class="promo">
+            <img src="https://images.pexels.com/photos/6146971/pexels-photo-6146971.jpeg?auto=compress&cs=tinysrgb&w=800" alt="重点推荐">
+            <div class="pm">
+              <b>中国国际大学生创新大赛（原互联网+）</b>
+              <small>赛道重点推荐 · 校选拔 9 月 20 日启动 · 报名进度 62%</small>
+              <div class="bar-prog"><i></i></div>
+            </div>
+          </div>
+          <div class="comp-card">
+            <span class="lvl A">国家级 A</span>
+            <div class="thumb"><img src="https://picsum.photos/seed/js-mcm/220/300" alt="占位"></div>
+            <div class="info">
+              <div class="r1"><span class="pill">NO.001</span><span class="mono" style="font-family:var(--mono);font-size:8.5px;color:var(--ink-fade)">3 人成队</span></div>
+              <b>全国大学生数学建模竞赛</b>
+              <p>9.15 截止报名 · 需指导教师签字 · 五级审批至校级</p>
+              <div class="meta">
+                <span class="ddl"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0-18 0"/><path d="M12 7v5l3 3"/></g></svg></span>DDL ·15</span>
+                <span class="handnote" style="font-size:13px">还剩 14 天</span>
+              </div>
+            </div>
+          </div>
+          <div class="comp-card">
+            <span class="lvl B">省级 B</span>
+            <div class="thumb"><img src="https://picsum.photos/seed/js-elec/220/300" alt="占位"></div>
+            <div class="info">
+              <div class="r1"><span class="pill">NO.002</span><span class="mono" style="font-family:var(--mono);font-size:8.5px;color:var(--ink-fade)">1-2 人</span></div>
+              <b>省大学生电子设计竞赛</b>
+              <p>9.30 截止 · 需院级审核 · 附作品说明书</p>
+              <div class="meta">
+                <span class="ddl"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0-18 0"/><path d="M12 7v5l3 3"/></g></svg></span>DDL ·30</span>
+                <span class="handnote" style="font-size:13px">组队 1/2</span>
+              </div>
+            </div>
+          </div>
+          <div class="comp-card">
+            <span class="lvl C">校级 C</span>
+            <div class="thumb"><img src="https://picsum.photos/seed/js-eng/220/300" alt="占位"></div>
+            <div class="info">
+              <div class="r1"><span class="pill">NO.003</span><span class="mono" style="font-family:var(--mono);font-size:8.5px;color:var(--ink-fade)">个人</span></div>
+              <b>校英语演讲比赛</b>
+              <p>10.08 截止 · 一级审批（指导教师）</p>
+              <div class="meta">
+                <span class="ddl"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0-18 0"/><path d="M12 7v5l3 3"/></g></svg></span>DDL ·08</span>
+                <span class="handnote" style="font-size:13px">最易上手</span>
+              </div>
+            </div>
+          </div>
+          <div class="hall-foot">—— 本期共 46 个赛项，往下还有 43 个故事 ——</div>
+        </div></div>
+        <div class="tabbar">
+          <div class="tb"><span class="ic" style="opacity:.45"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M5 12H3l9-9l9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/><path d="M10 12h4v4h-4z"/></g></svg></span>首页</div>
+          <div class="tb on"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zM4 15a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z"/></svg></span>大厅</div>
+          <div class="tb"><span class="ic" style="opacity:.45"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0"/><path d="M9 10a3 3 0 1 0 6 0a3 3 0 1 0-6 0m-2.832 8.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"/></g></svg></span>我的</div>
+        </div>
+      </div>
+      <div class="stage-note">
+        <h3>S3 · 竞赛大厅（分类广告版式）</h3>
+        <div class="en">HALL AS CLASSIFIEDS</div>
+        <p>双赛道 Tab 是两块墨底活字；竞赛卡片做成「分类小广告」：左缩略图右信息，级别用右上角<span class="mark">色块邮戳</span>（A 朱砂 / B 靛蓝 / C 墨灰），截止日期用手写体标注——机器时间和人的时间是有区别的。</p>
+        <span class="handnote">缩略图先用 Picsum 种子占位，接云存储后换官方海报。</span>
+        <div class="spec">
+          <b>DESIGN SPEC</b><br>
+          · 级别邮戳：绝对定位右上角，纯色块 + 纸色字<br>
+          · 占位图：picsum.photos/seed/&lt;赛项id&gt;/220/300<br>
+          · 筛选片：荧光黄 = 选中态，全站统一
+        </div>
+      </div>
+    </div>
+
+    <!-- S4 详情 -->
+    <div class="stage rev">
+      <div class="phone">
+        <div class="tape t2" style="top:-12px;left:80px"></div>
+        <div class="notch"></div>
+        <div class="statusbar"><span>20:58</span><span class="right"><span>墨纸 5G</span><span>▮▮▮▯</span><span>82%</span></span></div>
+        <div class="screen"><div class="screen-scroll">
+          <div class="detail-hero">
+            <img src="https://images.pexels.com/photos/8199217/pexels-photo-8199217.jpeg?auto=compress&cs=tinysrgb&w=800" alt="击掌实拍">
+            <div class="veil"></div>
+            <div class="dt">
+              <span class="pill">NO.001 · 学科竞赛赛道</span>
+              <h5>全国大学生数学建模竞赛</h5>
+              <div class="org">主办：教育部高等教育学会 · CUMCM</div>
+            </div>
+          </div>
+          <div class="meta-grid">
+            <div class="meta-cell"><small>LEVEL / 级别</small><b class="red">国家级 A</b></div>
+            <div class="meta-cell"><small>DEADLINE / 截止</small><b class="red">2026-09-15</b></div>
+          </div>
+          <div class="sec-band"><span class="sq"></span><b>赛 程</b><span class="ln"></span></div>
+          <div class="tl">
+            <div class="node now"><div><b>校内报名 · 进行中</b><small>09.01 — 09.15 · 五级审批</small></div></div>
+            <div class="node"><div><b>省赛复评</b><small>10.10 — 10.25</small></div></div>
+            <div class="node"><div><b>全国决赛</b><small>11 月 · 集中答辩</small></div></div>
+          </div>
+          <div class="sec-band"><span class="sq"></span><b>队 伍 要 求</b><span class="ln"></span></div>
+          <div class="team-req">
+            <div class="tr-card"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0-4 0m-2 8v-1a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1M15 5a2 2 0 1 0 4 0a2 2 0 0 0-4 0m2 5h2a2 2 0 0 1 2 2v1M5 5a2 2 0 1 0 4 0a2 2 0 0 0-4 0m-2 8v-1a2 2 0 0 1 2-2h2"/></svg></span><b>3 人</b><small>必须 3 人成队<br>学科不限</small></div>
+            <div class="tr-card"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v3M8 4v6m8-6v6m-4 8.5L9 20l.5-3.5l-2-2l3-.5l1.5-3l1.5 3l3 .5l-2 2L15 20z"/></svg></span><b>指导教师</b><small>1 名<br>负责一级审批</small></div>
+          </div>
+          <div class="sec-band"><span class="sq"></span><b>报 名 须 知</b><span class="ln"></span></div>
+          <div class="notice">
+            提交后进入 <b>五级审批</b>：指导教师 → 系 → 院 → 校。驳回会退回上一级并<b>保留版本号</b>，重新提交生成 v2。逾期 48 小时未审自动催办。<span class="handnote" style="font-size:12px"> ← 这句是给学生看的重点</span>
+          </div>
+          <div class="detail-foot">
+            <span class="fav-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 17.75l-6.172 3.245l1.179-6.873l-5-4.867l6.9-1l3.086-6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/></svg></span>
+            <span class="btn btn-ink apply-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2M9 9h1m-1 4h6m-6 4h6"/></g></svg> 立即报名</span>
+            <span class="barcode" data-no="NO.001"></span>
+          </div>
+        </div></div>
+      </div>
+      <div class="stage-note">
+        <h3>S4 · 竞赛详情（档案袋版式）</h3>
+        <div class="en">DETAIL AS DOSSIER</div>
+        <p>头图用 <span class="mark">Pexels 击掌实拍</span>压深色渐晕，像档案封面照片；赛程是墨线时间轴，进行中节点用荧光黄；报名按钮旁放条形码——它是这个赛项的「身份证」。</p>
+        <span class="handnote">须知段落里嵌一句手写体，关键规则一眼锚定。</span>
+        <div class="spec">
+          <b>DESIGN SPEC</b><br>
+          · 头图：Pexels №8199217（Yankrukov 拍摄）+ saturate(.75)<br>
+          · 时间轴：左 2px 墨线，节点 9px 圆，进行中 = 荧光黄<br>
+          · 报名按钮：衬线 900 + 字距 .3em，像盖章
+        </div>
+      </div>
+    </div>
+
+    <!-- S5 报名表单 -->
+    <div class="stage">
+      <div class="phone">
+        <div class="tape" style="top:-12px;right:60px;transform:rotate(-6deg)"></div>
+        <div class="notch"></div>
+        <div class="statusbar"><span>20:58</span><span class="right"><span>墨纸 5G</span><span>▮▮▮▯</span><span>82%</span></span></div>
+        <div class="screen"><div class="screen-scroll">
+          <div class="p-head">
+            <span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 6l-6 6l6 6"/></svg></span>
+            <span class="t">报 名 表</span>
+            <span class="pill red">FORM v1</span>
+          </div>
+          <div class="form-sheet">
+            <span class="seal" style="position:absolute;right:12px;top:40px;z-index:3"><small>竞赛管理</small><span>受理<br>专用章</span></span>
+            <div class="form-head">
+              <div>
+                <b>全国大学生数学建模竞赛</b>
+                <small>NO.2026-MCM-0817 · 学科竞赛赛道</small>
+              </div>
+            </div>
+            <div class="f-sec">
+              <div class="f-label"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 20h4L18.5 9.5a2.828 2.828 0 1 0-4-4L4 16zm9.5-13.5l4 4"/></svg></span>队 伍 名 称 <i>必填</i></div>
+              <div class="f-input handf">夜航西飞</div>
+              <div class="f-handnote f-hint" style="font-family:var(--hand);color:var(--verm);font-size:12px">↑ 队名提交后不可修改，想好再写</div>
+            </div>
+            <div class="f-sec">
+              <div class="f-label"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zM4 15a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z"/></svg></span>参 赛 赛 道</div>
+              <div class="radio-row">
+                <span class="rc on">学科竞赛</span><span class="rc">创新创业</span>
+              </div>
+            </div>
+            <div class="f-sec">
+              <div class="f-label"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0-4 0m-2 8v-1a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1M15 5a2 2 0 1 0 4 0a2 2 0 0 0-4 0m2 5h2a2 2 0 0 1 2 2v1M5 5a2 2 0 1 0 4 0a2 2 0 0 0-4 0m-2 8v-1a2 2 0 0 1 2-2h2"/></svg></span>队 员 组 队 <i>3 人</i></div>
+              <div class="member-row">
+                <div class="m-ava"><img src="https://picsum.photos/seed/js-a1/80/80" alt=""><span class="lead">队长</span></div>
+                <div class="m-ava"><img src="https://picsum.photos/seed/js-a2/80/80" alt=""></div>
+                <div class="m-ava"><img src="https://picsum.photos/seed/js-a3/80/80" alt=""></div>
+                <div class="m-add"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m-7-7h14"/></svg></div>
+                <span class="m-tag">已满 3/3<br>可跨院系组队</span>
+              </div>
+            </div>
+            <div class="f-sec">
+              <div class="f-label"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.46 20.846A12 12 0 0 1 3.5 6A12 12 0 0 0 12 3a12 12 0 0 0 8.5 3a12 12 0 0 1-.09 7.06M15 19l2 2l4-4"/></svg></span>一 级 审 批 人 <i>指导教师</i></div>
+              <div class="approver-card">
+                <div class="av"><img src="https://picsum.photos/seed/js-t1/80/80" alt=""></div>
+                <div><b>陈默 · 副教授</b><small>数学与统计学院 · 已带赛 6 届</small></div>
+                <span class="pick-me">✓ 已选定</span>
+              </div>
+            </div>
+            <div class="f-sec">
+              <div class="f-label"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2M9 9h1m-1 4h6m-6 4h6"/></g></svg></span>作 品 计 划 书 <i>PDF ≤ 10MB</i></div>
+              <div class="approver-card" style="border-style:dashed">
+                <span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 11l5 5l5-5m-5-7v12"/></svg></span>
+                <div><b>夜航西飞_计划书_v1.pdf</b><small>1.2MB · 已上传</small></div>
+                <span class="pick-me" style="color:var(--ink-fade)">重新上传</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-sheet" style="box-shadow:none;margin-top:-6px">
+            <div class="f-sec" style="display:flex;gap:12px;align-items:center">
+              <div class="udr" style="width:96px;flex-shrink:0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800.283 459.452"><g transform="translate(-560.001 -310)"><g transform="translate(595.918 441.564)"><path d="M456.278,312.134h0a12.465,12.465,0,0,0-5.2-3.049L436.759,293.47l-7.552,7.24,15.349,15.064a12.238,12.238,0,0,0,3.26,5.033c3.674,3.511,8.544,4.415,10.88,2.017s1.263-7.179-2.4-10.684h-.014Z" transform="translate(-327.646 -170.988)" fill="#9f616a"/><path d="M515.059,270.541l-7.607,9.563-39.318-29.762-.034-.068L445.124,207.4a14.706,14.706,0,1,1,26.7-12.2l14.908,39.019,28.329,36.309Z" transform="translate(-392.397 -136.424)" fill="#DCD2BC"/><path d="M516.754,164.58h16.029v25.429L515.11,184.2Z" transform="translate(-458.837 -129.638)" fill="#9f616a"/><path d="M527.619,140.7a17.6,17.6,0,1,1-17.6-17.6A17.6,17.6,0,0,1,527.619,140.7Z" transform="translate(-438.256 -116.33)" fill="#9f616a"/><path d="M506.612,148.761l-1.718,3.26-7.58-14.405c-4.564-13.978,11.376-22.005,11.376-22.005,5.2-6.126,15.655,1.039,15.655,1.039,15.078-3.348,7.8,9.359,7.8,9.359S527,126.124,527,130.28s-5.6,3.871-5.6,3.871l-4.388,7.682-2.425-2.948C505.573,135.068,506.612,148.761,506.612,148.761Z" transform="translate(-447.31 -113.133)" fill="#1A1815"/><rect width="14.222" height="20.178" transform="translate(51.423 295.497)" fill="#9f616a"/><path d="M517.326,585.018c-6.242,0-15.356-.652-15.424-.659-2.438.217-14.609,1.175-15.214-1.61a11.96,11.96,0,0,1,.38-5.6c1.175-11.634,1.61-11.77,1.868-11.845.414-.122,1.623.455,3.586,1.718l.122.081.027.143c.034.177.9,4.449,5.026,3.8,2.825-.448,3.742-1.073,4.034-1.379a1.738,1.738,0,0,1-.747-.625,2.185,2.185,0,0,1-.156-1.82,28.807,28.807,0,0,1,2.187-4.91l.183-.326,16.164,10.908,9.984,2.853a2.555,2.555,0,0,1,1.664,1.474h0a2.575,2.575,0,0,1-.652,2.907c-1.813,1.63-5.42,4.422-9.2,4.768-1.005.1-2.336.129-3.831.129h0Z" transform="translate(-437.832 -257.131)" fill="#1A1815"/><rect width="14.222" height="20.178" transform="matrix(-0.771, -0.637, 0.637, -0.771, 19.411, 289.863)" fill="#9f616a"/><path d="M590.468,550.994c-4.809-3.98-11.417-10.29-11.465-10.337-2.017-1.379-12.008-8.4-10.7-10.935a11.851,11.851,0,0,1,3.865-4.075c8.32-8.225,8.734-8.048,8.986-7.94.4.17.964,1.379,1.671,3.606l.041.136-.068.129c-.1.163-2.146,4.014,1.447,6.133,2.465,1.453,3.566,1.555,3.987,1.508a1.733,1.733,0,0,1-.177-.964,2.19,2.19,0,0,1,1.039-1.5,28.9,28.9,0,0,1,4.815-2.391l.346-.136,5.5,18.7,5.875,8.564a2.577,2.577,0,0,1,.34,2.2h0a2.583,2.583,0,0,1-2.357,1.827c-2.431.1-6.989-.048-10.12-2.187-.829-.571-1.875-1.392-3.029-2.343h0Z" transform="translate(-568.188 -242.919)" fill="#1A1815"/><path d="M541.479,319.1,519.8,480.358H503.54L492.7,319.1h48.786Z" transform="translate(-452.32 -179.211)" fill="#1A1815"/><path d="M525.077,407.183,492.7,449.19l13.855,11.444,55.564-52.847,4.965-88.688-9.936,8.884Z" transform="translate(-477.918 -179.211)" fill="#1A1815"/><path d="M535.992,177.582l9.936,94.861H497.143l-3.783-30.787a88.842,88.842,0,0,1,11.057-54.905L511.9,173.67l24.091,3.912h0Z" transform="translate(-456.763 -132.554)" fill="#DCD2BC"/><path d="M519.414,346.939h0a12.427,12.427,0,0,0-3.464-4.931L509.4,321.85l-9.882,3.457,7.709,20.07a12.168,12.168,0,0,0,.876,5.936c1.881,4.714,5.943,7.559,9.06,6.35s4.123-6.011,2.241-10.724Z" transform="translate(-435.811 -180.093)" fill="#9f616a"/><path d="M542.08,297.425l-10.887,5.542-23.425-43.393V259.5l-3.117-48.541a14.707,14.707,0,1,1,29.354,0l-2.628,41.681,10.7,44.792h0Z" transform="translate(-461.01 -139.496)" fill="#DCD2BC"/></g><path d="M656.482,526.506H144.27c-4.774,0-8.644-3.443-8.649-7.686v-345c.006-4.243,3.875-7.681,8.649-7.686H656.482c4.775,0,8.644,3.443,8.649,7.686v345C665.125,523.063,661.256,526.5,656.482,526.506ZM144.27,167.84c-3.713,0-6.723,2.678-6.727,5.978v345c0,3.3,3.014,5.974,6.727,5.978H656.482c3.713,0,6.723-2.678,6.727-5.978v-345c0-3.3-3.014-5.974-6.727-5.978Z" transform="translate(695.152 143.868)" fill="#E9E0CC"/><path d="M608.538,260.221H196.27a8.659,8.659,0,0,1-8.649-8.649V221.781a8.659,8.659,0,0,1,8.649-8.649H608.538a8.659,8.659,0,0,1,8.649,8.649v29.791a8.659,8.659,0,0,1-8.649,8.649ZM196.27,215.054a6.735,6.735,0,0,0-6.727,6.727v29.791a6.735,6.735,0,0,0,6.727,6.727H608.538a6.735,6.735,0,0,0,6.727-6.727V221.781a6.735,6.735,0,0,0-6.727-6.727Z" transform="translate(693.289 129.81)" fill="#1A1815"/><path d="M359.64,343.221H196.27a8.659,8.659,0,0,1-8.649-8.649V304.781a8.659,8.659,0,0,1,8.649-8.649H359.64a8.659,8.659,0,0,1,8.649,8.649v29.791A8.659,8.659,0,0,1,359.64,343.221ZM196.27,298.054a6.735,6.735,0,0,0-6.727,6.727v29.791a6.735,6.735,0,0,0,6.727,6.727H359.64a6.735,6.735,0,0,0,6.727-6.727V304.781a6.735,6.735,0,0,0-6.727-6.727Z" transform="translate(693.289 138.798)" fill="#1A1815"/><path d="M618.64,343.221H455.27a8.659,8.659,0,0,1-8.649-8.649V304.781a8.659,8.659,0,0,1,8.649-8.649H618.64a8.659,8.659,0,0,1,8.649,8.649v29.791a8.659,8.659,0,0,1-8.649,8.649ZM455.27,298.054a6.735,6.735,0,0,0-6.727,6.727v29.791a6.734,6.734,0,0,0,6.727,6.727H618.64a6.735,6.735,0,0,0,6.727-6.727V304.781a6.735,6.735,0,0,0-6.727-6.727Z" transform="translate(683.188 138.798)" fill="#1A1815"/><path d="M621.343,540.04H511.789a8.178,8.178,0,0,1-8.168-8.169V521.3a8.178,8.178,0,0,1,8.168-8.168H621.343a8.178,8.178,0,0,1,8.168,8.168v10.571A8.178,8.178,0,0,1,621.343,540.04Z" transform="translate(528.053 97.513)" fill="#E9E0CC"/><path d="M215.309,396.508A7.688,7.688,0,1,1,223,388.82a7.688,7.688,0,0,1-7.688,7.688Zm0-13.454a5.766,5.766,0,1,0,5.766,5.766A5.766,5.766,0,0,0,215.309,383.054Z" transform="translate(692.508 135.482)" fill="#E9E0CC"/><path d="M215.309,422.508A7.688,7.688,0,1,1,223,414.82a7.688,7.688,0,0,1-7.688,7.688Zm0-13.454a5.766,5.766,0,1,0,5.766,5.766A5.766,5.766,0,0,0,215.309,409.054Z" transform="translate(692.508 134.469)" fill="#E9E0CC"/><path d="M215.309,448.508A7.688,7.688,0,1,1,223,440.82a7.688,7.688,0,0,1-7.688,7.688Zm0-13.454a5.766,5.766,0,1,0,5.766,5.766,5.766,5.766,0,0,0-5.766-5.766Z" transform="translate(692.508 133.454)" fill="#C8442A"/><path d="M254.367,382.632a6.246,6.246,0,0,0,0,12.493H343.74a6.246,6.246,0,0,0,0-12.493Z" transform="translate(690.25 135.424)" fill="#E9E0CC"/><path d="M254.367,408.632a6.247,6.247,0,0,0,0,12.493H343.74a6.246,6.246,0,0,0,0-12.493Z" transform="translate(690.25 134.41)" fill="#E9E0CC"/><path d="M254.367,434.632a6.247,6.247,0,0,0,0,12.493H343.74a6.246,6.246,0,0,0,0-12.493Z" transform="translate(690.25 133.527)" fill="#E9E0CC"/><path d="M474.809,396.508a7.688,7.688,0,1,1,7.688-7.688A7.688,7.688,0,0,1,474.809,396.508Zm0-13.454a5.766,5.766,0,1,0,5.766,5.766,5.766,5.766,0,0,0-5.766-5.766Z" transform="translate(682.387 135.482)" fill="#E9E0CC"/><path d="M474.809,422.508a7.688,7.688,0,1,1,7.688-7.688,7.688,7.688,0,0,1-7.688,7.688Zm0-13.454a5.766,5.766,0,1,0,5.766,5.766,5.766,5.766,0,0,0-5.766-5.766Z" transform="translate(682.387 134.469)" fill="#C8442A"/><path d="M474.809,448.508a7.688,7.688,0,1,1,7.688-7.688A7.688,7.688,0,0,1,474.809,448.508Zm0-13.454a5.766,5.766,0,1,0,5.766,5.766,5.766,5.766,0,0,0-5.766-5.766Z" transform="translate(682.387 133.669)" fill="#E9E0CC"/><path d="M512.867,382.632a6.246,6.246,0,1,0,0,12.493H602.24a6.246,6.246,0,1,0,0-12.493Z" transform="translate(680.848 135.424)" fill="#E9E0CC"/><path d="M512.867,408.632a6.247,6.247,0,1,0,0,12.493H602.24a6.246,6.246,0,1,0,0-12.493Z" transform="translate(680.848 134.41)" fill="#E9E0CC"/><path d="M512.867,434.632a6.247,6.247,0,1,0,0,12.493H602.24a6.246,6.246,0,1,0,0-12.493Z" transform="translate(680.848 133.527)" fill="#E9E0CC"/><path d="M215.494,314.132a6.246,6.246,0,0,0,0,12.493H322.165a6.246,6.246,0,1,0,0-12.493Z" transform="translate(692.445 138.096)" fill="#E9E0CC"/><path d="M215.494,231.132a6.246,6.246,0,0,0,0,12.493H322.165a6.246,6.246,0,1,0,0-12.493Z" transform="translate(692.445 129.107)" fill="#C8442A"/><path d="M344.984,316.456a.48.48,0,0,0-.416.721l4.079,7.064a.481.481,0,0,0,.832,0l4.079-7.064a.48.48,0,0,0-.416-.721Z" transform="translate(687.17 138.006)" fill="#C8442A"/><path d="M474.494,314.132a6.246,6.246,0,0,0,0,12.493H581.165a6.246,6.246,0,0,0,0-12.493Z" transform="translate(682.344 138.096)" fill="#E9E0CC"/><path d="M603.984,316.456a.48.48,0,0,0-.416.721l4.079,7.064a.481.481,0,0,0,.833,0l4.078-7.064a.48.48,0,0,0-.416-.721Z" transform="translate(677.068 138.006)" fill="#C8442A"/><ellipse cx="3.844" cy="3.844" rx="3.844" ry="3.844" transform="translate(1153.354 545.445)" fill="#C8442A"/><ellipse cx="3.844" cy="3.844" rx="3.844" ry="3.844" transform="translate(903.975 570.562)" fill="#C8442A"/><path d="M960.05,733.1H742.512a.809.809,0,0,1,0-1.617H960.05a.809.809,0,0,1,0,1.617Z" transform="translate(-181.703 36.347)" fill="#F0E9D9"/><path d="M621.343,540.04H511.789a8.178,8.178,0,0,1-8.168-8.169V521.3a8.178,8.178,0,0,1,8.168-8.168H621.343a8.178,8.178,0,0,1,8.168,8.168v10.571A8.178,8.178,0,0,1,621.343,540.04Z" transform="matrix(0.819, -0.574, 0.574, 0.819, -8.102, 470.589)" fill="#C8442A"/></g></svg></div>
+              <div>
+                <b style="font-family:var(--serif);font-size:13px">提交即进入审批</b>
+                <p style="font-size:10px;color:var(--ink-soft);line-height:1.9;margin-top:4px">锁定为 v1 · 指导教师将收到待审提醒 · 48h 超时自动催办</p>
+              </div>
+            </div>
+          </div>
+          <div style="margin:0 14px 16px"><span class="btn btn-ink submit-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2M9 9h1m-1 4h6m-6 4h6"/></g></svg> 提 交 报 名</span></div>
+          <div class="submit-note">※ 提交前请核对队员与指导教师信息，提交后 24h 内可撤回。</div>
+        </div></div>
+      </div>
+      <div class="stage-note">
+        <h3>S5 · 报名表单（公文纸版式）</h3>
+        <div class="en">FORM AS OFFICIAL DOCUMENT</div>
+        <p>表单整体是一张<span class="mark">盖着「受理章」的公文纸</span>：手写体填队伍名、虚线上书、队员头像用 Picsum 种子占位、右侧盖朱砂「受理专用章」。核心规则（锁定版本号、可撤回）用手写小字押在按钮下方。</p>
+        <span class="handnote">审批人选择器只列「带赛资格」教师，数据来自 users 集合 role=teacher。</span>
+        <div class="spec">
+          <b>DESIGN SPEC</b><br>
+          · 受理章：absolute 定位 rotate(-11deg) + multiply 混合<br>
+          · 队员头像：picsum.photos/seed/&lt;openid后4位&gt;/80/80<br>
+          · 插画：unDraw「Complete Form」重着色
+        </div>
+      </div>
+    </div>
+
+    <!-- S6 审批中心 -->
+    <div class="stage rev">
+      <div class="phone">
+        <div class="tape t2" style="top:-12px;left:150px"></div>
+        <div class="notch"></div>
+        <div class="statusbar"><span>20:58</span><span class="right"><span>墨纸 5G</span><span>▮▮▮▯</span><span>82%</span></span></div>
+        <div class="screen"><div class="screen-scroll">
+          <div class="p-head">
+            <span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 6l-6 6l6 6"/></svg></span>
+            <span class="t">审 批 中 心</span>
+            <span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M10 20.777a9 9 0 0 1-2.48-.969M14 3.223a9.003 9.003 0 0 1 0 17.554m-9.421-3.684a9 9 0 0 1-1.227-2.592M3.124 10.5c.16-.95.468-1.85.9-2.675l.169-.305m2.714-2.941A9 9 0 0 1 10 3.223"/><path d="M12 8v4l3 3"/></g></svg></span>
+          </div>
+          <div class="ap-tabs">
+            <span class="at on">待我审批<span class="bdg">3</span></span>
+            <span class="at">我发起的</span>
+          </div>
+          <div class="ap-item">
+            <div class="ai-h">
+              <div><b>数学建模 · 夜航西飞队</b><div class="who">申请人：李雨桐 2023xxxx · v2</div></div>
+              <span class="seal" style="width:56px;height:56px"><small>系级</small><span>待审<br>批章</span></span>
+            </div>
+            <div class="ap-track">
+              <div class="ap-step ok"><span class="st"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#F4EDDF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 12l5 5L20 7"/></svg></span><div><b>指导教师 · 陈默</b><small>已通过并手签</small></div><span class="tm">09.01 09:12</span></div>
+              <div class="ap-step ok"><span class="st"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#F4EDDF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 12l5 5L20 7"/></svg></span><div><b>系统初审</b><small>表单完整性校验通过</small></div><span class="tm">09.01 09:12</span></div>
+              <div class="ap-step rej"><span class="st"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#F4EDDF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 6L6 18M6 6l12 12"/></svg></span><div><b>系级审核 · 王建国</b><small>驳回 · 退回上一级</small></div><span class="tm">09.01 14:30</span></div>
+              <div class="rej-note">「项目书第 3 节技术路线不清晰，请重写后再交。」</div>
+              <div class="ap-step"><span class="st"></span><div><b>院级审核</b><small>等待前序节点完成</small></div><span class="tm">—</span></div>
+              <div class="ap-step"><span class="st"></span><div><b>校级终审</b><small>等待</small></div><span class="tm">—</span></div>
+            </div>
+          </div>
+          <div class="overtime"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v4m-1.637-9.409L2.257 17.125a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636-2.87L13.637 3.59a1.914 1.914 0 0 0-3.274 0M12 16h.01"/></svg></span>上一单已滞留 53 小时，已触发自动催办</div>
+          <div class="sign-area">
+            <div class="sh">手 写 签 名 · SIGN HERE</div>
+            <div class="sig">王建国</div>
+            <div class="udr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 646.327 800"><g transform="translate(-637 -140)"><path d="M131.4.164V17.688S13.2,25.317.419,21.185c0,0-5.239-8.875,21.331-10.295C21.755,10.89,104.453-1.559,131.4.164Z" transform="matrix(-0.978, -0.208, 0.208, -0.978, 1039.104, 550.126)" fill="#1A1815"/><g transform="translate(958.419 209.669)"><path d="M550.009,624.357a2.437,2.437,0,0,1-.256-.006H305.613a14.382,14.382,0,0,1-13.379-19.71c8.858-22.132,20.785-75.229,1.142-182.186-23.2-126.3-2.429-171.941,7.576-185.7a14.445,14.445,0,0,1,11.65-5.931H560.564A14.386,14.386,0,0,1,574.4,249.191C564.056,284.958,542.753,379.728,568.294,487c19.362,81.323,10.055,114.493-1.163,128C559.731,623.906,551.578,624.357,550.009,624.357ZM312.6,233.273a11.992,11.992,0,0,0-9.67,4.922c-9.82,13.507-30.175,58.457-7.148,183.822,18.763,102.175,9.665,156.2-1.275,183.538a11.735,11.735,0,0,0,1.2,11.095,11.951,11.951,0,0,0,9.908,5.256h244.2c.386.019,8.258.237,15.51-8.566,10.808-13.116,19.684-45.583.589-125.777-25.675-107.833-4.261-203.1,6.137-239.05a11.938,11.938,0,0,0-11.486-15.242Z" transform="translate(-282.807 -230.822)" fill="#1A1815"/><path d="M318.06,324.41H512.684a9.792,9.792,0,1,0,0-19.585H318.06a9.792,9.792,0,1,0,0,19.585Z" transform="translate(-267.026 -214.244)" fill="#C8442A"/><path d="M318.06,358.41H512.684a9.792,9.792,0,1,0,0-19.585H318.06a9.792,9.792,0,1,0,0,19.585Z" transform="translate(-267.026 -206.626)" fill="#DCD2BC"/><path d="M318.06,290.41h91.8a9.792,9.792,0,1,0,0-19.585h-91.8a9.792,9.792,0,1,0,0,19.585Z" transform="translate(-267.026 -221.861)" fill="#C8442A"/><path d="M514.715,517.309c-1.976-8.366-11.258-11.109-18.845-10.8a80.456,80.456,0,0,0-14.212,2.249c-4.877,1.091-9.708,2.383-14.511,3.753-8.811,2.513-17.532,5.551-26.488,7.517-7.456,1.632-15.559,2.6-22.995.337-7.148-2.171-13.212-7.5-15.156-14.865-1.832-6.942.684-14.533,7.411-17.7,6.135-2.893,13.883-1.422,16.925,5.121,3.426,7.377,0,15.419-5.426,20.76a60.8,60.8,0,0,1-10.083,7.659,37.551,37.551,0,0,1-12.074,5.408c-7.081,1.512-15.517-.716-19.171-7.482a12.644,12.644,0,0,1-1.434-4.941c-.216-2.353,3.457-2.337,3.671,0,.619,6.736,8.508,9.891,14.408,9.152a29.289,29.289,0,0,0,11.17-4.335,65.458,65.458,0,0,0,9.252-6.526c5-4.33,9.694-11.456,6.334-18.213-2.736-5.5-9.871-5.447-14.209-1.9-5.255,4.3-4.317,12.1-.852,17.2,3.834,5.65,10.792,8.019,17.35,8.275,7.125.277,14.2-1.357,21-3.291,8.461-2.4,16.838-5.092,25.34-7.354,4.827-1.284,9.691-2.443,14.6-3.345A48.2,48.2,0,0,1,500.884,503c7.663.885,15.484,5.345,17.371,13.335.543,2.3-3,3.279-3.541.979Z" transform="translate(-300.132 -190.405)" fill="#1A1815"/><path d="M318.06,358.41H512.684a9.792,9.792,0,1,0,0-19.585H318.06a9.792,9.792,0,1,0,0,19.585Z" transform="translate(-267.026 -165.008)" fill="#DCD2BC"/><path d="M315.254,358.41H454.112c3.859,0,6.987-4.384,6.987-9.792s-3.128-9.792-6.987-9.792H315.254c-3.859,0-6.987,4.384-6.987,9.792S311.4,358.41,315.254,358.41Z" transform="translate(-267.026 -123.39)" fill="#DCD2BC"/></g><path d="M575.456,258.3h350.4a1.394,1.394,0,0,0,0-2.787h-350.4a1.394,1.394,0,0,0,0,2.787Z" transform="translate(356.113 -91.704)" fill="#D8CCB0"/><ellipse cx="8.166" cy="8.348" rx="8.166" ry="8.348" transform="translate(986.626 140)" fill="#E9E0CC"/><ellipse cx="8.166" cy="8.348" rx="8.166" ry="8.348" transform="translate(958.415 140)" fill="#E9E0CC"/><ellipse cx="8.166" cy="8.348" rx="8.166" ry="8.348" transform="translate(930.207 140)" fill="#E9E0CC"/><path d="M375.285,239.583,339.969,360.3a26.47,26.47,0,0,0,23.1,33.8l38.537,3.373Z" transform="translate(298.108 352.502)" fill="#C8442A"/><path d="M375.285,239.583,339.969,360.3a26.47,26.47,0,0,0,23.1,33.8l38.537,3.373Z" transform="translate(298.108 352.502)" opacity="0.1"/><path d="M827.13,180.787l-47.239,78.124-22.242-28.179,43.469-68.057c-1.544-7.918.326-17.108,5.852-25.045,9.67-13.887,26.825-18.657,38.317-10.655s12.971,25.747,3.3,39.634c-5.526,7.937-13.5,12.879-21.459,14.178Z" transform="translate(166.807 389.028)" fill="#ed9da0"/><path d="M415.181,483.036l-5.673,19.293.192,19.563s-37.311,44.876-23.565,141.941l174.823-2.192-20.825-156.19L415.181,483.036Z" transform="translate(284.248 276.167)" fill="#1A1815"/><path d="M458.5,70.913a49.577,49.577,0,1,1,64.431,47.311l-7.392,5.955,13.27,46.446L513.35,181.564l-48.859-40.716s10.555-13.444,16.216-28.6a49.523,49.523,0,0,1-22.2-41.331Z" transform="translate(260.604 420.934)" fill="#ed9da0"/><path d="M674.811,199.9c-17.5-.267-49.861,55.9-49.861,55.9l-26.579-9.4-54.665-19.353-41.9-17.243.184,1.266c-.165-.4-.344-.8-.542-1.2-4.4-9.076-17.2-19.753-53.521-17.637l-17.1,13.5-2.326,1.849a52.75,52.75,0,0,0-21.546,3.356c-7.779,3.127-15.559,8.962-19.239,19.868-1.907,5.625-1.907,17.256-.763,32.033,4.138,53.5,23.421,167.241,23.421,167.241l121.736-16.115,8.981.21s1.068-12.26,2.021-28.315c.591-9.419,1.125-20.116,1.43-30.412.21-7.551.267-14.872.133-21.317-.019-.4-.019-.8-.038-1.2-.362-11.764-1.544-20.287-4.08-21.221,0,0,7.875-.21,19.239-.629,27.457-1.03,75.315-3.337,82.141-7.055,9.648-5.244,60.233-75.62,60.233-75.62s-9.839-28.219-27.361-28.505Z" transform="translate(283.283 367.433)" fill="#C8442A"/><path d="M539.68,67.883c-3.745-18.322-5.541-27.707-19.154-40.668-3.231.457.853,17.211-16.956,40.548-25.889,33.925-23.308,2.82-30.964,13.27-1.662,2.269-2.021,10.454-1.474,13.27,2.158,11.127,14.93.262,1.474,38.336-2,2.961-4.362,2.241-7.372,2.212-.233,0,1.294-.294-4.423-1.474-2.729-.564-6.548-1.229-11.127-2-53.192-8.961-71.974-76.078-30.86-111,9.354-7.945,18.535-13.966,26.505-16.756,24.007-8.4,78.7-2.941,89.205,24.329a83.52,83.52,0,0,1,5.147,39.931Z" transform="translate(280.048 427.624)" fill="#1A1815"/><ellipse cx="37.937" cy="37.937" rx="37.937" ry="37.937" transform="translate(672.236 527.37)" fill="#1A1815"/></g></svg></div>
+          </div>
+          <div class="ap-actions">
+            <span class="btn btn-line" style="color:var(--verm);border-color:var(--verm)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 6L6 18M6 6l12 12"/></svg> 驳回</span>
+            <span class="btn btn-verm"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.46 20.846A12 12 0 0 1 3.5 6A12 12 0 0 0 12 3a12 12 0 0 0 8.5 3a12 12 0 0 1-.09 7.06M15 19l2 2l4-4"/></svg> 通过盖章</span>
+          </div>
+        </div></div>
+      </div>
+      <div class="stage-note">
+        <h3>S6 · 审批中心（签批版式）</h3>
+        <div class="en">APPROVAL AS SIGN-OFF</div>
+        <p>审批轨迹是竖排签批链：完成节点盖朱砂圆章，驳回节点是墨色实心；驳回理由用<span class="mark">手写批注 + 朱砂左边线</span>——像老师在你作业上划的那道红。签名板让审批人真签，而不是点个按钮。</p>
+        <span class="handnote">驳回文案做了模板化：选常用批语（理由不清/材料缺项/超期），也支持手写。</span>
+        <div class="spec">
+          <b>DESIGN SPEC</b><br>
+          · 轨迹章：ok=朱砂底纸色叉 / 驳回=墨底<br>
+          · 签名板：canvas 手写 + unDraw「Sign here」水印<br>
+          · 超时条：48h 无操作自动催办（云函数定时器）
+        </div>
+      </div>
+    </div>
+
+    <!-- S7 我的 -->
+    <div class="stage">
+      <div class="phone">
+        <div class="tape" style="top:-12px;left:100px;transform:rotate(3deg)"></div>
+        <div class="notch"></div>
+        <div class="statusbar"><span>20:58</span><span class="right"><span>墨纸 5G</span><span>▮▮▮▯</span><span>82%</span></span></div>
+        <div class="screen"><div class="screen-scroll">
+          <div class="p-head">
+            <span class="t">我 的</span>
+            <span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37c1 .608 2.296.07 2.572-1.065"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0-6 0"/></g></svg></span>
+          </div>
+          <div class="me-head">
+            <div class="me-ava"><img src="https://picsum.photos/seed/js-avatar/160/160" alt="头像占位"></div>
+            <div class="info">
+              <b>李雨桐 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 20h4L18.5 9.5a2.828 2.828 0 1 0-4-4L4 16zm9.5-13.5l4 4"/></svg></b>
+              <div class="sid">STU-2023-0817 · 数学与统计学院</div>
+              <span class="tagline">白鹭队 · 队长 · 参赛 4 次</span>
+            </div>
+          </div>
+          <div class="me-stats">
+            <div class="st"><b>4</b><small>报 名</small></div>
+            <div class="st"><b>2</b><small>进 行 中</small></div>
+            <div class="st"><b>1</b><small>获 奖</small></div>
+          </div>
+          <div class="sec-band" style="margin-top:16px"><span class="sq"></span><b>我 的 报 名</b><span class="ln"></span></div>
+          <div class="me-list">
+            <div class="me-item">
+              <div class="mi-h"><b>数学建模 · 夜航西飞队</b><span class="st-pill st-run">审批中 v2</span></div>
+              <div class="mi-b">
+                <span class="ddl"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0-18 0"/><path d="M12 7v5l3 3"/></g></svg></span>09.15 截止</span>
+                <span class="mini-track"><i class="d"></i><s></s><i class="d"></i><s></s><i></s><i></i></span>
+              </div>
+            </div>
+            <div class="me-item">
+              <div class="mi-h"><b>互联网+ 校赛 · 白鹭队</b><span class="st-pill st-run">审批中 v1</span></div>
+              <div class="mi-b">
+                <span class="ddl"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0-18 0"/><path d="M12 7v5l3 3"/></g></svg></span>09.20 截止</span>
+                <span class="mini-track"><i class="d"></i><s></s><i></i><i></i></span>
+              </div>
+            </div>
+            <div class="me-item">
+              <div class="mi-h"><b>电子设计 · 无线充球队</b><span class="st-pill st-rej">已驳回</span></div>
+              <div class="mi-b">
+                <span class="ddl" style="color:var(--verm)"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v4m-1.637-9.409L2.257 17.125a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636-2.87L13.637 3.59a1.914 1.914 0 0 0-3.274 0M12 16h.01"/></svg></span>08.28 被驳回</span>
+                <span class="handnote" style="font-size:13px;margin-left:auto">改完重交 →</span>
+              </div>
+            </div>
+          </div>
+          <div class="sec-band"><span class="sq"></span><b>我 的 证 书</b><span class="ln"></span></div>
+          <div class="empty-state">
+            <div class="udr"><?xml version="1.0" encoding="UTF-8"?><svg id="uuid-b619416f-6205-486c-b78f-4a074302c8ec" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 796.83295 753.07776"><metadata><c2pa:manifest xmlns:c2pa="http://c2pa.org/manifest">AAA0RWp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAADQfanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46dXVpZDpiNjAxYjU0Ni1kYTc0LTQ0NWItOTlmZS0zOWMxY2FkZDJkYjcAAAABtWp1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAANdqdW1iAAAAJmp1bWRjYm9yABEAEIAAAKoAOJtxA2MycGEuYWN0aW9ucwAAAACpY2JvcqFnYWN0aW9uc4GjZmFjdGlvbmtjMnBhLmVkaXRlZG1zb2Z0d2FyZUFnZW50bUFkb2JlIEZpcmVmbHlxZGlnaXRhbFNvdXJjZVR5cGV4U2h0dHA6Ly9jdi5pcHRjLm9yZy9uZXdzY29kZXMvZGlnaXRhbHNvdXJjZXR5cGUvY29tcG9zaXRlV2l0aFRyYWluZWRBbGdvcml0aG1pY01lZGlhAAAArWp1bWIAAAAoanVtZGNib3IAEQAQgAAAqgA4m3EDYzJwYS5oYXNoLmRhdGEAAAAAfWNib3KlamV4Y2x1c2lvbnOBomVzdGFydBkBA2ZsZW5ndGgZRbRkbmFtZW5qdW1iZiBtYW5pZmVzdGNhbGdmc2hhMjU2ZGhhc2hYIMGgorwb9jnKVwYMoU8X62w3ycRYkgFGgim+LE5tFprqY3BhZEkAAAAAAAAAAAAAAAILanVtYgAAACRqdW1kYzJjbAARABCAAACqADibcQNjMnBhLmNsYWltAAAAAd9jYm9yqGhkYzp0aXRsZW9HZW5lcmF0ZWQgSW1hZ2VpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDpjMzMyM2UxYi0zOWFlLTQxMzktYWIxMi1jYzcwZDg2ODRhYjNvY2xhaW1fZ2VuZXJhdG9yeDZBZG9iZV9JbGx1c3RyYXRvci8yOC43IGFkb2JlX2MycGEvMC43LjYgYzJwYS1ycy8wLjI1LjJ0Y2xhaW1fZ2VuZXJhdG9yX2luZm+Bv2RuYW1lcUFkb2JlIElsbHVzdHJhdG9yZ3ZlcnNpb25kMjguN/9pc2lnbmF0dXJleBlzZWxmI2p1bWJmPWMycGEuc2lnbmF0dXJlamFzc2VydGlvbnOComN1cmx4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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2WQEAYg6JfumRp8uwR4GB9JFF2RWPztxV7o9llXnzD5NKg8GRmDTAvIHQ9vwKLTNegUx0+sD7vnqMz5KYt2B+FJ1lgnXuOrYb18gPSORZOEGDB0zSnHwt4cArKVYcFzwN/QI9vCTPq0novPEXtYHtnAgcFXT1J2pVz3yCTOSAJ1yYbURgqAG+hmMqgEuRgrA+sm2BSz00BiaSNGuKOWY/URiKnf50RWIS/knX6I+3xJtCL+Il0wTP176xT6H67jFFtmwfDMqwn9kHq7CvZNhq8AiP/d7n9ZLA+g50sesK02D00sCg+tu7+8J9oLCRwheoT05/XnEXP3/IcwV5c+A/3F9TMQ==</c2pa:manifest></metadata><path d="M34.83943,141.98139c-6.00379,0-11.28299-4.30203-12.43683-10.25476L.23273,17.37851c-.71217-3.67405.22773-7.45161,2.57818-10.36379,2.34907-2.91081,5.84231-4.62775,9.58399-4.7078L119.52743.00339c6.25637-.14216,11.55903,4.1999,12.71562,10.30444l21.0119,110.89215c.67905,3.58847-.22221,7.29426-2.47605,10.16919-2.25246,2.87354-5.63529,4.63603-9.28035,4.8334l-105.97456,5.7595c-.22911.01242-.45822.01932-.68457.01932Z" fill="#DCD2BC"/><polygon points="27.90646 123.44951 51.22602 60.55735 90.09196 89.53014 102.81173 76.81038 147.3309 122.74285 27.90646 123.44951" fill="#C8442A"/><path d="M99.98543,54.90429c-5.84507,0-10.5998-4.75473-10.5998-10.5998s4.75473-10.5998,10.5998-10.5998,10.5998,4.75473,10.5998,10.5998-4.75473,10.5998-10.5998,10.5998Z" fill="#C8442A"/><path d="M38.80607,573.91229c-3.34004,0-6.60693-.97717-9.46529-2.86802-3.90592-2.58646-6.54069-6.54483-7.41572-11.14635L.51429,447.35783c-1.74317-9.16717,4.01909-17.9617,13.11864-20.02093l95.91717-21.72683c4.55184-1.02824,9.2141-.20565,13.13382,2.31733,3.92248,2.52573,6.60141,6.43303,7.54408,11.00006l23.33751,113.05628c1.90189,9.21272-4.03013,18.32744-13.22215,20.32043l-97.84528,21.20927c-1.22836.26638-2.46501.39887-3.69199.39887Z" fill="#DCD2BC"/><path d="M31.43452,472.53788c-2.33527,0-4.41244-1.66036-4.85686-4.03979-.50239-2.68584,1.26839-5.26954,3.95422-5.77054l77.54418-14.4864c2.68446-.50929,5.26816,1.26839,5.77054,3.95422s-1.26839,5.26954-3.95422,5.77054l-77.54418,14.4864c-.3064.05797-.6128.08557-.91368.08557Z" fill="#1A1815"/><path d="M38.50243,502.21733c-2.23866,0-4.26614-1.52924-4.80856-3.8024-.63212-2.65685,1.00891-5.32474,3.66715-5.95825l72.9951-17.38064c2.65547-.62936,5.32336,1.00891,5.95825,3.66715.63212,2.65685-1.00891,5.32474-3.66715,5.95825l-72.9951,17.38064c-.38507.09109-.77014.13526-1.14969.13526Z" fill="#1A1815"/><path d="M43.44763,530.9334c-2.28696,0-4.34067-1.59549-4.8334-3.92248-.56587-2.67341,1.14141-5.29852,3.81344-5.8644l49.79975-10.54598c2.68722-.56449,5.2999,1.14141,5.8644,3.81344.56587,2.67341-1.14141,5.29852-3.81344,5.8644l-49.79975,10.54598c-.34643.07315-.69147.10903-1.031.10903Z" fill="#1A1815"/><path d="M760.56841,227.68107c-.87918,0-1.76801-.06901-2.66099-.20841l-98.90664-15.51739c-4.62913-.72736-8.67031-3.23101-11.38099-7.05273-2.71068-3.82035-3.73891-8.46328-2.89562-13.07033l20.63373-112.68501c1.68382-9.17821,10.22301-15.2869,19.45919-13.94122l97.29597,14.34148c4.61395.68043,8.66755,3.13163,11.41273,6.90229,2.74656,3.76928,3.83553,8.37909,3.06677,12.97924l-19.02306,113.8623c-1.39951,8.38599-8.7407,14.38978-17.00109,14.38978Z" fill="#DCD2BC"/><path d="M764.45638,128.58672c-.30088,0-.6059-.0276-.9123-.08557l-77.5497-14.46569c-2.68584-.50101-4.45661-3.08333-3.9556-5.76916.49963-2.68584,3.07643-4.46765,5.76916-3.9556l77.5497,14.46569c2.68584.50101,4.45661,3.08333,3.9556,5.76916-.44304,2.37943-2.52159,4.04117-4.85686,4.04117Z" fill="#1A1815"/><path d="M757.14142,154.47481c-.22359,0-.44718-.0138-.67491-.04555l-74.35044-10.12502c-2.70654-.36851-4.60153-2.86112-4.23302-5.56904.36989-2.70792,2.87078-4.60429,5.56904-4.23302l74.35044,10.12502c2.70654.36851,4.60153,2.86112,4.23302,5.56904-.33814,2.48019-2.45949,4.27857-4.89413,4.27857Z" fill="#1A1815"/><path d="M727.29359,181.05022c-.26223,0-.52861-.02208-.79637-.06487l-50.25107-8.13204c-2.69688-.43614-4.52838-2.97705-4.09224-5.67393.43752-2.69688,2.96049-4.52286,5.67393-4.09224l50.25107,8.13204c2.69688.43614,4.52838,2.97705,4.09224,5.67393-.39335,2.42912-2.49261,4.15711-4.87757,4.15711Z" fill="#1A1815"/><path d="M222.64891,287.14791l-47.29506,161.67135c-6.28035,21.46857,8.64874,43.31638,30.93188,45.26688l51.60908,4.51747-35.24589-211.45575v.00004Z" fill="#C8442A"/><path d="M222.64891,287.14791l-47.29506,161.67135c-6.28035,21.46857,8.64874,43.31638,30.93188,45.26688l51.60908,4.51747-35.24589-211.45575v.00004Z" isolation="isolate" opacity=".1"/><path d="M651.92149,257.32277l-63.26257,104.62478-29.78667-37.73747,58.21446-91.14269c-2.0682-10.60368.43614-22.91144,7.83685-33.54014,12.94939-18.59749,35.92365-24.98598,51.31467-14.26928,15.39102,10.71677,17.37037,34.48035,4.4209,53.07788-7.4008,10.62879-18.07539,17.24745-28.73773,18.98691h.00009Z" fill="#9d616a"/><path d="M257.5162,510.95284l-7.59696,25.83762.25766,26.1991s-49.96735,60.09837-31.55908,190.08819l234.12408-2.93573-27.88935-209.17038-167.33635-30.0188Z" fill="#1A1815"/><path d="M283.8688,152.90862c0-36.66843,29.72568-66.39414,66.39437-66.39414s66.39437,29.7257,66.39437,66.39414c0,29.7381-19.55287,54.90653-46.50266,63.35927l-9.89876,7.97558,17.77149,62.20019-20.70791,14.64919-65.43239-54.52672s14.13548-18.00465,21.71605-38.30645c-17.91658-11.89023-29.73465-32.23667-29.73465-55.35106h.00009Z" fill="#9d616a"/><path d="M603.92063,254.00171c-23.44093-.35738-66.77332,74.86783-66.77332,74.86783l-35.59551-12.58843-73.20808-25.91741-56.10632-23.09235.24671,1.69586c-.221-.53178-.46098-1.06897-.72537-1.61115-5.89847-12.15404-23.03231-26.4537-71.67599-23.61958l-22.90482,18.07864-3.11516,2.47674s-14.45275-1.25105-28.85427,4.49418c-10.41822,4.18799-20.83644,12.0023-25.76464,26.60727-2.55342,7.53347-2.55342,23.10913-1.02142,42.89853,5.54117,71.6505,31.36594,223.97025,31.36594,223.97025l163.0301-21.58174,12.027.28126s1.42996-16.41857,2.70662-37.91927c.79162-12.61422,1.50664-26.93974,1.91518-40.72798.28087-10.11169.35747-19.91716.17865-28.5477-.02545-.53676-.02545-1.07305-.05107-1.60934-.48522-15.75453-2.06829-27.16846-5.46449-28.41951,0,0,10.54598-.28126,25.76464-.84295,36.77013-1.37876,100.86236-4.46882,110.00383-9.44765,12.92058-7.02211,80.66425-101.27081,80.66425-101.27081,0,0-13.17591-37.79151-36.64238-38.17471l-.00009.00002Z" fill="#C8442A"/><path d="M418.61948,157.80939c-5.01532-24.53704-7.42116-37.10576-25.65147-54.46304-4.32696.6124,1.14219,23.04847-22.70797,54.30175-34.67053,45.43222-31.21438,3.77633-41.46681,17.77149-2.22563,3.03823-2.70602,14.00027-1.97461,17.77149,2.89019,14.90138,19.99384.35113,1.97461,51.33984-2.68083,3.96572-5.84162,3.0016-9.87305,2.96191-.31218-.00306,1.73282-.39355-5.92383-1.97461-3.65446-.75466-8.76959-1.646-14.90157-2.67902-71.23459-12.0008-96.38772-101.88441-41.32758-148.64722,12.52731-10.6395,24.82146-18.70302,35.49571-22.43939,32.1498-11.25363,105.40066-3.93893,119.46386,32.58105,6.70838,17.42062,8.9491,35.27059,6.89263,53.47573h.00009Z" fill="#1A1815"/><circle cx="271.90478" cy="251.28667" r="50.80564" fill="#1A1815"/></svg></div>
+            <p>档案柜还是空的<br>去打一场漂亮的胜仗，再回来放证书。</p>
+            <span class="go">去 逛 大 厅</span>
+          </div>
+          <div class="me-menu">
+            <div class="mm"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3H4a4 4 0 0 0 2-3v-3a7 7 0 0 1 4-6M9 17v1a3 3 0 0 0 6 0v-1"/></svg> 消息与催办<span class="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 6l6 6l-6 6"/></svg></span></div>
+            <div class="mm"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M10 20.777a9 9 0 0 1-2.48-.969M14 3.223a9.003 9.003 0 0 1 0 17.554m-9.421-3.684a9 9 0 0 1-1.227-2.592M3.124 10.5c.16-.95.468-1.85.9-2.675l.169-.305m2.714-2.941A9 9 0 0 1 10 3.223"/><path d="M12 8v4l3 3"/></g></svg> 操作记录<span class="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 6l6 6l-6 6"/></svg></span></div>
+            <div class="mm"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37c1 .608 2.296.07 2.572-1.065"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0-6 0"/></g></svg> 账号设置<span class="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 6l6 6l-6 6"/></svg></span></div>
+            <div class="mm" style="color:var(--verm)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2"/><path d="M9 12h12l-3-3m0 6l3-3"/></g></svg> 退出登录<span class="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#1a1815" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 6l6 6l-6 6"/></svg></span></div>
+          </div>
+        </div></div>
+        <div class="tabbar">
+          <div class="tb"><span class="ic" style="opacity:.45"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M5 12H3l9-9l9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/><path d="M10 12h4v4h-4z"/></g></svg></span>首页</div>
+          <div class="tb"><span class="ic" style="opacity:.45"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zM4 15a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z"/></svg></span>大厅</div>
+          <div class="tb on"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#f6f1e7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0"/><path d="M9 10a3 3 0 1 0 6 0a3 3 0 1 0-6 0m-2.832 8.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"/></g></svg></span>我的</div>
+        </div>
+      </div>
+      <div class="stage-note">
+        <h3>S7 · 我的（档案柜版式）</h3>
+        <div class="en">PROFILE AS ARCHIVE</div>
+        <p>个人页是一口档案柜：报名条目像卷宗，<span class="mark">状态用票据印章式胶囊</span>（审批中/已驳回/获奖），驳回项直接给「改完重交」的手写指引。证书区留了个有性格的空状态。</p>
+        <span class="handnote">头像用 Picsum 种子占位，上线后接微信头像。</span>
+        <div class="spec">
+          <b>DESIGN SPEC</b><br>
+          · 状态胶囊：st-run 靛蓝 / st-rej 朱砂 / st-ok 墨绿<br>
+          · 迷你轨迹：4 节点对应 5 级审批的当前段<br>
+          · 插画：unDraw「My Files」重着色
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== 04 资源清单 ===================== -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">04</span>
+    <h2>资源集成清单</h2>
+    <span class="en">Asset Inventory</span>
+    <span class="sec-rule"></span>
+  </div>
+  <div class="res-grid">
+    <div class="res-card">
+      <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zM4 15a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm10 0a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z"/></svg> 插画 · unDraw</h3>
+      <div class="src">SOURCE: undraw.co · MIT License · 已重着色为纸墨色系</div>
+      <table>
+        <tr><th>插画</th><th>用途 / 屏</th></tr>
+        <tr><td><b>Fingerprint login</b></td><td>S1 登录页主视觉</td></tr>
+        <tr><td><b>Complete Form</b></td><td>S5 报名表单提交提示</td></tr>
+        <tr><td><b>Sign here</b></td><td>S6 签名板水印</td></tr>
+        <tr><td><b>My Files</b></td><td>S7 证书空状态</td></tr>
+        <tr><td><b>Schedule / Team up / Teamwork</b></td><td>预留：S4 时间轴、组队空态、W2 首页改版</td></tr>
+      </table>
+      <div class="credit">换色规则：#6c63ff→#C8442A（朱砂）· #3f3d56 系→#1A1815（墨）· 灰系→纸色阶。CREDIT: illustrations by Katerina Limpitsouni / unDraw</div>
+    </div>
+    <div class="res-card">
+      <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 21h8m-4-4v4M7 4h10m0 0v8a5 5 0 0 1-10 0V4M3 9a2 2 0 1 0 4 0a2 2 0 1 0-4 0m14 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/></svg> 图标 · Iconify</h3>
+      <div class="src">SOURCE: api.iconify.design · Tabler（线性）+ Lucide（stamp）</div>
+      <table>
+        <tr><th>色阶</th><th>图标</th></tr>
+        <tr><td><b>墨 #1A1815</b></td><td>search / chevron / bell / clock / pencil / download / x / alert / settings / logout / plus 等 16 枚</td></tr>
+        <tr><td><b>朱砂 #C8442A</b></td><td>trophy / medal / users-group / file-text / shield-check / stamp / flame / history / star 等 15 枚</td></tr>
+        <tr><td><b>纸 #F4EDDF</b></td><td>TabBar 6 枚（墨底反白）</td></tr>
+      </table>
+      <div class="credit">统一 2px 描边与油墨边框同构；上线时经 iconify 工具批量导出 SVG 内联进 wxml，避免运行时请求。</div>
+    </div>
+    <div class="res-card">
+      <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2zm5-1h2m-1 13v.01"/></svg> 实拍 · Pexels</h3>
+      <div class="src">SOURCE: pexels.com · Free License</div>
+      <table>
+        <tr><th>照片</th><th>用途</th></tr>
+        <tr><td><b>№5940828</b> · Kampus Production</td><td>S2 首页 Banner（团队协作）</td></tr>
+        <tr><td><b>№6146971</b> · Keira Burton</td><td>S3 大厅重点推荐</td></tr>
+        <tr><td><b>№8199217</b> · Yankrukov</td><td>S4 详情头图（击掌）</td></tr>
+      </table>
+      <div class="credit">统一处理：saturate(.8) + 2px 墨边 + 硬投影，保证照片融入纸感。上线后替换为校内赛事实拍。</div>
+    </div>
+    <div class="res-card">
+      <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-4 4l4-4m-4-4l4 4"/></svg> 占位 · Picsum</h3>
+      <div class="src">SOURCE: picsum.photos · seeded placeholders</div>
+      <table>
+        <tr><th>种子</th><th>用途</th></tr>
+        <tr><td class="mono">js-mcm / js-elec / js-eng</td><td>S3 赛事卡缩略图</td></tr>
+        <tr><td class="mono">js-a1 / js-a2 / js-a3 / js-t1</td><td>S5 队员 & 教师头像</td></tr>
+        <tr><td class="mono">js-avatar</td><td>S7 用户头像</td></tr>
+      </table>
+      <div class="credit">seed 与赛项 ID / openid 绑定，同一实体永远拿到同一张图；接入云存储后逐一替换，前端零改动。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 05 落地 ===================== -->
+<section>
+  <div class="sec-head">
+    <span class="sec-num">05</span>
+    <h2>小程序落地要点</h2>
+    <span class="en">Implementation Notes</span>
+    <span class="sec-rule"></span>
+  </div>
+  <div class="deploy-grid">
+    <div>
+      <pre class="code"><span class="c">/* app.wxss — 墨纸版设计令牌 */</span>
+page {
+  <span class="k">--paper</span>: <span class="v">#F4EDDF</span>;   <span class="c">/* 页面底 */</span>
+  <span class="k">--ink</span>:   <span class="v">#1A1815</span>;   <span class="c">/* 主墨 */</span>
+  <span class="k">--verm</span>:  <span class="v">#C8442A</span>;   <span class="c">/* 朱砂强调 */</span>
+  <span class="k">--marker</span>: <span class="v">#F5D547</span>;   <span class="c">/* 选中态 */</span>
+  <span class="k">--serif</span>: <span class="v">"Noto Serif SC"</span>;
+  <span class="k">--hand</span>:  <span class="v">"Zhi Mang Xing"</span>;
+}
+.card {
+  background: <span class="v">#FBF7EC</span>;
+  border: 2rpx solid var(--ink);
+  box-shadow: 6rpx 6rpx 0 var(--ink);
+}</pre>
+    </div>
+    <ul class="tips">
+      <li><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 13V8.5C14 7 15 7 15 5a3 3 0 0 0-6 0c0 2 1 2 1 3.5V13m10 2.5a2.5 2.5 0 0 0-2.5-2.5h-11A2.5 2.5 0 0 0 4 15.5V17a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1zM5 22h14"/></svg></span><div><b>印章效果</b>：CSS 圆形边框 + rotate(-11deg) + mix-blend-mode: multiply；小程序用 view 覆盖层实现，驳回理由左边线同款。签名板用 canvas 2d，笔迹粗细跟随速度。</div></li>
+      <li><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M18.9 7a8 8 0 0 1 1.1 5v1a6 6 0 0 0 .8 3M8 11a4 4 0 0 1 8 0v1a10 10 0 0 0 2 6"/><path d="M12 11v2a14 14 0 0 0 2.5 8M8 15a18 18 0 0 0 1.8 6m-4.9-2a22 22 0 0 1-.9-7v-1a8 8 0 0 1 12-6.95"/></g></svg></span><div><b>纸纹颗粒</b>：feTurbulence SVG 转 base64 铺 5% 透明度全局伪元素，体积 2KB，不增加请求数。</div></li>
+      <li><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-4 4l4-4m-4-4l4 4"/></svg></span><div><b>字体策略</b>：衬线/手写字体包大，小程序侧先走系统兜底（SimSun / KaiTi），仅标题字号按需加载 woff2 子集（&lt;80KB）。</div></li>
+      <li><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.46 20.846A12 12 0 0 1 3.5 6A12 12 0 0 0 12 3a12 12 0 0 0 8.5 3a12 12 0 0 1-.09 7.06M15 19l2 2l4-4"/></svg></span><div><b>图片降饱和</b>：Pexels/Picsum 统一 CSS filter: saturate(.8)——同一滤镜规则保证异源图片色调统一，这是「不像 AI 拼贴」的关键。</div></li>
+      <li><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="#c8442a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 21h8m-4-4v4M7 4h10m0 0v8a5 5 0 0 1-10 0V4M3 9a2 2 0 1 0 4 0a2 2 0 1 0-4 0m14 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/></svg></span><div><b>图标内联</b>：Tabler SVG 全部内联 wxml，色阶只留墨/朱砂/纸三份，杜绝运行时图标请求。</div></li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="l">竞赛·墨纸版 —— 软件不该只有一种好看的方式。</div>
+  <div class="r">INK &amp; PAPER EDITORIAL SYSTEM · V2.0<br>2026-09-01 · DRAFTED FOR W1 SPRINT</div>
+</footer>
+
+</body>
+</html>

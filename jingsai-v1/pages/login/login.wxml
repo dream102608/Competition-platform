@@ -1,0 +1,40 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="login-wrap">
+  <!-- 刊头：像一份创刊号 -->
+  <view class="mast">
+    <view class="issue mono">第 2026-35 期 · 创 刊 号</view>
+    <view class="mast-row">
+      <view class="title serif">竞赛<em>一体化</em><br/>管理平台</view>
+      <view class="v-slogan serif">一站式竞赛管理</view>
+    </view>
+    <view class="mast-rule">
+      <span class="mono">JINGSAI DAILY</span>
+      <span class="mono">EST. 2026</span>
+    </view>
+  </view>
+
+  <!-- 主视觉：unDraw 指纹插画（朱砂重着色，base64 内嵌） -->
+  <view class="hero illus-login"></view>
+
+  <!-- 身份票根 -->
+  <view class="roles">
+    <view
+      wx:for="{{roles}}" wx:key="key"
+      class="role {{role === item.key ? 'on' : ''}} {{!item.on ? 'off' : ''}}"
+      bindtap="pick" data-role="{{item.key}}">
+      <view class="role-l">
+        <b class="serif">{{item.name}}</b>
+        <small>{{item.desc}}</small>
+      </view>
+      <view class="role-r">
+        <text class="ver-tag mono">{{item.ver}}</text>
+        <text wx:if="{{role === item.key}}" class="picked">已选</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 接入按钮 -->
+  <button class="btn btn-ink login-btn" bindtap="onLogin">微 信 一 键 接 入</button>
+  <view class="login-sub mono">首次登录自动绑定学号 · 角色写入 USERS 集合</view>
+</view>

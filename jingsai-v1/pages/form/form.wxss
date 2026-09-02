@@ -1,0 +1,78 @@
+/* S5 报名表单 · 公文纸版式 */
+@import "../../styles/illus.wxss";
+.back { font-size: 44rpx; color: var(--ink); line-height: 1; padding: 0 10rpx; }
+
+.form-sheet {
+  position: relative;
+  margin: 24rpx 28rpx;
+  background: var(--cream);
+  border: 3rpx solid var(--ink);
+  box-shadow: 8rpx 8rpx 0 var(--ink);
+  padding: 26rpx;
+}
+.sheet-seal { position: absolute; right: 26rpx; top: 52rpx; z-index: 3; width: 148rpx; height: 148rpx; }
+
+.form-head { border-bottom: 3rpx solid var(--ink); padding-bottom: 18rpx; padding-right: 150rpx; }
+.form-head b { font-size: 32rpx; font-weight: 900; display: block; line-height: 1.5; }
+.form-head small { font-size: 17rpx; color: var(--ink-fade); letter-spacing: 2rpx; margin-top: 8rpx; display: block; }
+
+.f-sec { padding: 26rpx 0 10rpx; border-bottom: 2rpx dashed var(--paper-4); }
+.f-sec:last-child { border-bottom: none; }
+
+.f-label { display: flex; align-items: center; gap: 10rpx; font-weight: 700; letter-spacing: 4rpx; font-size: 27rpx; }
+.f-label .f-ic { color: var(--verm); font-size: 28rpx; }
+.f-label .req { font-size: 16rpx; color: var(--verm); border: 2rpx solid var(--verm); padding: 0 8rpx; margin-left: auto; letter-spacing: 2rpx; }
+
+.f-input {
+  margin-top: 16rpx; padding: 16rpx 20rpx;
+  border: none; border-bottom: 3rpx solid var(--ink);
+  background: rgba(244, 237, 223, .5);
+  font-size: 32rpx;
+}
+.handf { font-family: "KaiTi", "STKaiti", cursive; color: var(--verm); }
+.ph2 { color: var(--ink-fade); font-family: "KaiTi", "STKaiti", cursive; }
+
+.f-hint { font-size: 22rpx; color: var(--verm); margin-top: 10rpx; }
+
+/* 组队 */
+.member-row { display: flex; align-items: center; gap: 20rpx; margin-top: 20rpx; flex-wrap: wrap; }
+.m-ava { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6rpx; }
+.m-ava image { width: 88rpx; height: 88rpx; border: 3rpx solid var(--ink); border-radius: 50%; }
+.m-ava .lead {
+  position: absolute; top: -12rpx; left: 50%; transform: translateX(-50%) rotate(-8deg);
+  background: var(--marker); border: 2rpx solid var(--ink);
+  font-size: 17rpx; padding: 0 8rpx; color: var(--ink);
+}
+.m-name { font-size: 19rpx; color: var(--ink-soft); }
+.m-add {
+  width: 88rpx; height: 88rpx; border-radius: 50%;
+  border: 3rpx dashed var(--ink-fade); color: var(--ink-fade);
+  font-size: 44rpx; display: flex; align-items: center; justify-content: center;
+}
+.m-tag { display: flex; flex-direction: column; font-size: 17rpx; color: var(--ink-fade); line-height: 1.7; font-family: var(--hand); }
+
+/* 审批人卡片 */
+.approver-card {
+  display: flex; align-items: center; gap: 18rpx;
+  border: 3rpx solid var(--ink); background: var(--paper);
+  padding: 18rpx 20rpx; margin-top: 16rpx;
+}
+.approver-card.on { border-color: var(--verm); background: rgba(200, 68, 42, .05); }
+.approver-card.dashed { border-style: dashed; }
+.approver-card .av image { width: 80rpx; height: 80rpx; border: 3rpx solid var(--ink); border-radius: 50%; display: block; }
+.a-info { flex: 1; min-width: 0; }
+.a-info b { font-size: 27rpx; display: block; }
+.a-info small { font-size: 20rpx; color: var(--ink-fade); }
+.pick-me { color: var(--verm); font-size: 24rpx; font-weight: 700; }
+.pick-me.grey { color: var(--ink-fade); }
+.f-ic.big { font-size: 44rpx; color: var(--ink); }
+
+/* 提交条 */
+.submit-sheet { box-shadow: none; }
+.submit-row { display: flex; align-items: center; gap: 20rpx; }
+/* .illus-form 定义见 styles/illus.wxss */
+.s-txt b { font-size: 27rpx; }
+.s-txt p { font-size: 19rpx; color: var(--ink-soft); margin-top: 6rpx; line-height: 1.7; }
+
+.submit-btn { margin: 24rpx 28rpx 0; height: 96rpx; font-size: 32rpx; }
+.submit-note { text-align: center; font-size: 17rpx; color: var(--ink-fade); margin: 16rpx 28rpx 40rpx; letter-spacing: 1rpx; }

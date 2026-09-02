@@ -1,0 +1,31 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/home/home",
+    "pages/hall/hall",
+    "pages/approval/approval",
+    "pages/profile/profile",
+    "pages/detail/detail",
+    "pages/form/form"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundColor": "#EDE4CE",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#4A443A",
+    "selectedColor": "#C8442A",
+    "backgroundColor": "#F4EDDF",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/home/home", "text": "首页" },
+      { "pagePath": "pages/hall/hall", "text": "大厅" },
+      { "pagePath": "pages/approval/approval", "text": "审批" },
+      { "pagePath": "pages/profile/profile", "text": "我的" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

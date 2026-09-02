@@ -1,0 +1,129 @@
+/* pages/profile/profile.wxss —— S7 档案柜版式 */
+@import "../../styles/illus.wxss";
+
+.page {
+  min-height: 100vh;
+  background: var(--paper);
+  padding: 0 32rpx 60rpx;
+  box-sizing: border-box;
+}
+
+/* ---------- 自定义导航 ---------- */
+.p-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 24rpx 8rpx 20rpx;
+}
+.p-title {
+  font-family: var(--serif); font-size: 44rpx; font-weight: 900; color: var(--ink);
+  letter-spacing: 4rpx;
+}
+.p-issue {
+  font-family: var(--mono); font-size: 20rpx; color: var(--ink-fade);
+  letter-spacing: 2rpx;
+}
+
+/* ---------- 档案封面 ---------- */
+.me-head {
+  position: relative;
+  display: flex; align-items: center; gap: 28rpx;
+  padding: 36rpx 32rpx;
+}
+.me-avatar {
+  width: 128rpx; height: 128rpx; flex-shrink: 0;
+  background: var(--ink); color: var(--paper);
+  font-family: var(--serif); font-size: 56rpx; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  transform: rotate(-3deg);
+}
+.me-info { flex: 1; min-width: 0; }
+.me-name-row { display: flex; align-items: center; gap: 12rpx; }
+.me-name {
+  font-family: var(--serif); font-size: 40rpx; font-weight: 900; color: var(--ink);
+  max-width: 320rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.me-pencil { font-size: 28rpx; color: var(--verm); }
+.me-sid {
+  font-family: var(--mono); font-size: 22rpx; color: var(--ink-soft);
+  margin-top: 10rpx; letter-spacing: 1rpx;
+}
+.me-role-tag {
+  display: inline-block; margin-top: 14rpx;
+  font-size: 20rpx; color: var(--ink); background: var(--marker);
+  border: 2rpx solid var(--ink); padding: 4rpx 14rpx;
+  font-weight: 700; letter-spacing: 2rpx;
+}
+.me-corner {
+  position: absolute; top: 20rpx; right: 24rpx;
+  font-family: var(--hand); font-size: 20rpx; color: var(--ink-fade);
+  transform: rotate(-2deg);
+}
+
+/* ---------- 三格统计 ---------- */
+.me-stats {
+  display: flex; align-items: center;
+  padding: 28rpx 0; margin-top: 24rpx;
+}
+.stat-cell { flex: 1; text-align: center; }
+.stat-num {
+  font-family: var(--mono); font-size: 52rpx; font-weight: 700; color: var(--ink);
+  line-height: 1;
+}
+.stat-verm { color: var(--verm); }
+.stat-label {
+  font-size: 22rpx; color: var(--ink-soft); margin-top: 12rpx; letter-spacing: 4rpx;
+}
+.stat-div { width: 2rpx; height: 56rpx; background: var(--ink-fade); opacity: .4; }
+
+/* ---------- 卷宗条目 ---------- */
+.me-reg { padding: 28rpx 32rpx; margin-top: 24rpx; }
+.reg-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16rpx; }
+.reg-title {
+  font-family: var(--serif); font-size: 30rpx; font-weight: 700; color: var(--ink);
+  flex: 1; line-height: 1.4;
+}
+.reg-team { font-size: 26rpx; color: var(--ink-soft); margin-top: 12rpx; }
+.ver-pill {
+  font-family: var(--mono); font-size: 20rpx; color: var(--verm);
+  border: 2rpx solid var(--verm); padding: 0 8rpx; margin-left: 8rpx;
+}
+.mini-track { display: flex; gap: 8rpx; margin-top: 20rpx; }
+.mt-dot {
+  flex: 1; height: 10rpx; background: var(--paper-4);
+  border: 2rpx solid var(--ink-fade);
+}
+.mt-done { background: var(--ink); border-color: var(--ink); }
+.reg-foot {
+  display: flex; justify-content: space-between; margin-top: 20rpx;
+  font-size: 22rpx; color: var(--ink-fade);
+}
+.reg-arrow { color: var(--verm); font-weight: 700; }
+
+/* ---------- 空状态 ---------- */
+.empty-box { padding: 60rpx 40rpx; text-align: center; }
+.empty-hand { font-size: 28rpx; color: var(--ink-soft); margin-bottom: 32rpx; }
+
+/* ---------- 证书空状态 ---------- */
+.cert-box { padding: 56rpx 40rpx; text-align: center; }
+.cert-hand { font-size: 26rpx; color: var(--ink-soft); margin: 28rpx 0 32rpx; }
+
+/* ---------- 菜单 ---------- */
+.me-menu { padding: 8rpx 32rpx; }
+.menu-row {
+  display: flex; align-items: center; gap: 24rpx;
+  padding: 30rpx 0;
+  border-bottom: 2rpx dashed var(--ink-fade);
+}
+.menu-row:last-child { border-bottom: none; }
+.menu-idx {
+  font-family: var(--mono); font-size: 22rpx; color: var(--ink-fade); letter-spacing: 1rpx;
+}
+.menu-name { flex: 1; font-family: var(--serif); font-size: 28rpx; font-weight: 700; color: var(--ink); }
+.menu-arrow { font-size: 24rpx; color: var(--ink-soft); }
+.menu-danger .menu-name, .menu-danger .menu-arrow { color: var(--verm); }
+
+.foot-note {
+  text-align: center; font-family: var(--hand);
+  font-size: 22rpx; color: var(--ink-fade); margin-top: 56rpx;
+}
+
+.btn-s { display: inline-block; }

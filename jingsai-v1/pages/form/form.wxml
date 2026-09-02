@@ -1,0 +1,88 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="p-head">
+  <view class="back mono" bindtap="back">‹</view>
+  <view class="t serif">报 名 表</view>
+  <text class="pill red mono">FORM v1</text>
+</view>
+
+<!-- 公文纸：盖着受理章 -->
+<view class="form-sheet">
+  <view class="seal sheet-seal">
+    <small>竞赛管理</small>
+    <view class="stxt">受理<text decode="{{true}}">&nbsp;</text>专用章</view>
+  </view>
+
+  <view class="form-head">
+    <b class="serif">{{comp.title}}</b>
+    <small class="mono">NO.{{comp.no}} · {{comp.track === 'subject' ? '学科竞赛' : '创新创业'}}赛道 · 截止 {{comp.deadline}}</small>
+  </view>
+
+  <!-- 队伍名称 -->
+  <view class="f-sec">
+    <view class="f-label"><text class="f-ic">✎</text>队 伍 名 称 <text class="req mono">必填</text></view>
+    <input class="f-input handf" placeholder="想一个响亮的队名…" placeholder-class="ph2"
+           value="{{teamName}}" bindinput="onTeamName" maxlength="20"/>
+    <view class="f-hint hand">↑ 队名提交后不可修改，想好再写</view>
+  </view>
+
+  <!-- 队员组队 -->
+  <view class="f-sec">
+    <view class="f-label"><text class="f-ic">⧉</text>队 员 组 队 <text class="req mono">{{members.length}}/{{comp.teamMax}} 人</text></view>
+    <view class="member-row">
+      <view class="m-ava" wx:for="{{members}}" wx:key="name" bindtap="removeMember" data-idx="{{index}}">
+        <image src="{{item.avatar}}" mode="aspectFill"/>
+        <text wx:if="{{item.lead}}" class="lead">队长</text>
+        <text class="m-name">{{item.name}}</text>
+      </view>
+      <view class="m-add" bindtap="addMember" wx:if="{{members.length < comp.teamMax}}">＋</view>
+      <view class="m-tag">
+        <text>可跨院系组队</text>
+        <text>点头像移除</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 一级审批人 -->
+  <view class="f-sec">
+    <view class="f-label"><text class="f-ic">✪</text>一 级 审 批 人 <text class="req mono">指导教师</text></view>
+    <view
+      wx:for="{{teachers}}" wx:key="_id"
+      class="approver-card {{teacherId === item._id ? 'on' : ''}}"
+      bindtap="pickTeacher" data-id="{{item._id}}">
+      <view class="av"><image src="https://picsum.photos/seed/js-t{{index + 1}}/80/80" mode="aspectFill"/></view>
+      <view class="a-info">
+        <b>{{item.name}} · {{item.title}}</b>
+        <small>{{item.org}} · {{item.exp}}</small>
+      </view>
+      <text wx:if="{{teacherId === item._id}}" class="pick-me">✓ 已选定</text>
+    </view>
+  </view>
+
+  <!-- 计划书上传 -->
+  <view class="f-sec">
+    <view class="f-label"><text class="f-ic">▣</text>作 品 计 划 书 <text class="req mono">PDF ≤ 10MB</text></view>
+    <view class="approver-card dashed" bindtap="upload">
+      <text class="f-ic big">⇡</text>
+      <view class="a-info">
+        <b>{{planFile || '点击上传计划书'}}</b>
+        <small>{{planFile ? '已上传 · 待审批' : '支持从聊天记录选取文件'}}</small>
+      </view>
+      <text class="pick-me grey">{{planFile ? '重新上传' : '选择文件'}}</text>
+    </view>
+  </view>
+</view>
+
+<!-- 提交条 -->
+<view class="form-sheet submit-sheet">
+  <view class="submit-row">
+    <view class="illus-form"></view>
+    <view class="s-txt">
+      <b class="serif">提交即进入审批</b>
+      <p>锁定为 v1 · 指导教师将收到待审提醒 · 48h 超时自动催办</p>
+    </view>
+  </view>
+</view>
+
+<button class="btn btn-verm submit-btn" bindtap="submit">提 交 报 名</button>
+<view class="submit-note mono">※ 提交前请核对队员与指导教师信息，提交后 24h 内可撤回。</view>

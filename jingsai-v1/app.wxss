@@ -1,0 +1,171 @@
+/* app.wxss —— 墨纸编辑部设计系统 V1.0
+   纸 #F4EDDF · 墨 #1A1815 · 朱砂 #C8442A · 荧光黄 #F5D547 */
+
+page {
+  --paper: #F4EDDF;
+  --paper-2: #EDE4CE;
+  --paper-3: #E4D9BE;
+  --paper-4: #DCD2BC;
+  --ink: #1A1815;
+  --ink-soft: #4A443A;
+  --ink-fade: #8A8172;
+  --verm: #C8442A;
+  --verm-deep: #A03521;
+  --marker: #F5D547;
+  --ind: #3D5A80;
+  --green: #3E6B4F;
+  --cream: #FBF7EC;
+  /* 三套字族：宋体报头 / 楷体手写批注 / 等宽编号 */
+  --serif: "Noto Serif SC", "Source Han Serif SC", "STZhongsong", "SimSun", serif;
+  --hand:  "Zhi Mang Xing", "KaiTi", "STKaiti", "Kaiti SC", cursive;
+  --mono:  "JetBrains Mono", Menlo, Consolas, "Courier New", monospace;
+
+  background: var(--paper);
+  /* 纸张噪点颗粒：两层极淡斜纹叠出肌理 */
+  background-image:
+    repeating-linear-gradient(0deg, rgba(26, 24, 21, .022) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(26, 24, 21, .016) 0 1px, transparent 1px 4px);
+  color: var(--ink);
+  font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+/* ========== 通用排版 ========== */
+.serif { font-family: var(--serif); }
+.hand  { font-family: var(--hand); }
+.mono  { font-family: var(--mono); }
+.handnote { font-family: "Zhi Mang Xing", "KaiTi", "STKaiti", cursive; color: var(--verm); }
+
+/* 自绘导航头部 */
+.p-head {
+  display: flex; align-items: center; gap: 16rpx;
+  padding: 20rpx 28rpx; border-bottom: 2rpx solid var(--ink);
+  background: var(--paper);
+}
+.p-head .t { font-family: "Noto Serif SC", "SimSun", serif; font-weight: 900; font-size: 34rpx; letter-spacing: 4rpx; flex: 1; }
+.p-head .ic { width: 40rpx; height: 40rpx; display: block; }
+
+/* ========== 卡片：2px 油墨边 + 硬投影 ========== */
+.card {
+  background: var(--cream);
+  border: 3rpx solid var(--ink);
+  box-shadow: 8rpx 8rpx 0 var(--ink);
+  border-radius: 4rpx;
+}
+
+/* ========== 按钮：像盖章 ========== */
+.btn {
+  display: flex; align-items: center; justify-content: center; gap: 12rpx;
+  border-radius: 6rpx; font-weight: 700;
+}
+.btn-ink {
+  background: var(--ink); color: var(--paper);
+  border: 3rpx solid var(--ink);
+  box-shadow: 6rpx 6rpx 0 rgba(26, 24, 21, .35);
+  font-family: "Noto Serif SC", "SimSun", serif;
+  letter-spacing: 6rpx;
+}
+.btn-verm {
+  background: var(--verm); color: var(--paper);
+  border: 3rpx solid var(--verm-deep);
+  box-shadow: 6rpx 6rpx 0 rgba(160, 53, 33, .35);
+  font-family: "Noto Serif SC", "SimSun", serif;
+  letter-spacing: 6rpx;
+}
+.btn-line {
+  background: transparent; color: var(--ink);
+  border: 3rpx solid var(--ink);
+  font-family: "Noto Serif SC", "SimSun", serif;
+  letter-spacing: 6rpx;
+}
+.btn-ghost {
+  background: transparent; color: var(--ink-fade);
+  border: 3rpx dashed var(--ink-fade);
+}
+.btn::after { border: none; }
+
+/* ========== 印章 ========== */
+.seal {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 148rpx; height: 148rpx;
+  border: 5rpx solid rgba(200, 68, 42, .85);
+  border-radius: 50%;
+  color: var(--verm);
+  font-family: "Noto Serif SC", "SimSun", serif;
+  font-weight: 900;
+  transform: rotate(-11deg);
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+.seal small { font-size: 18rpx; letter-spacing: 2rpx; font-weight: 700; }
+.seal .stxt { font-size: 26rpx; text-align: center; }
+
+/* ========== 票据胶囊 ========== */
+.pill {
+  display: inline-block; font-family: "JetBrains Mono", Consolas, monospace;
+  font-size: 19rpx; border: 2.4rpx solid var(--ink);
+  padding: 4rpx 14rpx; letter-spacing: 2rpx;
+  color: var(--ink); background: var(--cream);
+}
+.pill.red { color: var(--verm); border-color: var(--verm); }
+
+/* 状态胶囊（档案柜） */
+.st-pill { font-family: "JetBrains Mono", Consolas, monospace; font-size: 20rpx; padding: 4rpx 14rpx; border: 2.4rpx solid; }
+.st-run { color: var(--ind); border-color: var(--ind); background: rgba(61, 90, 128, .08); }
+.st-rej { color: var(--verm); border-color: var(--verm); background: rgba(200, 68, 42, .08); }
+.st-ok  { color: var(--green); border-color: var(--green); background: rgba(62, 107, 79, .08); }
+
+/* ========== 分节横带：方块 + 衬线标题 + 长线 ========== */
+.sec-band { display: flex; align-items: center; gap: 14rpx; margin: 36rpx 28rpx 20rpx; }
+.sec-band .sq { width: 16rpx; height: 16rpx; background: var(--verm); }
+.sec-band b { font-family: "Noto Serif SC", "SimSun", serif; font-weight: 900; font-size: 30rpx; letter-spacing: 6rpx; }
+.sec-band .ln { flex: 1; border-bottom: 2rpx solid var(--ink); }
+
+/* ========== 进度轨迹 ========== */
+.pc-track { display: flex; align-items: center; gap: 0; }
+.pc-track i, .pc-track s {
+  width: 16rpx; height: 16rpx; border-radius: 50%;
+  border: 3rpx solid var(--ink); background: transparent;
+  text-decoration: none; margin-right: 26rpx; position: relative;
+}
+.pc-track i:last-child, .pc-track s:last-child { margin-right: 0; }
+.pc-track s::after,
+.pc-track i.done::after {
+  content: ""; position: absolute; left: 100%; top: 50%;
+  width: 26rpx; border-bottom: 3rpx solid var(--ink); margin: 0;
+}
+.pc-track s:last-child::after, .pc-track i.done:last-child::after { display: none; }
+.pc-track i.done, .pc-track s.done { background: var(--verm); border-color: var(--verm); }
+
+/* ========== 手写批注条（驳回理由等） ========== */
+.rej-note {
+  margin: 12rpx 0 12rpx 24rpx; padding: 10rpx 18rpx;
+  border-left: 6rpx solid var(--verm); background: rgba(200, 68, 42, .06);
+  font-family: "KaiTi", "STKaiti", cursive; color: var(--verm-deep); font-size: 26rpx;
+  line-height: 1.7;
+}
+
+/* ========== 条形码 ========== */
+.barcode {
+  height: 44rpx; width: 160rpx; position: relative;
+  background: repeating-linear-gradient(90deg, var(--ink) 0 4rpx, transparent 4rpx 8rpx, var(--ink) 8rpx 10rpx, transparent 10rpx 18rpx, var(--ink) 18rpx 24rpx, transparent 24rpx 28rpx);
+}
+.barcode::after {
+  content: attr(data-no); position: absolute; left: 0; right: 0; top: 46rpx;
+  font-family: "JetBrains Mono", Consolas, monospace; font-size: 15rpx;
+  letter-spacing: 4rpx; color: var(--ink-soft); text-align: center;
+}
+
+/* ========== 胶带（贴纸感） ========== */
+.tape {
+  position: absolute; width: 140rpx; height: 40rpx;
+  background: rgba(227, 216, 183, .85);
+  border-left: 2rpx dashed rgba(26, 24, 21, .18);
+  border-right: 2rpx dashed rgba(26, 24, 21, .18);
+  z-index: 9;
+}
+
+/* 通用小图标容器 */
+.ic { width: 40rpx; height: 40rpx; display: inline-block; vertical-align: middle; }
+.ic image, .ic icon { width: 100%; height: 100%; }

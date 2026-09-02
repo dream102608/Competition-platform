@@ -1,0 +1,58 @@
+/* S1 登录 · 墨纸创刊号 */
+@import "../../styles/illus.wxss";
+.login-wrap { padding: 30rpx 36rpx 60rpx; }
+
+.mast { border-bottom: 4rpx solid var(--ink); padding-bottom: 24rpx; position: relative; }
+.issue { font-size: 20rpx; color: var(--verm); letter-spacing: 6rpx; }
+.mast-row { display: flex; align-items: flex-end; gap: 24rpx; margin-top: 20rpx; }
+.mast .title { font-size: 84rpx; font-weight: 900; line-height: 1.15; letter-spacing: 4rpx; }
+.mast .title em { font-style: normal; color: var(--verm); }
+.v-slogan {
+  writing-mode: vertical-rl;
+  font-size: 22rpx; letter-spacing: 8rpx;
+  color: var(--ink-soft);
+  border-left: 2rpx solid var(--ink);
+  border-right: 2rpx solid var(--ink);
+  padding: 12rpx 8rpx; align-self: flex-start;
+}
+.mast-rule {
+  display: flex; justify-content: space-between; margin-top: 24rpx;
+  border-top: 2rpx solid var(--ink); padding-top: 12rpx;
+  font-size: 19rpx; letter-spacing: 3rpx; color: var(--ink-soft);
+}
+
+/* 主视觉插画 */
+.hero { margin: 36rpx 40rpx 8rpx; }
+/* 插画定义见 styles/illus.wxss（顶部 @import） */
+
+/* 身份票根 */
+.roles { margin-top: 24rpx; }
+.role {
+  display: flex; align-items: center;
+  border: 3rpx solid var(--ink);
+  background: var(--cream);
+  box-shadow: 6rpx 6rpx 0 var(--ink);
+  padding: 24rpx 28rpx;
+  margin-bottom: 20rpx;
+  position: relative;
+}
+.role.on { border-color: var(--verm); box-shadow: 6rpx 6rpx 0 var(--verm); }
+.role.off { opacity: .55; border-style: dashed; box-shadow: none; }
+.role-l { flex: 1; display: flex; flex-direction: column; gap: 6rpx; }
+.role-l b { font-size: 32rpx; font-weight: 900; }
+.role.on .role-l b { color: var(--verm-deep); }
+.role-l small { font-size: 22rpx; color: var(--ink-fade); letter-spacing: 2rpx; }
+.role-r { display: flex; align-items: center; gap: 16rpx; }
+.ver-tag { font-size: 18rpx; border: 2rpx solid var(--ink); padding: 2rpx 8rpx; color: var(--ink-soft); }
+.role.on .ver-tag { border-color: var(--verm); color: var(--verm); }
+/* 荧光黄「已选」拍纸 */
+.picked {
+  background: var(--marker); color: var(--ink);
+  font-family: "KaiTi", "STKaiti", cursive;
+  font-size: 24rpx; padding: 4rpx 12rpx;
+  transform: rotate(-8deg);
+  border: 2rpx solid var(--ink);
+}
+
+.login-btn { margin-top: 40rpx; height: 96rpx; font-size: 32rpx; }
+.login-sub { text-align: center; margin-top: 18rpx; font-size: 18rpx; letter-spacing: 4rpx; color: var(--ink-fade); }
