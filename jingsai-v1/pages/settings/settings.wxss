@@ -1,0 +1,35 @@
+/* pages/settings/settings.wxss —— S9 账号设置（档案室版式） */
+.page { min-height: 100vh; background: var(--paper); padding: 0 32rpx 60rpx; box-sizing: border-box; }
+
+.p-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 24rpx 8rpx 20rpx; border-bottom: 2rpx solid var(--ink);
+}
+.t { font-size: 44rpx; font-weight: 900; letter-spacing: 4rpx; color: var(--ink); }
+.sub { font-size: 20rpx; color: var(--ink-fade); letter-spacing: 3rpx; }
+
+.sec-band {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin: 36rpx 8rpx 4rpx; padding-top: 20rpx;
+  border-top: 2rpx dashed var(--ink-fade);
+}
+.sec-band text:first-child { font-family: var(--serif); font-size: 30rpx; font-weight: 900; color: var(--ink); letter-spacing: 2rpx; }
+.sec-en { font-family: var(--mono); font-size: 18rpx; color: var(--ink-fade); letter-spacing: 2rpx; }
+
+.set-card { padding: 12rpx 32rpx; }
+.set-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 26rpx 0; border-bottom: 2rpx dashed var(--ink-fade);
+  gap: 20rpx;
+}
+.set-row:last-child { border-bottom: none; }
+.set-label { font-size: 26rpx; color: var(--ink); font-weight: 700; flex-shrink: 0; }
+.set-en-sub { font-size: 16rpx; color: var(--verm); border: 2rpx solid var(--verm); padding: 0 8rpx; letter-spacing: 1rpx; margin-left: 12rpx; }
+.set-input { flex: 1; text-align: right; font-size: 28rpx; color: var(--ink); }
+.ph { color: var(--ink-fade); }
+.set-arrow { font-size: 22rpx; color: var(--verm); font-weight: 700; }
+.set-tip { font-size: 22rpx; color: var(--ink-fade); padding: 8rpx 0 20rpx; text-align: center; }
+
+.save-btn { margin-top: 24rpx; }
+
+.foot-note { text-align: center; font-family: var(--hand); font-size: 22rpx; color: var(--ink-fade); margin-top: 64rpx; }

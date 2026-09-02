@@ -1,7 +1,7 @@
-// app.js —— 竞赛一体化管理平台 V1.0（墨纸编辑部版）
+// app.js —— 竞赛一体化管理平台 V1.1（墨纸编辑部版）
 App({
   globalData: {
-    user: null,          // 当前登录用户
+    user: null,          // 当前登录用户（student | teacher | admin）
     sbh: 24,             // 状态栏高度
     db: null,            // 云开发数据库（可用时）
     cloudReady: false,
@@ -34,20 +34,14 @@ App({
   /** 登录：wx.login 换 code，演示模式下直接绑定 mock 用户 */
   login(role) {
     return new Promise((resolve) => {
-      wx.login({
-        success: () => {
-          const user = require('./utils/data').mockUser(role);
-          this.globalData.user = user;
-          wx.setStorageSync('user', user);
-          resolve(user);
-        },
-        fail: () => {
-          const user = require('./utils/data').mockUser(role);
-          this.globalData.user = user;
-          wx.setStorageSync('user', user);
-          resolve(user);
-        }
-      });
+      const bind = () => {
+        const data = require('./utils/data');
+        const user = data.mockUser(role);
+        this.globalData.user = user;
+        data.saveUser(user);
+        resolve(user);
+      };
+      wx.login({ success: bind, fail: bind });
     });
   },
 

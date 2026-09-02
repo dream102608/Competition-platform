@@ -20,6 +20,7 @@ Page({
     teachers: [],
     teacherId: '',
     planFile: '',
+    planFileId: '',
     uploading: false,
     pool: []
   },
@@ -72,14 +73,46 @@ Page({
   },
 
   upload() {
-    // 演示：模拟选择文件上传；正式版 wx.chooseMessageFile → 云存储
+    // V1.1：云开发可用时走 wx.chooseMessageFile → wx.cloud.uploadFile；
+    // 否则模拟上传（演示模式），保证流程可跑。
     this.setData({ uploading: true });
-    wx.showLoading({ title: '上传中…' });
+    if (app.globalData.cloudReady && wx.chooseMessageFile) {
+      wx.chooseMessageFile({
+        count: 1,
+        type: 'file',
+        extension: ['pdf', 'doc', 'docx', 'zip', 'rar'],
+        success: (res) => {
+          const f = res.tempFiles[0];
+          const cloudPath = `plans/${Date.now()}_${f.name}`;
+          wx.showLoading({ title: '上传云端…' });
+          wx.cloud.uploadFile({
+            cloudPath,
+            filePath: f.path,
+            success: (up) => {
+              wx.hideLoading();
+              this.setData({
+                uploading: false,
+                planFile: `${f.name} · ${(f.size / 1048576).toFixed(1)}MB`,
+                planFileId: up.fileID
+              });
+            },
+            fail: () => this.simulate()
+          });
+        },
+        fail: () => { this.setData({ uploading: false }); }
+      });
+    } else {
+      this.simulate();
+    }
+  },
+
+  simulate() {
     setTimeout(() => {
       wx.hideLoading();
       this.setData({
         uploading: false,
-        planFile: `${this.data.teamName || '队伍'}_计划书_v1.pdf · 1.2MB`
+        planFile: `${this.data.teamName || '队伍'}_计划书_v1.pdf · 1.2MB`,
+        planFileId: ''
       });
     }, 800);
   },

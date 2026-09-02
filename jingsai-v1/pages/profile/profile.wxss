@@ -52,6 +52,7 @@
   border: 2rpx solid var(--ink); padding: 4rpx 14rpx;
   font-weight: 700; letter-spacing: 2rpx;
 }
+.me-tagline { margin-top: 12rpx; font-size: 24rpx; color: var(--verm-deep); }
 .me-corner {
   position: absolute; top: 20rpx; right: 24rpx;
   font-family: var(--hand); font-size: 20rpx; color: var(--ink-fade);
@@ -105,6 +106,7 @@
 /* ---------- 证书空状态 ---------- */
 .cert-box { padding: 56rpx 40rpx; text-align: center; }
 .cert-hand { font-size: 26rpx; color: var(--ink-soft); margin: 28rpx 0 32rpx; }
+.tea-box { border-style: dashed; background: var(--cream); }
 
 /* ---------- 菜单 ---------- */
 .me-menu { padding: 8rpx 32rpx; }
@@ -119,6 +121,7 @@
 }
 .menu-name { flex: 1; font-family: var(--serif); font-size: 28rpx; font-weight: 700; color: var(--ink); }
 .menu-arrow { font-size: 24rpx; color: var(--ink-soft); }
+.menu-badge { font-size: 20rpx; color: var(--paper); background: var(--verm); padding: 2rpx 10rpx; margin-right: 10rpx; }
 .menu-danger .menu-name, .menu-danger .menu-arrow { color: var(--verm); }
 
 .foot-note {
