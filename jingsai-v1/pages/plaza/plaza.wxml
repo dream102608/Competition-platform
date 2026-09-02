@@ -1,0 +1,92 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<!-- 页头 -->
+<view class="pl-head">
+  <view class="pl-back" bindtap="back">‹</view>
+  <view class="pl-t serif">知 识 广 场</view>
+  <text class="pl-en mono">PLAZA EXCHANGE</text>
+</view>
+<view class="pl-lead hand">把踩过的坑、拿过的奖、用过的模板，留给下一支队伍。</view>
+
+<!-- 栏目页签 -->
+<view class="pl-tabs">
+  <view wx:for="{{tabs}}" wx:key="key"
+        class="pl-tab {{tab === item.key ? 'on' : ''}}"
+        data-tab="{{item.key}}" bindtap="setTab">
+    <text class="pl-tab-cn">{{item.label}}</text>
+    <text class="pl-tab-en mono">{{item.en}}</text>
+    <text class="pl-tab-n mono">{{counts[item.key]}}</text>
+  </view>
+</view>
+
+<!-- ========== 栏目一：经验帖 ========== -->
+<block wx:if="{{tab === 'posts'}}">
+  <view wx:for="{{posts}}" wx:key="_id" class="card ps-card" data-id="{{item._id}}" bindtap="openPost">
+    <view class="ps-top">
+      <text class="ps-comp mono">{{item.track}} · {{item.comp}}</text>
+      <text class="ps-date mono">{{item.date}}</text>
+    </view>
+    <view class="ps-title serif"><text class="ps-quo">「</text>{{item.title}}</view>
+    <view class="ps-brief">{{item.brief}}</view>
+    <view class="ps-foot">
+      <view class="ps-author hand">{{item.author}} · {{item.from}}</view>
+      <view class="ps-meta mono">
+        <text>◔ {{item.views}}</text>
+        <text>♥ {{item.likes}}</text>
+        <text class="ps-go">读全文 →</text>
+      </view>
+    </view>
+  </view>
+</block>
+
+<!-- ========== 栏目二：获奖名单 ========== -->
+<block wx:if="{{tab === 'winners'}}">
+  <view wx:for="{{winners}}" wx:key="_id" class="card wl-card">
+    <view class="wl-head">
+      <view class="wl-season serif">{{item.season}}</view>
+      <text class="wl-comp mono">{{item.comp}}</text>
+    </view>
+    <view wx:for="{{item.rows}}" wx:for-item="row" wx:key="team" class="wl-row">
+      <view class="wl-prize {{row.grade === 'gold' ? 'g-gold' : (row.grade === 'silver' ? 'g-silver' : 'g-bronze')}}">{{row.prize}}</view>
+      <view class="wl-info">
+        <b class="serif">{{row.team}}</b>
+        <small class="mono">{{row.members}}</small>
+      </view>
+      <view class="wl-tea mono">指导 {{row.teacher}}</view>
+    </view>
+  </view>
+  <view class="pl-note mono">* 名单为演示样例数据，正式部署后由获奖库同步。</view>
+</block>
+
+<!-- ========== 栏目三：模板库 ========== -->
+<block wx:if="{{tab === 'templates'}}">
+  <view wx:for="{{templates}}" wx:key="_id" class="card tpl-card">
+    <view class="tpl-top">
+      <b class="serif">{{item.name}}</b>
+      <text class="tpl-tag mono">{{item.tag}}</text>
+    </view>
+    <view class="tpl-desc">{{item.desc}}</view>
+    <button class="tpl-copy" data-id="{{item._id}}" bindtap="copyTpl">✂ 复制模板要点</button>
+  </view>
+  <view class="pl-note mono">模板为纯文本要点，复制后可直接粘贴进 Word / WPS 使用；正式版将接入附件下载。</view>
+</block>
+
+<view class="pl-foot mono">竞赛一体化管理平台 · V1.4 · 知识广场副刊</view>
+
+<!-- ========== 经验帖全文弹层 ========== -->
+<view wx:if="{{postShow}}" class="pl-mask" bindtap="closePost">
+  <view class="pl-modal" catchtap="noop">
+    <view class="pm-top">
+      <text class="pm-comp mono">{{post.track}} · {{post.comp}}</text>
+      <text class="pm-date mono">{{post.date}}</text>
+    </view>
+    <scroll-view scroll-y class="pm-scroll">
+      <view class="pm-title serif">「{{post.title}}」</view>
+      <view class="pm-author hand">{{post.author}} · {{post.from}}</view>
+      <view class="pm-rule"></view>
+      <view wx:for="{{post.body}}" wx:for-item="para" wx:key="index" class="pm-para">{{para}}</view>
+      <view class="pm-end serif">—— 完 ——</view>
+    </scroll-view>
+    <button class="pm-close" bindtap="closePost">收起</button>
+  </view>
+</view>
