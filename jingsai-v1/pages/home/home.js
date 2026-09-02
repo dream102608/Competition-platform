@@ -45,5 +45,11 @@ Page({
   goHall() { wx.switchTab({ url: '/pages/hall/hall' }); },
   goApproval() { wx.switchTab({ url: '/pages/approval/approval' }); },
   goProfile() { wx.switchTab({ url: '/pages/profile/profile' }); },
+<<<<<<< Updated upstream
   soon() { wx.showToast({ title: '知识广场将在 V2.0 上线', icon: 'none' }); }
+=======
+  goMessages() { wx.navigateTo({ url: '/pages/messages/messages' }); },
+  goReports() { wx.navigateTo({ url: '/pages/reports/reports' }); },
+  goPlaza() { wx.navigateTo({ url: '/pages/plaza/plaza' }); }
+>>>>>>> Stashed changes
 });

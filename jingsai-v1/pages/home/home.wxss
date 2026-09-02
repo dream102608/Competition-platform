@@ -48,12 +48,6 @@
 .g-item .g-ic.verm { color: var(--verm); }
 .g-item b { font-size: 30rpx; font-weight: 900; letter-spacing: 2rpx; }
 .g-item small { font-size: 20rpx; color: var(--ink-fade); letter-spacing: 1rpx; }
-.g-item.off { border-style: dashed; box-shadow: none; opacity: .6; }
-.g-item .soon {
-  position: absolute; top: 12rpx; right: 12rpx;
-  font-size: 16rpx; color: var(--verm); border: 2rpx solid var(--verm);
-  padding: 0 8rpx; transform: rotate(6deg);
-}
 
 /* 报名进度卡 */
 .prog-card { margin: 30rpx 28rpx 40rpx; padding: 24rpx; }

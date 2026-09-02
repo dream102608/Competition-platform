@@ -6,7 +6,15 @@
     "pages/approval/approval",
     "pages/profile/profile",
     "pages/detail/detail",
+<<<<<<< Updated upstream
     "pages/form/form"
+=======
+    "pages/form/form",
+    "pages/messages/messages",
+    "pages/settings/settings",
+    "pages/reports/reports",
+    "pages/plaza/plaza"
+>>>>>>> Stashed changes
   ],
   "window": {
     "navigationStyle": "custom",

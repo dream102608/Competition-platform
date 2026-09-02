@@ -28,8 +28,26 @@
   <view class="g-item" bindtap="goHall">
     <text class="g-ic verm">▤</text><b>竞赛大厅</b><small>双赛道 · 5 项在报</small>
   </view>
+<<<<<<< Updated upstream
   <view class="g-item" bindtap="goApproval">
     <text class="g-ic verm">▤</text><b>我的报名</b><small>{{activeCount}} 支队伍 · 审批中</small>
+=======
+
+  <!-- 功能宫格 -->
+  <view class="grid-nav">
+    <view class="g-item" bindtap="goHall">
+      <text class="g-ic verm">▤</text><b>竞赛大厅</b><small>双赛道 · 5 项在报</small>
+    </view>
+    <view class="g-item" bindtap="goApproval">
+      <text class="g-ic verm">▤</text><b>我的报名</b><small>{{activeCount}} 支队伍 · 审批中</small>
+    </view>
+    <view class="g-item" bindtap="goApproval">
+      <text class="g-ic verm">▤</text><b>审批中心</b><small>轨迹 · 签批 · 催办</small>
+    </view>
+    <view class="g-item" bindtap="goPlaza">
+      <text class="g-ic verm">▤</text><b>知识广场</b><small>经验帖 · 获奖名单 · 模板库</small>
+    </view>
+>>>>>>> Stashed changes
   </view>
   <view class="g-item" bindtap="goApproval">
     <text class="g-ic verm">▤</text><b>审批中心</b><small>轨迹 · 签批 · 催办</small>
