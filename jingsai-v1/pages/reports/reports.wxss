@@ -1,0 +1,77 @@
+/* S-reports 统计报表中心 · 纸墨风图表 */
+.rp-head { gap: 14rpx; }
+.rp-back {
+  width: 56rpx; height: 56rpx; flex-shrink: 0;
+  border: 2rpx solid var(--ink); background: var(--cream);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40rpx; line-height: 1;
+}
+.rp-head .en { font-size: 15rpx; color: var(--ink-fade); letter-spacing: 3rpx; }
+
+/* 分节小标 */
+.sec-band .en { font-size: 15rpx; color: var(--ink-fade); letter-spacing: 3rpx; }
+
+/* 总览票 */
+.rp-over { margin: 4rpx 28rpx 0; padding: 26rpx 8rpx; display: flex; align-items: center; }
+.rp-ov-cell { flex: 1; text-align: center; }
+.rp-ov-n { font-size: 50rpx; font-weight: 700; line-height: 1; }
+.rp-ov-n.verm { color: var(--verm); }
+.rp-ov-l { font-size: 20rpx; color: var(--ink-soft); margin-top: 12rpx; letter-spacing: 3rpx; }
+.rp-ov-div { width: 2rpx; height: 64rpx; background: var(--ink); opacity: .2; }
+.rp-sub { margin: 12rpx 28rpx 0; text-align: center; font-size: 16rpx; color: var(--ink-fade); letter-spacing: 1rpx; }
+
+/* 卡片区块 */
+.rp-card { margin: 4rpx 28rpx 8rpx; padding: 24rpx; }
+
+/* 横向条形图 */
+.rp-bar-row { display: flex; align-items: center; gap: 14rpx; padding: 11rpx 0; }
+.rp-bar-k {
+  width: 288rpx; flex-shrink: 0; font-size: 23rpx; color: var(--ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.rp-bar { flex: 1; height: 30rpx; border: 2rpx solid var(--ink); background: var(--paper-2); overflow: hidden; }
+.rp-bar-fill { height: 100%; background: var(--verm); }
+.rp-bar-fill.ind { background: var(--ind); }
+.rp-bar-fill.tea { background: var(--ink-soft); }
+.rp-bar-v { width: 52rpx; flex-shrink: 0; text-align: right; font-size: 22rpx; font-weight: 700; }
+
+/* 状态堆叠条 + 图例 */
+.rp-stack { display: flex; height: 46rpx; border: 2rpx solid var(--ink); overflow: hidden; }
+.rp-stack-seg { height: 100%; }
+.rp-legend { display: flex; flex-wrap: wrap; gap: 14rpx 28rpx; margin-top: 20rpx; }
+.rp-leg { display: flex; align-items: center; gap: 10rpx; }
+.rp-leg-dot { width: 18rpx; height: 18rpx; border: 2rpx solid var(--ink); }
+.rp-leg-t { font-size: 22rpx; color: var(--ink-soft); }
+
+/* 赛道构成 */
+.rp-track { padding: 14rpx 0; }
+.rp-track-h { display: flex; justify-content: space-between; align-items: baseline; font-size: 25rpx; margin-bottom: 10rpx; }
+.rp-track-h .mono { font-size: 18rpx; color: var(--ink-fade); }
+
+/* 筛选导出 */
+.rp-filters { display: flex; flex-wrap: wrap; gap: 14rpx; }
+.rp-fil {
+  display: flex; align-items: baseline; gap: 8rpx;
+  padding: 10rpx 18rpx; border: 2rpx solid var(--ink-fade);
+  color: var(--ink-fade); font-size: 23rpx;
+}
+.rp-fil text { font-size: 17rpx; }
+.rp-fil.on {
+  border-color: var(--ink); color: var(--ink);
+  background: var(--marker); font-weight: 700;
+}
+.rp-fil.on text { color: var(--ink); }
+.rp-exp { margin-top: 24rpx; width: 100%; height: 84rpx; font-size: 28rpx; }
+.rp-note { margin-top: 18rpx; font-size: 16rpx; color: var(--ink-fade); text-align: center; line-height: 1.8; }
+
+/* 空态 */
+.rp-empty { text-align: center; color: var(--ink-fade); padding: 34rpx 0; font-size: 26rpx; }
+.empty-box { margin: 40rpx 28rpx; padding: 60rpx 0; text-align: center; }
+.empty-box .hand { font-size: 30rpx; color: var(--verm); }
+.btn-s {
+  margin: 30rpx auto 0; width: 240rpx; height: 76rpx;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 25rpx; letter-spacing: 3rpx;
+}
+
+.foot-note { text-align: center; font-size: 17rpx; color: var(--ink-fade); letter-spacing: 2rpx; padding: 44rpx 0 70rpx; }

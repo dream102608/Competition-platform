@@ -1,0 +1,115 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="p-head rp-head">
+  <view class="rp-back" bindtap="back">‹</view>
+  <view class="t serif">统 计 报 表</view>
+  <text class="mono en">REPORT DESK</text>
+</view>
+
+<!-- 学生守卫 -->
+<view wx:if="{{guard}}" class="card empty-box">
+  <view class="hand">报表中心仅对评审台开放（教师 / 系级 / 院级 / 校级）。</view>
+  <view class="btn-line btn-s" bindtap="goHome">回首页</view>
+</view>
+
+<block wx:else>
+  <!-- 总览票 -->
+  <view class="sec-band"><view class="sq"></view><b>总 览</b><view class="ln"></view><text class="en mono">TOTALS</text></view>
+  <view class="card rp-over">
+    <view class="rp-ov-cell">
+      <view class="rp-ov-n verm mono">{{total}}</view>
+      <view class="rp-ov-l">报名总量</view>
+    </view>
+    <view class="rp-ov-div"></view>
+    <view class="rp-ov-cell">
+      <view class="rp-ov-n mono">{{approving}}</view>
+      <view class="rp-ov-l">审批中</view>
+    </view>
+    <view class="rp-ov-div"></view>
+    <view class="rp-ov-cell">
+      <view class="rp-ov-n mono">{{rejected}}</view>
+      <view class="rp-ov-l">已驳回</view>
+    </view>
+    <view class="rp-ov-div"></view>
+    <view class="rp-ov-cell">
+      <view class="rp-ov-n mono">{{passed}}</view>
+      <view class="rp-ov-l">已通过</view>
+    </view>
+  </view>
+  <view class="rp-sub mono">通过率 {{passRate}}% · 覆盖 {{members}} 名队员 · 平均每队 {{avgTeam}} 人 · 已撤回 {{withdrawn}}</view>
+
+  <!-- 按赛项 -->
+  <view class="sec-band"><view class="sq"></view><b>按赛项</b><view class="ln"></view><text class="en mono">BY COMPETITION</text></view>
+  <view class="card rp-card">
+    <view wx:if="{{!compBars.length}}" class="hand rp-empty">暂无报名数据，去大厅看看？</view>
+    <view wx:for="{{compBars}}" wx:key="k" class="rp-bar-row">
+      <text class="rp-bar-k">{{item.k}}</text>
+      <view class="rp-bar">
+        <view class="rp-bar-fill" style="width: {{item.w}}%;"></view>
+      </view>
+      <text class="rp-bar-v mono">{{item.v}}</text>
+    </view>
+  </view>
+
+  <!-- 状态分布 -->
+  <view class="sec-band"><view class="sq"></view><b>状态分布</b><view class="ln"></view><text class="en mono">STATUS</text></view>
+  <view class="card rp-card">
+    <view wx:if="{{!stack.length}}" class="hand rp-empty">暂无数据</view>
+    <block wx:else>
+      <view class="rp-stack">
+        <view wx:for="{{stack}}" wx:key="key" class="rp-stack-seg"
+              style="width: {{item.pct}}%; background: {{item.color}};"></view>
+      </view>
+      <view class="rp-legend">
+        <view wx:for="{{stack}}" wx:key="key" class="rp-leg">
+          <text class="rp-leg-dot" style="background: {{item.color}};"></text>
+          <text class="rp-leg-t">{{item.label}} · {{item.v}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 赛道构成 -->
+  <view class="sec-band"><view class="sq"></view><b>赛道构成</b><view class="ln"></view><text class="en mono">TRACK</text></view>
+  <view class="card rp-card">
+    <view wx:if="{{!trackBars.length}}" class="hand rp-empty">暂无数据</view>
+    <view wx:for="{{trackBars}}" wx:key="k" class="rp-track">
+      <view class="rp-track-h">
+        <text class="serif">{{item.k}}</text>
+        <text class="mono">{{item.v}} 项</text>
+      </view>
+      <view class="rp-bar">
+        <view class="rp-bar-fill ind" style="width: {{item.w}}%;"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 指导教师负载 -->
+  <view class="sec-band"><view class="sq"></view><b>指导教师负载</b><view class="ln"></view><text class="en mono">BY TEACHER</text></view>
+  <view class="card rp-card">
+    <view wx:if="{{!teacherBars.length}}" class="hand rp-empty">暂无数据</view>
+    <view wx:for="{{teacherBars}}" wx:key="k" class="rp-bar-row">
+      <text class="rp-bar-k">{{item.k}}</text>
+      <view class="rp-bar">
+        <view class="rp-bar-fill tea" style="width: {{item.w}}%;"></view>
+      </view>
+      <text class="rp-bar-v mono">{{item.v}}</text>
+    </view>
+  </view>
+
+  <!-- 筛选导出 -->
+  <view class="sec-band"><view class="sq"></view><b>导出</b><view class="ln"></view><text class="en mono">EXPORT</text></view>
+  <view class="card rp-card">
+    <view class="rp-filters">
+      <view wx:for="{{filters}}" wx:key="key"
+            class="rp-fil {{filter === item.key ? 'on' : ''}}"
+            data-f="{{item.key}}" bindtap="setFilter">
+        {{item.label}}<text class="mono">{{item.v}}</text>
+      </view>
+    </view>
+    <button class="btn btn-verm rp-exp" bindtap="exportCSV">↧ 导出 CSV（{{exportHint}}）</button>
+    <view class="rp-note mono">数据实时聚合自本地卷宗；筛选导出含表头 9 列，弹窗一键复制。</view>
+  </view>
+
+  <view class="foot-note">竞赛一体化管理平台 · {{version}} · 墨纸编辑部</view>
+</block>

@@ -1,0 +1,32 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="p-head">
+  <view class="t serif">消息与催办</view>
+  <view class="head-act" bindtap="markAll" wx:if="{{unread}}">全部已读</view>
+</view>
+
+<view class="inbox-sub mono" wx:if="{{unread}}">
+  <view class="dot-live"></view>您有 {{unread}} 封未读来函，请查收
+</view>
+
+<!-- 来函列表 -->
+<view wx:if="{{!msgs.length}}" class="card empty-box">
+  <view class="hand">收件箱空空如也，暂无来函。</view>
+  <view class="btn-line btn-s" bindtap="goHome">回首页</view>
+</view>
+
+<view wx:for="{{msgs}}" wx:key="_id" class="msg card {{item.read ? 'read' : ''}}"
+      data-id="{{item._id}}" data-regid="{{item.regId}}" bindtap="open">
+  <view class="msg-stamp {{item.cls}}">{{item.label}}</view>
+  <view class="msg-body">
+    <view class="msg-row">
+      <text class="msg-title serif">{{item.title}}</text>
+      <text wx:if="{{!item.read}}" class="unread-dot"></text>
+    </view>
+    <view class="msg-body-txt">{{item.body}}</view>
+    <view class="msg-meta mono">
+      {{item.time}}
+      <text wx:if="{{item.regId}}" class="msg-go">查看报名单 →</text>
+    </view>
+  </view>
+</view>
