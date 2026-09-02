@@ -1,0 +1,15 @@
+{
+  "name": "jingsai-server",
+  "version": "1.6.0",
+  "private": true,
+  "description": "竞赛一体化管理平台 · Node HTTP 服务端（零外部依赖，JSON 文件持久化，服务端哈希加封链防伪权威）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "smoke": "node smoke.js",
+    "check": "node --check server.js && node --check lib/domain.js && node --check lib/store.js && node --check lib/bootstrap.js && node --check smoke.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

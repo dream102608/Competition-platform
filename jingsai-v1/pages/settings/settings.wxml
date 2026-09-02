@@ -1,0 +1,75 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="p-head">
+  <view class="t serif">账号设置</view>
+  <text class="mono sub">SETTINGS</text>
+</view>
+
+<!-- 基本档案 -->
+<view class="sec-band"><text>基本档案</text><text class="sec-en">PROFILE</text></view>
+<view class="card set-card">
+  <view class="set-row">
+    <text class="set-label">昵称</text>
+    <input class="set-input hand" value="{{name}}" bindinput="onName" placeholder="输入你的昵称" placeholder-class="ph" />
+  </view>
+  <view class="set-row">
+    <text class="set-label">一句话签名</text>
+    <input class="set-input hand" value="{{tagline}}" bindinput="onTagline" placeholder="写在档案封面上的一句话" placeholder-class="ph" />
+  </view>
+  <button class="btn btn-verm save-btn" bindtap="saveProfile">保存档案</button>
+</view>
+
+<!-- 通知偏好 -->
+<view class="sec-band"><text>通知偏好</text><text class="sec-en">NOTIFY</text></view>
+<view class="card set-card">
+  <view class="set-row">
+    <text class="set-label">审批动态</text>
+    <switch checked="{{prefs.approval}}" data-key="approval" bindchange="toggle" color="#C8442A" />
+  </view>
+  <view class="set-row">
+    <text class="set-label">催办提醒</text>
+    <switch checked="{{prefs.urge}}" data-key="urge" bindchange="toggle" color="#C8442A" />
+  </view>
+  <view class="set-row">
+    <text class="set-label">系统公告</text>
+    <switch checked="{{prefs.notice}}" data-key="notice" bindchange="toggle" color="#C8442A" />
+  </view>
+  <view class="set-row">
+    <text class="set-label">微信服务通知</text>
+    <text class="set-en-sub mono">V1.3</text>
+    <switch checked="{{prefs.subscribe}}" bindchange="onSubscribe" color="#C8442A" />
+  </view>
+  <view class="set-tip hand">站内信开关即时生效；服务通知为微信订阅消息演示（正式版需后台配置模板 ID，未配置时审批仍走站内信）。</view>
+</view>
+
+<!-- V1.6 服务端状态 -->
+<view class="sec-band"><text>服务端</text><text class="sec-en">SERVER · NODE HTTP</text></view>
+<view class="card set-card" bindtap="pingServer">
+  <view class="set-row">
+    <text class="set-label">连接状态</text>
+    <view class="srv-state">
+      <text class="srv-dot {{server.status}}"></text>
+      <text class="srv-label {{server.status}}">{{server.label}}</text>
+    </view>
+  </view>
+  <view class="set-row" wx:if="{{server.status === 'online'}}">
+    <text class="set-label">服务端版本</text>
+    <text class="srv-val mono">{{server.version}}</text>
+  </view>
+  <view class="set-row" wx:if="{{server.status === 'online' && server.counts}}">
+    <text class="set-label">服务端集合</text>
+    <text class="srv-val mono">报名 {{server.counts.registrations}} · 消息 {{server.counts.messages}}</text>
+  </view>
+  <view class="set-tip hand">接入层已就绪（utils/api.js）：服务可达时数据以服务端为权威；不可达自动降级本地演示，不影响任何功能。点此卡可重试连接。</view>
+</view>
+
+<!-- 存储与关于 -->
+<view class="sec-band"><text>存储</text><text class="sec-en">STORAGE</text></view>
+<view class="card set-card">
+  <view class="set-row" bindtap="clearCache">
+    <text class="set-label">清除缓存</text>
+    <text class="set-arrow">消息 · 日志 · 收藏 →</text>
+  </view>
+</view>
+
+<view class="foot-note">竞赛一体化管理平台 · {{version}} · 墨纸编辑部</view>
