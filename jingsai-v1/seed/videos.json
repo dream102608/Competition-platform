@@ -1,0 +1,6 @@
+{"_id":"vid-1","courseId":"vc-1","title":"第一课：竞赛是什么？为什么要参加竞赛","duration":"18:32","lecturerId":"lec-1","status":"published","sort":100,"views":326,"fileID":"","intro":"竞赛分类、级别认定与学分激励政策一次讲透。","createdAt":"2026-09-04 13:56"}
+{"_id":"vid-2","courseId":"vc-1","title":"第二课：如何组队与选择赛道","duration":"22:10","lecturerId":"lec-1","status":"published","sort":90,"views":254,"fileID":"","intro":"个人赛与团队赛的选择策略，队友从哪找。","createdAt":"2026-09-04 13:56"}
+{"_id":"vid-3","courseId":"vc-2","title":"建模第一课：从题目到假设","duration":"35:47","lecturerId":"lec-1","status":"published","sort":100,"views":189,"fileID":"","intro":"以 2024 年国赛 A 题为例拆解审题与建模假设。","createdAt":"2026-09-04 13:56"}
+{"_id":"vid-4","courseId":"vc-2","title":"建模第二课：论文写作框架","duration":"41:05","lecturerId":"lec-1","status":"published","sort":90,"views":173,"fileID":"","intro":"摘要、模型评价与灵敏度分析的写法模板。","createdAt":"2026-09-04 13:56"}
+{"_id":"vid-5","courseId":"vc-3","title":"电设实战：最小系统搭建","duration":"28:16","lecturerId":"lec-2","status":"published","sort":100,"views":142,"fileID":"","intro":"单片机最小系统与电源设计要点。","createdAt":"2026-09-04 13:56"}
+{"_id":"vid-6","courseId":"vc-4","title":"学院竞赛风采年度宣传片","duration":"06:58","lecturerId":"lec-3","status":"published","sort":100,"views":521,"fileID":"","intro":"一分钟了解学院竞赛实力，欢迎领导与企业观看。","createdAt":"2026-09-04 13:56"}

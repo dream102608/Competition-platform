@@ -1,0 +1,55 @@
+/* pages/schedule/schedule.wxss —— 我的课表 */
+.sc-ops { display: flex; gap: 12rpx; padding: 16rpx 28rpx; flex-wrap: wrap; }
+.sc-btn { flex: 1; min-width: 200rpx; height: 72rpx; font-size: 22rpx; letter-spacing: 1rpx; }
+
+.sc-grid { margin: 8rpx 20rpx; overflow: hidden; }
+.sc-row { display: flex; }
+.sc-row.sc-head { background: var(--ink); }
+.sc-row.sc-head .sc-cell { color: var(--paper); font-weight: 700; }
+.sc-cell {
+  flex: 1; min-height: 76rpx; border-right: 1rpx solid var(--paper-4); border-bottom: 1rpx solid var(--paper-4);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-size: 18rpx; padding: 2rpx; box-sizing: border-box;
+}
+.sc-cell.sc-time { flex: 0 0 110rpx; background: var(--paper-2); }
+.sc-cell.sc-time b { font-size: 22rpx; font-family: var(--mono); }
+.sc-cell.sc-time small { font-size: 14rpx; color: var(--ink-fade); font-family: var(--mono); }
+.sc-cell.busy { background: var(--marker); }
+.sc-cell.busy.start { border: 2rpx solid var(--ink); }
+.sc-course { font-size: 18rpx; font-weight: 700; line-height: 1.2; text-align: center; }
+.sc-place { font-size: 14rpx; color: var(--ink-soft); }
+
+.sc-legend { display: flex; gap: 30rpx; padding: 10rpx 28rpx; font-size: 18rpx; color: var(--ink-soft); }
+.sc-legend .free-lg { color: var(--ink-fade); }
+
+.sc-list { padding: 0 28rpx 40rpx; }
+.sc-item { display: flex; align-items: center; padding: 20rpx 24rpx; margin-bottom: 16rpx; }
+.sc-item-l { flex: 1; }
+.sc-item-l b { font-size: 27rpx; display: block; }
+.sc-item-l small { font-size: 19rpx; color: var(--ink-soft); display: block; }
+.sc-del { color: var(--verm); font-size: 24rpx; padding: 10rpx; }
+.sc-empty { text-align: center; padding: 40rpx 0; color: var(--ink-soft); }
+
+/* 弹窗基础用 app.wxss 通用；本页 sheet 需要 max-height */
+.sheet { max-height: 85vh; overflow-y: auto; }
+.kn-input { background: var(--paper-2); border: 2.4rpx solid var(--ink); padding: 14rpx 20rpx; font-size: 26rpx; border-radius: 12rpx; box-sizing: border-box; }
+.fm-line { margin-bottom: 16rpx; }
+.sh-full { width: 100%; height: 80rpx; font-size: 26rpx; letter-spacing: 4rpx; margin-top: 10rpx; }
+.sh-full.btn::after { border: none; }
+
+.q-res { margin-top: 20rpx; }
+.q-t { font-weight: 900; font-family: var(--serif); margin: 14rpx 0 8rpx; }
+.q-t.ok { color: var(--green); }
+.q-t.rej { color: var(--verm); }
+.q-name { display: inline-block; border: 2rpx solid var(--ink); background: var(--cream); padding: 6rpx 16rpx; margin: 0 10rpx 10rpx 0; font-size: 23rpx; }
+.q-name small { color: var(--ink-fade); font-size: 18rpx; }
+.q-name.dim { opacity: .5; }
+.q-tip { text-align: center; color: var(--ink-soft); padding: 16rpx 0; }
+
+/* ---------- Excel 导入预览 ---------- */
+.imp-scroll { max-height: 480rpx; }
+.imp-row { padding: 14rpx 0; border-bottom: 2rpx dashed var(--ink-fade); }
+.imp-row:last-child { border-bottom: none; }
+.imp-row b { font-size: 26rpx; display: block; }
+.imp-row small { font-size: 19rpx; color: var(--ink-soft); }
+.imp-tip { margin-top: 12rpx; font-size: 20rpx; color: var(--ink-fade); }

@@ -1,56 +1,141 @@
 <view class="sbh" style="height:{{sbh}}px"></view>
 
-<!-- 报头 -->
+<!-- 顶部地址条：学院 + 专业（参考图城市选择器风格） -->
+<view class="addr-bar">
+  <picker class="addr-pick" range="{{majors}}" range-key="name" value="{{majorIdx}}" bindchange="switchMajor">
+    <text class="pin serif">🏛</text>
+    <text class="serif">{{majors[majorIdx].name}}</text>
+    <text class="caret serif">▾</text>
+  </picker>
+  <view class="addr-tools">
+    <view class="addr-dot" wx:if="{{overview.todo}}"></view>
+    <view class="ic" bindtap="goApproval">✉</view>
+  </view>
+</view>
+
+<!-- 报头（保留水墨元素：日期、院名、slogan、条码、学院章） -->
 <view class="paper-mast">
   <view class="date mono"><span>{{dateText}}</span><span>{{issue}}</span></view>
-  <view class="mast-title serif">竞赛早报</view>
-  <view class="slogan mono">JINGSAI DAILY · 一站式竞赛管理</view>
+  <view class="mast-title serif">信息科学与技术学院</view>
+  <view class="slogan mono">燕京理工学院 · 竞赛一体化管理平台</view>
+  <view class="mast-bar">
+    <view class="barcode mast-bc"></view>
+    <view class="barcode-cap mono">ISSN YIT-2026-INFO · 学院官方平台</view>
+  </view>
+  <view class="stamp mast-stamp">学院<br/>认证</view>
 </view>
 
-<!-- 快讯跑马灯 -->
-<view class="ticker">
-  <text class="tag mono">快讯</text>
-  <view class="ticker-box"><text class="txt">{{news}}</text></view>
+<!-- 胶囊搜索栏（参考图风格：圆角 + 墨边 + 朱砂按钮） -->
+<view class="search-pill">
+  <input class="input" placeholder="搜索竞赛 · 知识点 · 队伍"
+         value="{{kw}}" bindinput="onKw" confirm-type="search"/>
+  <view class="btn serif" bindtap="goSearch">搜 索</view>
 </view>
 
-<!-- 头版 Banner（Pexels 实拍） -->
-<view class="home-banner" bindtap="goHall">
-  <image src="https://images.pexels.com/photos/5940828/pexels-photo-5940828.jpeg?auto=compress&cs=tinysrgb&w=800" mode="aspectFill"/>
-  <view class="flag serif">国赛冲刺</view>
-  <view class="cap">
-    <b>组队冲国赛，现在报名</b>
-    <text class="cap-arrow">▸</text>
+<!-- 大轮播 Banner：瞭望台视频课 / 学院新闻 / 重点赛事 / 学院成就 -->
+<swiper class="banner-sw" autoplay circular interval="4500"
+        indicator-dots indicator-color="rgba(244,237,223,.55)" indicator-active-color="#FBF7EC"
+        bindtap="onBannerTap" data-idx="{{current}}">
+  <swiper-item wx:for="{{banners}}" wx:key="key" data-idx="{{index}}" catch:tap="goBanner">
+    <view class="banner-slide {{item.cls}}">
+      <view>
+        <view class="kicker">{{item.kicker}}</view>
+        <view class="title serif">{{item.title}}</view>
+        <view class="sub">{{item.sub}}</view>
+      </view>
+      <view class="pager mono">{{index + 1}} / {{banners.length}}</view>
+    </view>
+  </swiper-item>
+</swiper>
+
+<!-- 圆图标宫格：2 行 × 5 列 = 10 个快捷入口（参考图风格） -->
+<view class="icon-grid">
+  <view class="g5" wx:for="{{quicks}}" wx:key="name" data-i="{{index}}" bindtap="goQuick">
+    <view class="badge" style="background:{{item.color}}">{{item.icon}}</view>
+    <view class="name serif">{{item.name}}</view>
   </view>
 </view>
 
-<!-- 功能宫格 -->
-<view class="grid-nav">
-  <view class="g-item" bindtap="goHall">
-    <text class="g-ic verm">▤</text><b>竞赛大厅</b><small>双赛道 · 5 项在报</small>
+<!-- 4 格数据概览（保留） -->
+<view class="info-card">
+  <view class="title"><view class="sq"></view><text class="serif">数 据 概 览</text></view>
+  <view class="ov-row">
+    <view class="ov-item"><b class="mono">{{overview.total}}</b><small>总参赛</small></view>
+    <view class="ov-item"><b class="mono run">{{overview.approving}}</b><small>进行中</small></view>
+    <view class="ov-item"><b class="mono ok">{{overview.passed}}</b><small>获奖/通过</small></view>
+    <view class="ov-item" bindtap="goApproval"><b class="mono verm">{{overview.todo}}</b><small>待审批 ▸</small></view>
   </view>
-  <view class="g-item" bindtap="goApproval">
-    <text class="g-ic verm">▤</text><b>我的报名</b><small>{{activeCount}} 支队伍 · 审批中</small>
-  </view>
-  <view class="g-item" bindtap="goApproval">
-    <text class="g-ic verm">▤</text><b>审批中心</b><small>轨迹 · 签批 · 催办</small>
-  </view>
-  <view class="g-item off" bindtap="soon">
-    <text class="soon mono">V2.0</text>
-    <text class="g-ic">▤</text><b>知识广场</b><small>经验帖 · 空状态</small>
+  <!-- 新闻滚动条（保留） -->
+  <view class="ticker" bindtap="goNews" style="margin:18rpx 0 0">
+    <text class="tag mono">新闻</text>
+    <view class="ticker-box">
+      <text class="txt" wx:if="{{newsList.length}}">
+        <block wx:for="{{newsList}}" wx:key="_id">{{item.topped ? '【置顶】' : ''}}{{item.title}}{{item.isToday ? '（已更新）' : ''}}　·　</block>
+      </text>
+      <text class="txt" wx:else>暂无新闻 ——</text>
+    </view>
   </view>
 </view>
 
-<!-- 报名进度 -->
+<!-- 特色彩色 banner（参考图「私人定制旅行」绿色 banner 风格） -->
+<view class="banner-c green" bindtap="goWatchtower">
+  <view class="left">
+    <view class="ttl serif">科创瞭望台</view>
+    <view class="sub">宣传片 · 视频课堂 · 每周更新</view>
+    <view class="pill mono">{{watchStats.videoCount}} 个视频 · {{watchStats.totalViews}} 次观看</view>
+  </view>
+  <view class="illu">▶</view>
+</view>
+
+<!-- 热门竞赛（保留） -->
+<view class="sec-band"><view class="sq"></view><b class="serif">热 门 竞 赛</b><view class="ln"></view></view>
+<view class="hot-card card" wx:for="{{hotComps}}" wx:key="_id" data-id="{{item._id}}" bindtap="goDetail">
+  <image class="hot-cover" src="{{item.cover}}" mode="aspectFill"/>
+  <view class="hot-info">
+    <b>{{item.title}}</b>
+    <small>{{item.host}}</small>
+    <view class="hot-tags">
+      <text class="pill">{{item.levelName}}</text>
+      <text class="pill red">截止 {{item.deadline}}</text>
+    </view>
+  </view>
+</view>
+
+<!-- 获奖证书轮播（保留：审核通过的证书） -->
+<view class="sec-band"><view class="sq"></view><b class="serif">最 新 证 书</b><view class="ln"></view></view>
+<swiper class="cert-sw" wx:if="{{certs.length}}" autoplay circular interval="4000"
+        indicator-dots indicator-color="rgba(26,24,21,.25)" indicator-active-color="#C8442A">
+  <swiper-item wx:for="{{certs}}" wx:key="_id">
+    <view class="cert-slide card">
+      <view class="medal gold cs-medal">奖</view>
+      <view class="cs-info">
+        <b>{{item.compTitle}}</b>
+        <small class="mono">{{item.studentName}} · {{item.award}} · {{item.year}}</small>
+      </view>
+      <view class="stamp cs-stamp">审核<br/>通过</view>
+    </view>
+  </swiper-item>
+</swiper>
+
+<!-- 荣誉墙（保留：横向滚动） -->
+<view class="sec-band"><view class="sq"></view><b class="serif">荣 誉 墙</b><view class="ln"></view></view>
+<scroll-view scroll-x class="honor-scroll" enhanced show-scrollbar="{{false}}">
+  <view class="honor-card card" wx:for="{{honors}}" wx:key="title">
+    <view class="medal {{item.grade}}">{{item.medal}}</view>
+    <b class="honor-t">{{item.title}}</b>
+    <small class="mono honor-a">{{item.award}}</small>
+    <text class="honor-y mono">{{item.year}}</text>
+  </view>
+</scroll-view>
+
+<!-- 我的报名进度（保留） -->
+<view class="sec-band"><view class="sq"></view><b class="serif">我 的 报 名 进 度</b><view class="ln"></view></view>
 <view class="prog-card card">
-  <view class="pc-t">
-    <b class="serif">报 名 进 度</b>
-    <text class="pill mono">{{activeCount}} ACTIVE</text>
-  </view>
   <view class="pc-body">
     <view class="pc-row" wx:for="{{regs}}" wx:key="_id" bindtap="goApproval">
       <text class="num mono">{{index + 1 < 10 ? '0' : ''}}{{index + 1}}</text>
       <view class="pc-info">
-        <b>{{item.compTitle}} · {{item.teamName}}队</b>
+        <b>{{item.compTitle}} · {{item.teamName || '个人'}}</b>
         <small class="mono">{{item.regNo}}</small>
       </view>
       <view class="pc-track">
@@ -60,6 +145,8 @@
       </view>
       <text class="ver mono">v{{item.version}}</text>
     </view>
-    <view wx:if="{{regs.length === 0}}" class="pc-empty hand">还没报名？大厅里转转，总有一场适合你。</view>
+    <view wx:if="{{regs.length === 0}}" class="pc-empty hand">还没报名？去竞赛大厅转转，总有一场适合你。</view>
   </view>
 </view>
+
+<view class="tail">墨纸编辑部 · 出品</view>

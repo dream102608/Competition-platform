@@ -1,0 +1,12 @@
+/* pages/news/news.wxss —— 新闻动态 */
+.nw-card { margin: 20rpx 28rpx; padding: 24rpx 28rpx; }
+.nw-flags { display: flex; gap: 10rpx; margin-bottom: 10rpx; }
+.nw-title { font-size: 30rpx; font-weight: 900; line-height: 1.5; }
+.nw-content { font-size: 26rpx; color: var(--ink-soft); margin: 10rpx 0; line-height: 1.7; }
+.nw-meta { font-size: 19rpx; color: var(--ink-fade); }
+.nw-empty { text-align: center; padding: 80rpx 0; color: var(--ink-soft); }
+
+/* 弹窗基础用 app.wxss 通用 */
+.kn-input { background: var(--paper-2); border: 2.4rpx solid var(--ink); padding: 14rpx 20rpx; font-size: 26rpx; border-radius: 12rpx; box-sizing: border-box; }
+.fm-line { margin-bottom: 16rpx; }
+.kn-textarea { width: 100%; box-sizing: border-box; min-height: 180rpx; border: 2.4rpx solid var(--ink); background: var(--paper-2); padding: 16rpx; font-size: 26rpx; border-radius: 12rpx; }

@@ -1,67 +1,48 @@
 <view class="sbh" style="height:{{sbh}}px"></view>
 
+<!-- 报头（保留水墨） -->
 <view class="p-head">
-  <view class="t serif">竞赛大厅</view>
-  <text class="h-ic">⌕</text>
-  <text class="h-ic">◔</text>
+  <text class="t serif">竞 赛 大 厅</text>
+  <text class="pill mono">{{comps.length}} 项</text>
 </view>
 
-<!-- 双赛道活字 Tab -->
-<view class="hall-tabs">
-  <view
-    wx:for="{{trackTabs}}" wx:key="key"
-    class="ht {{track === item.key ? 'on' : ''}}"
-    bindtap="switchTrack" data-key="{{item.key}}">{{item.name}}</view>
+<!-- 双赛道切换（参考图分类大圆角） -->
+<view class="track-bar">
+  <view class="trk {{track === item.key ? 'on' : ''}}" wx:for="{{trackTabs}}" wx:key="key"
+        data-key="{{item.key}}" bindtap="switchTrack">{{item.name}}</view>
 </view>
 
-<!-- 搜索条 -->
-<view class="searchbar">
-  <text class="s-ic">⌕</text>
-  <input class="s-input mono" placeholder="搜索竞赛 / 赛项编号…" placeholder-class="ph"
+<!-- 胶囊搜索 -->
+<view class="search-pill">
+  <input class="input" placeholder="搜索竞赛名称 / 编号 / 主办方"
          value="{{keyword}}" bindinput="onSearch" confirm-type="search"/>
+  <view class="btn serif" bindtap="noop">搜 索</view>
 </view>
 
-<!-- 筛选片 -->
-<view class="filter-chips">
-  <view
-    wx:for="{{filters}}" wx:key="*this"
-    class="fchip {{filter === item ? 'on' : ''}}"
-    bindtap="setFilter" data-f="{{item}}">{{item}}</view>
-</view>
+<!-- 分类筛选（横滑 chip） -->
+<scroll-view scroll-x class="chips">
+  <text class="chip {{filter === f ? 'on' : ''}}" wx:for="{{filters}}" wx:for-item="f" wx:key="*this"
+        data-f="{{f}}" bindtap="setFilter">{{f}}</text>
+</scroll-view>
 
-<!-- 重点推荐位 -->
-<view wx:if="{{promo}}" class="promo" bindtap="goDetail" data-id="{{promo._id}}">
-  <image src="https://images.pexels.com/photos/6146971/pexels-photo-6146971.jpeg?auto=compress&cs=tinysrgb&w=800" mode="aspectFill"/>
-  <view class="pm">
-    <b>{{promo.title}}</b>
-    <small>赛道重点推荐 · 校选拔 9 月 20 日启动 · 报名进行中</small>
-    <view class="bar-prog"><i></i></view>
-  </view>
-</view>
-
-<!-- 竞赛卡片（分类小广告） -->
-<view
-  wx:for="{{comps}}" wx:key="_id"
-  class="comp-card {{item.closed ? 'closed' : ''}}"
-  bindtap="goDetail" data-id="{{item._id}}">
-  <view class="lvl {{item.level}}">{{item.levelName}}</view>
-  <view class="thumb">
-    <image src="{{item.cover}}" mode="aspectFill"/>
-  </view>
-  <view class="info">
-    <view class="r1">
-      <text class="pill mono">NO.{{item.no}}</text>
-      <text class="team-size mono">{{item.teamSize}}</text>
+<!-- 竞赛卡片列表 -->
+<view class="comp-card card {{item.closed ? 'closed' : ''}}" wx:for="{{comps}}" wx:key="_id"
+      data-id="{{item._id}}" bindtap="goDetail">
+  <image class="cc-cover" src="{{item.cover}}" mode="aspectFill"/>
+  <view class="cc-body">
+    <view class="cc-title serif">{{item.title}}</view>
+    <view class="cc-host">{{item.host}}</view>
+    <view class="cc-tags">
+      <text class="pill">{{item.levelName}}</text>
+      <text class="pill">{{item.category}}</text>
+      <text class="st-pill {{item.closed ? 'st-rej' : 'st-run'}}">{{item.statusText}}</text>
     </view>
-    <b class="ct serif">{{item.title}}</b>
-    <p class="cdesc">{{item.deadline}} 截止报名 · {{item.level === 'A' ? '五级' : item.level === 'B' ? '三级' : '一级'}}审批</p>
-    <view class="meta">
-      <text class="ddl mono">DDL ·{{item.deadline.slice(5)}}</text>
-      <text wx:if="{{item.closed}}" class="hand ddl-hand">已截止</text>
-      <text wx:elif="{{item.ddlDays <= 15}}" class="hand ddl-hand">还剩 {{item.ddlDays}} 天！</text>
-      <text wx:else class="hand ddl-hand">时间充裕</text>
+    <view class="cc-foot mono">
+      <text>{{item.teamMin}}-{{item.teamMax}} 人组队</text>
+      <text class="ddl {{item.closed ? '' : 'hot'}}">⏳ 剩余 {{item.ddlDays}}</text>
     </view>
   </view>
 </view>
 
-<view class="hall-foot hand">—— 本期共 {{comps.length + (promo ? 1 : 0)}} 个赛项，往下还有故事 ——</view>
+<view wx:if="{{comps.length === 0}}" class="empty hand">这个分类下暂时没有竞赛，换个筛选试试。</view>
+<view class="tail">— 共 {{comps.length}} 项 —</view>

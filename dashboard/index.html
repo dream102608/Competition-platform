@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>竞赛一体化管理平台 · 数据大屏</title>
+<!--
+  可视化大屏 V1.0
+  用法一（演示）：直接双击打开本文件，显示内置演示数据。
+  用法二（真实数据）：开通云开发后，在下方 CONFIG.envId 填入你的云环境 ID，
+    并在云开发控制台开启「匿名登录」，本页面会自动切换为真实数据（每 60 秒刷新）。
+-->
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; background: #0b1020; overflow: hidden;
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif; color: #dfe8ff; }
+  #stage { width: 1920px; height: 1080px; position: absolute; left: 50%; top: 50%;
+    transform-origin: center center; display: flex; flex-direction: column; padding: 28px 36px; }
+
+  header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 18px;
+    border-bottom: 2px solid rgba(90, 140, 255, .35); }
+  h1 { font-size: 40px; letter-spacing: 10px; font-weight: 900;
+    background: linear-gradient(90deg, #7fb2ff, #4de3c2); -webkit-background-clip: text; color: transparent; }
+  .clock { font-family: Consolas, monospace; font-size: 26px; color: #7fb2ff; }
+  .sub { font-size: 14px; color: rgba(160, 190, 255, .55); letter-spacing: 3px; margin-top: 6px; }
+
+  .cards { display: flex; gap: 24px; margin: 26px 0; }
+  .card { flex: 1; background: linear-gradient(160deg, rgba(50, 80, 160, .25), rgba(20, 30, 60, .5));
+    border: 1px solid rgba(100, 150, 255, .35); border-radius: 14px; padding: 26px 30px; position: relative; overflow: hidden; }
+  .card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+    background: linear-gradient(180deg, #4de3c2, #4d8bff); }
+  .card b { font-family: Consolas, monospace; font-size: 56px; color: #fff; display: block; }
+  .card span { font-size: 18px; color: rgba(180, 205, 255, .7); letter-spacing: 4px; }
+
+  .main { flex: 1; display: flex; gap: 24px; min-height: 0; }
+  .panel { background: rgba(18, 28, 58, .55); border: 1px solid rgba(100, 150, 255, .3);
+    border-radius: 14px; padding: 20px 24px; display: flex; flex-direction: column; min-height: 0; }
+  .panel h2 { font-size: 20px; letter-spacing: 4px; color: #9ec1ff; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px; }
+  .panel h2::before { content: ""; width: 10px; height: 10px; background: #4de3c2; }
+  .p-bars { flex: 1.4; }
+  .p-feed { flex: 1; }
+
+  .bar-row { display: flex; align-items: center; gap: 14px; margin: 14px 0; font-size: 16px; }
+  .bar-name { flex: 0 0 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #c9d8ff; }
+  .bar-track { flex: 1; height: 22px; background: rgba(255, 255, 255, .06); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #2e6bff, #4de3c2);
+    width: 0; transition: width 1.2s ease; }
+  .bar-num { width: 50px; text-align: right; font-family: Consolas, monospace; color: #4de3c2; }
+
+  .feed { flex: 1; overflow: hidden; position: relative; }
+  .feed-item { padding: 12px 6px; border-bottom: 1px dashed rgba(120, 160, 255, .2); font-size: 16px;
+    display: flex; gap: 12px; align-items: baseline; }
+  .feed-item .t { font-family: Consolas, monospace; color: rgba(140, 175, 255, .6); font-size: 14px; flex: none; }
+  .tag { flex: none; font-size: 12px; padding: 2px 10px; border-radius: 20px; border: 1px solid; }
+  .tag.ok { color: #4de3a1; border-color: #4de3a1; }
+  .tag.run { color: #ffb84d; border-color: #ffb84d; }
+  .tag.rej { color: #ff7a6b; border-color: #ff7a6b; }
+
+  footer { margin-top: 22px; border-top: 1px solid rgba(90, 140, 255, .3); padding-top: 14px;
+    display: flex; align-items: center; gap: 18px; }
+  .news-label { flex: none; color: #4de3c2; font-size: 16px; letter-spacing: 3px; }
+  marquee { flex: 1; font-size: 18px; color: #c9d8ff; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <header>
+    <div>
+      <h1>竞赛一体化管理平台 · 数据大屏</h1>
+      <div class="sub">COMPETITION INTEGRATED MANAGEMENT PLATFORM</div>
+    </div>
+    <div class="clock" id="clock">--:--:--</div>
+  </header>
+
+  <div class="cards">
+    <div class="card"><b id="cUsers">-</b><span>注册用户</span></div>
+    <div class="card"><b id="cRegs">-</b><span>累计报名</span></div>
+    <div class="card"><b id="cPassed">-</b><span>终审通过</span></div>
+    <div class="card"><b id="cCheckins">-</b><span>今日签到</span></div>
+  </div>
+
+  <div class="main">
+    <div class="panel p-bars">
+      <h2>各竞赛报名热度</h2>
+      <div id="bars"></div>
+    </div>
+    <div class="panel p-feed">
+      <h2>审批实时动态</h2>
+      <div class="feed" id="feed"></div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="news-label">📢 最新公告</span>
+    <marquee id="news" scrollamount="4">加载中…</marquee>
+  </footer>
+</div>
+
+<script>
+/* ================= 配置 ================= */
+const CONFIG = {
+  envId: '',        // ← 开通云开发后填你的云环境 ID（如 cloud1-xxxx），留空 = 演示数据
+  refreshMs: 60000  // 数据刷新间隔
+};
+
+/* 大屏自适应缩放：按 1920×1080 设计，任何屏幕等比缩放 */
+function fit() {
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  document.getElementById('stage').style.transform = `translate(-50%,-50%) scale(${s})`;
+}
+addEventListener('resize', fit); fit();
+
+/* 时钟 */
+setInterval(() => {
+  const d = new Date(), p = n => String(n).padStart(2, '0');
+  document.getElementById('clock').textContent =
+    `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+}, 1000);
+
+/* ================= 演示数据（与小程序种子数据一致） ================= */
+const DEMO = {
+  users: 128, regs: 46, passed: 21, checkinsToday: 35,
+  perComp: [
+    { title: '全国大学生数学建模竞赛', count: 12 },
+    { title: 'ACM 程序设计校赛', count: 9 },
+    { title: 'CTF 网络安全省赛', count: 7 },
+    { title: '电子设计竞赛', count: 6 },
+    { title: '英语演讲比赛', count: 5 },
+    { title: '教师教学能力大赛', count: 4 },
+    { title: '创新创业大赛', count: 3 }
+  ],
+  feed: [
+    { t: '14:32', tag: 'ok',  txt: '张三 · 数学建模报名 · 院长终审通过' },
+    { t: '14:10', tag: 'run', txt: '李四 · 请假申请 · 等待辅导员审批' },
+    { t: '13:55', tag: 'ok',  txt: '王五 · CTF 集训报名 · 指导教师通过' },
+    { t: '13:20', tag: 'rej', txt: '赵六 · 经费申请 · 教研室主任驳回（预算超支说明不足）' },
+    { t: '12:48', tag: 'run', txt: 'ACM 校赛 · 林一舟提交新闻待管理员审核' },
+    { t: '11:30', tag: 'ok',  txt: '陈老师 · 教师竞赛报名 · 教学秘书初审通过' }
+  ],
+  news: '喜报：我院学子获数学建模国赛一等奖　｜　ACM 校赛报名通道今日开启　｜　CTF 省赛集训营下周开营　｜　平台试运行，欢迎师生反馈问题'
+};
+
+/* ================= 渲染 ================= */
+function render(d) {
+  document.getElementById('cUsers').textContent = d.users;
+  document.getElementById('cRegs').textContent = d.regs;
+  document.getElementById('cPassed').textContent = d.passed;
+  document.getElementById('cCheckins').textContent = d.checkinsToday;
+
+  const max = Math.max(1, ...d.perComp.map(x => x.count));
+  document.getElementById('bars').innerHTML = d.perComp.map(x => `
+    <div class="bar-row">
+      <span class="bar-name">${x.title}</span>
+      <div class="bar-track"><div class="bar-fill" data-w="${Math.round(x.count / max * 100)}"></div></div>
+      <span class="bar-num">${x.count}</span>
+    </div>`).join('');
+  requestAnimationFrame(() =>
+    document.querySelectorAll('.bar-fill').forEach(el => el.style.width = el.dataset.w + '%'));
+
+  document.getElementById('feed').innerHTML = d.feed.map(f => `
+    <div class="feed-item">
+      <span class="t">${f.t}</span>
+      <span class="tag ${f.tag}">${{ ok: '已通过', run: '审批中', rej: '已驳回' }[f.tag]}</span>
+      <span>${f.txt}</span>
+    </div>`).join('');
+
+  document.getElementById('news').textContent = d.news;
+}
+
+/* ================= 真实数据接入（可选） ================= */
+async function loadLive() {
+  // 需要在控制台引入云开发 Web SDK 并开启匿名登录：
+  // <script src="https://imgcache.qq.com/qcloud/tcbjs/1.10.x/tcb.js"></script>
+  if (!CONFIG.envId || typeof tcb === 'undefined') return null;
+  try {
+    const app = tcb.init({ env: CONFIG.envId });
+    await app.auth().anonymousAuthProvider().signIn();
+    const db = app.database();
+    const [users, regs, comps, news] = await Promise.all([
+      db.collection('users').count(),
+      db.collection('registrations').get(),
+      db.collection('competitions').get(),
+      db.collection('news').where({ status: 'passed' }).orderBy('ts', 'desc').limit(5).get()
+    ]);
+    return {
+      users: users.total,
+      regs: regs.data.length,
+      passed: regs.data.filter(r => r.status === 'passed').length,
+      checkinsToday: DEMO.checkinsToday,
+      perComp: comps.data.map(c => ({
+        title: c.title, count: regs.data.filter(r => r.compId === c._id).length
+      })).sort((a, b) => b.count - a.count).slice(0, 7),
+      feed: DEMO.feed,
+      news: news.data.map(n => n.title).join('　｜　') || DEMO.news
+    };
+  } catch (e) { console.warn('真实数据加载失败，回退演示数据', e); return null; }
+}
+
+async function refresh() { render((await loadLive()) || DEMO); }
+refresh();
+setInterval(refresh, CONFIG.refreshMs);
+</script>
+</body>
+</html>

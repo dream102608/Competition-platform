@@ -1,0 +1,108 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<!-- 报头（保留水墨） -->
+<view class="p-head">
+  <text class="t serif">知 识 广 场</text>
+  <text class="pill mono">{{list.length}} 帖</text>
+</view>
+
+<!-- 胶囊搜索 -->
+<view class="search-pill">
+  <input class="input" placeholder="搜索标题 / 内容关键词" value="{{keyword}}" bindinput="onSearch" confirm-type="search"/>
+  <view class="btn serif" bindtap="noop">搜 索</view>
+</view>
+
+<!-- 分类 + 排序 -->
+<scroll-view scroll-x class="chips">
+  <text class="chip {{tag === t ? 'on' : ''}}" wx:for="{{tags}}" wx:for-item="t" wx:key="*this" data-t="{{t}}" bindtap="setTag">{{t}}</text>
+</scroll-view>
+<view class="kn-sort">
+  <text class="sp {{sort === 'hot' ? 'on' : ''}}" data-s="hot" bindtap="setSort">🔥 最热</text>
+  <text class="sp {{sort === 'new' ? 'on' : ''}}" data-s="new" bindtap="setSort">🕐 最新</text>
+</view>
+
+<!-- 知识卡片（点击看全文） -->
+<view class="kn-card card" wx:for="{{list}}" wx:key="_id" data-id="{{item._id}}" bindtap="openDetail">
+  <view class="kn-flags">
+    <text wx:if="{{item.topped}}" class="pill red">置顶</text>
+    <text wx:if="{{item.featured}}" class="pill">★ 精选</text>
+    <text class="pill" wx:for="{{item.tags}}" wx:for-item="tg" wx:key="*this">{{tg}}</text>
+  </view>
+  <view class="kn-title serif">{{item.title}}</view>
+  <view class="kn-content">{{item.content}}</view>
+  <view class="kn-more">阅读全文 ▸</view>
+  <view class="kn-meta mono">{{item.author}}<text wx:if="{{item.teamName}}"> · {{item.teamName}}</text> · {{item.createdAt}}</view>
+  <view class="kn-ops">
+    <text class="op" data-id="{{item._id}}" catchtap="like">👍 {{item.likes || 0}}</text>
+    <text class="op" data-id="{{item._id}}" catchtap="openDetail">💬 {{item.commentCount || 0}}</text>
+    <text class="op" wx:if="{{canTop}}" data-id="{{item._id}}" data-on="{{item.topped}}" catchtap="toggleTop">{{item.topped ? '取消置顶' : '📌 置顶'}}</text>
+    <text class="op" wx:if="{{isAdmin}}" data-id="{{item._id}}" data-on="{{item.featured}}" catchtap="toggleFeature">{{item.featured ? '取消精选' : '★ 精选'}}</text>
+  </view>
+</view>
+
+<view wx:if="{{list.length === 0}}" class="empty hand">这里还空着，来发第一条经验贴吧。</view>
+
+<!-- 发布按钮（FAB） -->
+<view class="kn-fab" bindtap="openPub">✎ 发布</view>
+
+<!-- 发布弹窗 -->
+<view class="mask" wx:if="{{pubShow}}" bindtap="closePub">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">发 布 知 识 点</view>
+    <input class="kn-input fm-line" placeholder="标题（一句话说清主题）" value="{{pubTitle}}" bindinput="onPubTitle"/>
+    <textarea class="kn-textarea" placeholder="正文：经验 / 模板 / 踩坑记录…" value="{{pubContent}}" bindinput="onPubContent"/>
+    <view class="kn-tags">
+      <text class="chip {{pubTags.indexOf(t) > -1 ? 'on' : ''}}" wx:for="{{tags}}" wx:for-item="t" wx:key="*this"
+            wx:if="{{t !== '全部'}}" data-t="{{t}}" bindtap="togglePubTag">{{t}}</text>
+    </view>
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="closePub">取消</button>
+      <button class="btn btn-verm sh-btn" bindtap="submitPub">发布</button>
+    </view>
+  </view>
+</view>
+
+<!-- 评论弹窗 -->
+<view class="mask" wx:if="{{cmShow}}" bindtap="closeComments">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">评 论</view>
+    <view class="cm-list">
+      <view class="cm-item" wx:for="{{cmList}}" wx:key="_id">
+        <b>{{item.author}}</b><small class="mono">　{{item.createdAt}}</small>
+        <view class="cm-content">{{item.content}}</view>
+      </view>
+      <view wx:if="{{cmList.length === 0}}" class="hand kn-no-cm">还没有评论，抢个沙发。</view>
+    </view>
+    <view class="cm-input-row" wx:if="{{canPost}}">
+      <input class="kn-input cm-input" placeholder="写下你的评论" value="{{cmInput}}" bindinput="onCmInput"/>
+      <button class="btn btn-ink cm-send" bindtap="sendComment">发送</button>
+    </view>
+  </view>
+</view>
+
+<!-- 文章详情弹窗（全文 + 延伸阅读 + 评论） -->
+<view class="mask" wx:if="{{dtShow}}" bindtap="closeDetail">
+  <view class="dt-sheet sheet" catchtap="noop">
+    <view class="dt-title">{{dtItem.title}}</view>
+    <view class="dt-meta">{{dtItem.author}}<text wx:if="{{dtItem.teamName}}"> · {{dtItem.teamName}}</text> · {{dtItem.createdAt}}　👍 {{dtItem.likes || 0}}</view>
+    <scroll-view scroll-y class="dt-scroll">
+      <text class="dt-content">{{dtItem.content}}</text>
+    </scroll-view>
+    <view class="dt-src" wx:if="{{dtItem.sourceUrl}}" catchtap="copySource">
+      <text class="name">🔗 {{dtItem.sourceName || '延伸阅读'}}</text>
+      <text class="cpy">复制链接</text>
+    </view>
+    <view class="dt-cm-t">评论（{{cmList.length}}）</view>
+    <view class="cm-list">
+      <view class="cm-item" wx:for="{{cmList}}" wx:key="_id">
+        <b>{{item.author}}</b><small class="mono">　{{item.createdAt}}</small>
+        <view class="cm-content">{{item.content}}</view>
+      </view>
+      <view wx:if="{{cmList.length === 0}}" class="hand kn-no-cm">还没有评论，抢个沙发。</view>
+    </view>
+    <view class="cm-input-row" wx:if="{{canPost}}">
+      <input class="kn-input cm-input" placeholder="写下你的评论" value="{{cmInput}}" bindinput="onCmInput"/>
+      <button class="btn btn-verm cm-send" bindtap="sendComment">发送</button>
+    </view>
+  </view>
+</view>

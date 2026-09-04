@@ -1,0 +1,49 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="p-head">
+  <text class="t serif">请 假 管 理</text>
+  <text class="pill mono" bindtap="goApproval">去审批 ▸</text>
+</view>
+
+<!-- 发起请假 -->
+<view class="sec-band"><view class="sq"></view><b>发 起 请 假</b><view class="ln"></view></view>
+<view class="lv-form card">
+  <view class="lv-label">请假类型</view>
+  <picker range="{{types}}" value="{{typeIdx}}" bindchange="pickType">
+    <view class="lv-picker">{{types[typeIdx]}} ▾</view>
+  </picker>
+
+  <view class="lv-label">开始日期</view>
+  <picker mode="date" value="{{startTime}}" bindchange="onStart">
+    <view class="lv-picker">{{startTime || '点击选择日期'}} ▾</view>
+  </picker>
+
+  <view class="lv-label">结束日期</view>
+  <picker mode="date" value="{{endTime}}" bindchange="onEnd">
+    <view class="lv-picker">{{endTime || '点击选择日期'}} ▾</view>
+  </picker>
+
+  <view class="lv-label">请假事由</view>
+  <textarea class="lv-textarea" placeholder="说明请假原因（至少 5 个字）" value="{{reason}}" bindinput="onReason"/>
+
+  <view class="lv-label">附件（证明材料的文件名，选填）</view>
+  <button class="btn btn-line lv-upload" bindtap="upload">📎 {{attachment || '选择附件'}}</button>
+
+  <button class="btn btn-verm lv-submit {{submitting ? 'disabled' : ''}}" bindtap="submit">提 交 请 假 申 请</button>
+  <view class="lv-note hand">流程：队长手签 → 辅导员手签；终审通过前可在审批中心撤回。</view>
+</view>
+
+<!-- 我的请假记录 -->
+<view class="sec-band"><view class="sq"></view><b>我 的 请 假 记 录</b><view class="ln"></view></view>
+<view class="lv-card card" wx:for="{{leaves}}" wx:key="_id">
+  <view class="lv-row1">
+    <b>{{item.leaveType}}</b>
+    <text class="st-pill {{item.status === 'passed' ? 'st-ok' : item.status === 'approving' ? 'st-run' : 'st-rej'}}">{{item.statusText}}</text>
+  </view>
+  <view class="lv-meta mono">{{item.startTime}} 至 {{item.endTime}} · v{{item.version}}</view>
+  <view class="lv-reason">{{item.reason}}</view>
+  <view class="rej-note" wx:if="{{item.status === 'rejected'}}">
+    {{item.nodes[item.currentNode] && item.nodes[item.currentNode].note || '已被驳回，可修改后重新提交'}}
+  </view>
+</view>
+<view wx:if="{{leaves.length === 0}}" class="lv-empty hand">清清爽爽，一次假都没请过。</view>

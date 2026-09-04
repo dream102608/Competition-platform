@@ -1,0 +1,8 @@
+{"_id":"tea-1","name":"陈建国","title":"教授","org":"信息科学与技术学院 · 计算机科学与技术系","exp":"带赛 10 届 · 数学建模总教练","kind":"teacher"}
+{"_id":"tea-2","name":"林晓峰","title":"副教授","org":"信息科学与技术学院 · 软件工程系","exp":"ACM/蓝桥杯教练 · 带赛 6 届","kind":"teacher"}
+{"_id":"tea-3","name":"赵慧敏","title":"副教授","org":"信息科学与技术学院 · 电子信息工程系","exp":"电子设计竞赛教练 · 省级优秀指导教师","kind":"teacher"}
+{"_id":"tea-4","name":"王志强","title":"讲师","org":"信息科学与技术学院 · 数据科学与大数据技术系","exp":"CTF/网络安全方向 · 带赛 3 届","kind":"teacher"}
+{"_id":"tea-5","name":"刘思远","title":"讲师","org":"信息科学与技术学院 · 人工智能系","exp":"互联网+/挑战杯 双创导师","kind":"teacher"}
+{"_id":"cou-1","name":"周敏","title":"辅导员","org":"信息科学与技术学院","exp":"负责 2023 级本科","kind":"counselor"}
+{"_id":"cou-2","name":"吴桐","title":"辅导员","org":"信息科学与技术学院","exp":"负责 2024 级本科","kind":"counselor"}
+{"_id":"cou-3","name":"郑雅文","title":"辅导员","org":"信息科学与技术学院","exp":"负责 2025 级及专科","kind":"counselor"}

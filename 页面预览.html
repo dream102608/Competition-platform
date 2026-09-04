@@ -1,0 +1,2520 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>竞赛一体化平台 · 页面设计预览</title>
+<style>
+  body { margin:0; background:#2b2823; font-family:"Microsoft YaHei","PingFang SC",sans-serif; }
+  header { color:#F4EDDF; padding:30px 5vw 20px; }
+  header h1 { margin:0 0 6px; font-size:24px; letter-spacing:2px; }
+  header p { margin:0; opacity:.65; font-size:13px; }
+  .gallery { display:flex; flex-wrap:wrap; gap:34px; padding:10px 5vw 60px; justify-content:flex-start; }
+  .phone { flex:none; }
+  .p-title { color:#F4EDDF; font-size:14px; margin-bottom:8px; }
+  .p-title code { opacity:.5; font-size:11px; margin-left:6px; }
+  .screen { width:375px; height:700px; overflow-y:auto; border:10px solid #000; border-radius:28px;
+            position:relative; box-shadow:0 12px 40px rgba(0,0,0,.5); }
+  .screen::-webkit-scrollbar { width:0; }
+  .statusbar { text-align:center; font-size:11px; padding:4px 0 2px; opacity:.5; }
+  .tabbar { position:sticky; bottom:0; display:flex; background:#FBF7EC; border-top:1.5px solid #1A1815; }
+  .tb-i { flex:1; text-align:center; font-size:11px; padding:8px 0 10px; color:#8A8172; }
+  .tb-i.on { color:#C8442A; font-weight:700; }
+  .ph { background:#EDE4CE; color:#8A8172; font-size:12px; padding:8px 12px; border-radius:3px;
+        border:1px dashed #8A8172; display:inline-block; margin:2px 0; }
+  img { background:#EDE4CE; object-fit:cover; }
+  /* app.wxss —— 墨纸编辑部设计系统 V1.0
+   纸 #F4EDDF · 墨 #1A1815 · 朱砂 #C8442A · 荧光黄 #F5D547 */
+
+.screen{
+  --paper: #F4EDDF;
+  --paper-2: #EDE4CE;
+  --paper-3: #E4D9BE;
+  --paper-4: #DCD2BC;
+  --ink: #1A1815;
+  --ink-soft: #4A443A;
+  --ink-fade: #8A8172;
+  --verm: #C8442A;
+  --verm-deep: #A03521;
+  --marker: #F5D547;
+  --ind: #3D5A80;
+  --green: #3E6B4F;
+  --cream: #FBF7EC;
+  /* 三套字族：宋体报头 / 楷体手写批注 / 等宽编号 */
+  --serif: "Noto Serif SC", "Source Han Serif SC", "STZhongsong", "SimSun", serif;
+  --hand:  "Zhi Mang Xing", "KaiTi", "STKaiti", "Kaiti SC", cursive;
+  --mono:  "JetBrains Mono", Menlo, Consolas, "Courier New", monospace;
+
+  background: var(--paper);
+  /* 纸张噪点颗粒：两层极淡斜纹叠出肌理 */
+  background-image:
+    repeating-linear-gradient(0deg, rgba(26, 24, 21, .022) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(26, 24, 21, .016) 0 1px, transparent 1px 4px);
+  color: var(--ink);
+  font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ========== 通用排版 ========== */
+.serif { font-family: var(--serif); }
+.hand  { font-family: var(--hand); }
+.mono  { font-family: var(--mono); }
+.handnote { font-family: "Zhi Mang Xing", "KaiTi", "STKaiti", cursive; color: var(--verm); }
+
+/* 自绘导航头部 */
+.p-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; border-bottom: 1px solid var(--ink);
+  background: var(--paper);
+}
+.p-head .t { font-family: "Noto Serif SC", "SimSun", serif; font-weight: 900; font-size: 17px; letter-spacing: 2px; flex: 1; }
+.p-head .ic { width: 20px; height: 20px; display: block; }
+
+/* ========== 卡片：2px 油墨边 + 硬投影 ========== */
+.card {
+  background: var(--cream);
+  border: 1.5px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  border-radius: 2px;
+}
+
+/* ========== 按钮：像盖章 ========== */
+.btn {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  border-radius: 3px; font-weight: 700;
+}
+.btn-ink {
+  background: var(--ink); color: var(--paper);
+  border: 1.5px solid var(--ink);
+  box-shadow: 3px 3px 0 rgba(26, 24, 21, .35);
+  font-family: "Noto Serif SC", "SimSun", serif;
+  letter-spacing: 3px;
+}
+.btn-verm {
+  background: var(--verm); color: var(--paper);
+  border: 1.5px solid var(--verm-deep);
+  box-shadow: 3px 3px 0 rgba(160, 53, 33, .35);
+  font-family: "Noto Serif SC", "SimSun", serif;
+  letter-spacing: 3px;
+}
+.btn-line {
+  background: transparent; color: var(--ink);
+  border: 1.5px solid var(--ink);
+  font-family: "Noto Serif SC", "SimSun", serif;
+  letter-spacing: 3px;
+}
+.btn-ghost {
+  background: transparent; color: var(--ink-fade);
+  border: 1.5px dashed var(--ink-fade);
+}
+.btn::after { border: none; }
+
+/* ========== 印章 ========== */
+.seal {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 74px; height: 74px;
+  border: 2.5px solid rgba(200, 68, 42, .85);
+  border-radius: 50%;
+  color: var(--verm);
+  font-family: "Noto Serif SC", "SimSun", serif;
+  font-weight: 900;
+  transform: rotate(-11deg);
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+.seal small { font-size: 9px; letter-spacing: 1px; font-weight: 700; }
+.seal .stxt { font-size: 13px; text-align: center; }
+
+/* ========== 票据胶囊 ========== */
+.pill {
+  display: inline-block; font-family: "JetBrains Mono", Consolas, monospace;
+  font-size: 9.5px; border: 1.2px solid var(--ink);
+  padding: 2px 7px; letter-spacing: 1px;
+  color: var(--ink); background: var(--cream);
+}
+.pill.red { color: var(--verm); border-color: var(--verm); }
+
+/* 状态胶囊（档案柜） */
+.st-pill { font-family: "JetBrains Mono", Consolas, monospace; font-size: 10px; padding: 2px 7px; border: 1.2px solid; }
+.st-run { color: var(--ind); border-color: var(--ind); background: rgba(61, 90, 128, .08); }
+.st-rej { color: var(--verm); border-color: var(--verm); background: rgba(200, 68, 42, .08); }
+.st-ok  { color: var(--green); border-color: var(--green); background: rgba(62, 107, 79, .08); }
+
+/* ========== 分节横带：方块 + 衬线标题 + 长线 ========== */
+.sec-band { display: flex; align-items: center; gap: 7px; margin: 18px 14px 10px; }
+.sec-band .sq { width: 8px; height: 8px; background: var(--verm); }
+.sec-band b { font-family: "Noto Serif SC", "SimSun", serif; font-weight: 900; font-size: 15px; letter-spacing: 3px; }
+.sec-band .ln { flex: 1; border-bottom: 1px solid var(--ink); }
+
+/* ========== 进度轨迹 ========== */
+.pc-track { display: flex; align-items: center; gap: 0; }
+.pc-track i, .pc-track s {
+  width: 8px; height: 8px; border-radius: 50%;
+  border: 1.5px solid var(--ink); background: transparent;
+  text-decoration: none; margin-right: 13px; position: relative;
+}
+.pc-track i:last-child, .pc-track s:last-child { margin-right: 0; }
+.pc-track s::after,
+.pc-track i.done::after {
+  content: ""; position: absolute; left: 100%; top: 50%;
+  width: 13px; border-bottom: 1.5px solid var(--ink); margin: 0;
+}
+.pc-track s:last-child::after, .pc-track i.done:last-child::after { display: none; }
+.pc-track i.done, .pc-track s.done { background: var(--verm); border-color: var(--verm); }
+
+/* ========== 手写批注条（驳回理由等） ========== */
+.rej-note {
+  margin: 6px 0 6px 12px; padding: 5px 9px;
+  border-left: 3px solid var(--verm); background: rgba(200, 68, 42, .06);
+  font-family: "KaiTi", "STKaiti", cursive; color: var(--verm-deep); font-size: 13px;
+  line-height: 1.7;
+}
+
+/* ========== 条形码 ========== */
+.barcode {
+  height: 22px; width: 80px; position: relative;
+  background: repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 4px, var(--ink) 4px 5px, transparent 5px 9px, var(--ink) 9px 12px, transparent 12px 14px);
+}
+.barcode::after {
+  content: attr(data-no); position: absolute; left: 0; right: 0; top: 23px;
+  font-family: "JetBrains Mono", Consolas, monospace; font-size: 7.5px;
+  letter-spacing: 2px; color: var(--ink-soft); text-align: center;
+}
+
+/* ========== 胶带（贴纸感） ========== */
+.tape {
+  position: absolute; width: 70px; height: 20px;
+  background: rgba(227, 216, 183, .85);
+  border-left: 1px dashed rgba(26, 24, 21, .18);
+  border-right: 1px dashed rgba(26, 24, 21, .18);
+  z-index: 9;
+}
+
+/* 通用小图标容器 */
+.ic { width: 20px; height: 20px; display: inline-block; vertical-align: middle; }
+.ic image, .ic icon { width: 100%; height: 100%; }
+
+/* ========== V2.3 精致化增强（在墨纸编辑部之上做加法） ========== */
+/* 更柔和的纸张光影：顶部一层淡淡的暖光 */
+page::before {
+  content: ""; position: fixed; left: 0; right: 0; top: 0; height: 200px;
+  background: linear-gradient(180deg, rgba(200, 68, 42, .05), transparent);
+  pointer-events: none; z-index: 0;
+}
+
+/* 票根齿孔分隔线：--●----●----●-- */
+.stub-line {
+  display: flex; align-items: center; gap: 0; margin: 10px 14px;
+}
+.stub-line::before, .stub-line::after {
+  content: ""; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--paper); border: 1px solid var(--ink); flex: none;
+}
+.stub-line i {
+  flex: 1; border-bottom: 1.5px dashed var(--ink-fade); margin: 0 3px;
+}
+
+/* 卡片按压反馈（手指按下去像盖章回弹） */
+.card { transition: transform .12s ease; }
+.card:active { transform: scale(.985); }
+
+/* 按钮按压反馈 */
+.btn { transition: transform .1s ease, box-shadow .1s ease; }
+.btn-ink:active, .btn-verm:active { transform: translate(1.5px, 1.5px); box-shadow: 1px 1px 0 rgba(26, 24, 21, .3); }
+
+/* 花饰分隔：◆ ◆ ◆ */
+.divider-orn {
+  text-align: center; color: var(--ink-fade); font-size: 9px;
+  letter-spacing: 6px; margin: 14px 0 4px;
+}
+
+/* 复古输入框统一样式 */
+.input-retro {
+  background: var(--cream); border: 1.2px solid var(--ink);
+  box-shadow: 2px 2px 0 rgba(26, 24, 21, .15);
+  padding: 8px 11px; font-size: 13px; border-radius: 2px;
+}
+.input-retro:focus, .input-retro.on { border-color: var(--verm); }
+
+/* 角标缎带（热门/推荐） */
+.ribbon {
+  position: absolute; top: 8px; right: -15px; transform: rotate(38deg);
+  background: var(--verm); color: var(--paper); font-size: 9px;
+  padding: 2px 17px; letter-spacing: 1.5px; font-weight: 700;
+}
+
+/* ================= V2.4 精品配件 ================= */
+/* 刊号条形码（报纸配件，纯CSS模拟） */
+.barcode {
+  height: 13px;
+  background: repeating-linear-gradient(90deg,
+    var(--ink) 0 1.5px, transparent 1.5px 3px,
+    var(--ink) 3px 4px, transparent 4px 6.5px,
+    var(--ink) 6.5px 8.5px, transparent 8.5px 10.5px,
+    var(--ink) 10.5px 11px, transparent 11px 14px);
+  opacity: .8;
+}
+.barcode-cap { font-size: 8px; letter-spacing: 2px; color: var(--ink-fade); text-align: center; margin-top: 3px; }
+
+/* 圆形红印章（官方认证/已审核） */
+.stamp {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 2.5px double var(--verm); color: var(--verm);
+  font-family: var(--serif); font-size: 10px; font-weight: 900;
+  letter-spacing: 1px; text-align: center; line-height: 1.3;
+  transform: rotate(-12deg); opacity: .88;
+  text-shadow: 0 0 1px rgba(200, 68, 42, .35);
+}
+
+/* 奖牌圆标（金/银/铜，荣誉墙用） */
+.medal {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 15px; font-weight: 900;
+  border: 1.5px solid rgba(26, 24, 21, .25);
+  box-shadow: inset 0 -3px 5px rgba(0, 0, 0, .18), 1.5px 1.5px 0 rgba(26, 24, 21, .12);
+}
+.medal.gold { background: radial-gradient(circle at 35% 30%, #F5D77E, #C9A227 70%); color: #6B4E00; }
+.medal.silver { background: radial-gradient(circle at 35% 30%, #EDEDED, #A9A9A9 70%); color: #444; }
+.medal.bronze { background: radial-gradient(circle at 35% 30%, #E0A070, #9C6B30 70%); color: #4A2E10; }
+
+/* 编号角标（卷宗号 No.0001） */
+.corner-no {
+  font-size: 9px; letter-spacing: 1px; color: var(--ink-fade);
+  border: 1px solid var(--ink-fade); padding: 1px 6px; border-radius: 1px;
+}
+
+/* 头条红标签 */
+.headline-tag {
+  display: inline-block; background: var(--verm); color: var(--paper);
+  font-size: 9px; padding: 1px 6px; letter-spacing: 1.5px; font-weight: 700;
+}
+
+/* 表单说明文字（通用） */
+.fm-note { font-size: 10px; color: var(--ink-soft); margin-bottom: 7px; letter-spacing: 0.5px; }
+
+  .pv-login .lg-mast{ text-align: center; padding: 30px 15px 15px; }
+.pv-login .mast-kicker{ font-size: 9px; letter-spacing: 3px; color: var(--ink-fade); }
+.pv-login .mast-title{ font-size: 28px; font-weight: 900; letter-spacing: 4px; margin: 8px 0 4px; }
+.pv-login .mast-sub{ font-size: 10px; letter-spacing: 2px; color: var(--ink-soft); }
+.pv-login .sch-wrap{ padding: 0 14px 4px; }
+.pv-login .sch-box{ padding: 12px; }
+.pv-login .sch-input{
+  width: 100%; box-sizing: border-box; height: 38px; padding: 0 10px;
+  background: #FFFBF0; border: 1px solid var(--ink);
+  font-family: Georgia, 'Songti SC', serif; font-size: 14px; color: var(--ink);
+}
+.pv-login .sch-cur{ margin-top: 9px; display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
+.pv-login .sch-cur b{ font-size: 15px; letter-spacing: 1px; color: var(--verm); }
+.pv-login .sch-cur small{ font-size: 10px; color: var(--ink-soft); letter-spacing: 0.5px; }
+.pv-login .sch-list{ margin-top: 7px; padding: 4px 0; max-height: 280px; }
+.pv-login .sch-item{
+  display: flex; align-items: center; padding: 9px 12px;
+  border-bottom: 1px dashed var(--ink-fade);
+}
+.pv-login .sch-item:last-child{ border-bottom: none; }
+.pv-login .sch-item-l{ flex: 1; min-width: 0; }
+.pv-login .sch-item-l b{ font-size: 13px; display: block; letter-spacing: 0.5px; }
+.pv-login .sch-item-l small{ font-size: 10px; color: var(--ink-soft); }
+.pv-login .sch-tags{ display: flex; gap: 4px; margin-left: 8px; }
+.pv-login .sch-tags text{
+  font-size: 9px; padding: 2px 5px; letter-spacing: 0.5px;
+  border: 1px solid var(--ink-soft); color: var(--ink-soft);
+}
+.pv-login .sch-more{ padding: 7px 12px; font-size: 10px; color: var(--ink-fade); letter-spacing: 0.5px; }
+.pv-login .sch-empty{ padding: 10px 14px 0; font-size: 11px; color: var(--ink-fade); letter-spacing: 0.5px; }
+.pv-login .ticket-wrap{ padding: 0 14px; display: flex; flex-direction: column; gap: 12px; }
+.pv-login .ticket{ display: flex; align-items: center; padding: 14px; position: relative; }
+.pv-login .ticket.on{ outline: 2px solid var(--verm); box-shadow: 4px 4px 0 var(--verm); }
+.pv-login .ticket .tk-l{ flex: 1; }
+.pv-login .ticket .tk-l b{ font-size: 16px; letter-spacing: 2px; display: block; }
+.pv-login .ticket .tk-l small{ color: var(--ink-soft); font-size: 11px; }
+.pv-login .ticket .tk-r{ font-size: 10px; border: 1px dashed var(--ink-soft); padding: 4px 8px; color: var(--ink-soft); }
+.pv-login .ticket.on .tk-r{ color: var(--verm); border-color: var(--verm); }
+.pv-login .fixed-wrap{ padding: 18px 14px 0; }
+.pv-login .fx-t{ font-size: 10px; color: var(--ink-fade); letter-spacing: 1.5px; margin-bottom: 8px; }
+.pv-login .fx-grid{ display: flex; flex-wrap: wrap; gap: 7px; }
+.pv-login .fx-item{
+  border: 1px dashed var(--ink-fade); padding: 6px 10px; opacity: .55;
+}
+.pv-login .fx-item b{ font-size: 12px; display: block; }
+.pv-login .fx-item small{ font-size: 9px; color: var(--ink-fade); }
+.pv-login .lg-cta{ padding: 24px 14px 40px; text-align: center; }
+.pv-login .lg-btn{ height: 48px; font-size: 16px; }
+.pv-login .lg-tip{ margin-top: 10px; font-size: 10px; color: var(--ink-fade); letter-spacing: 1px; }
+.pv-login .lg-mast{ position: relative; }
+.pv-login .lg-stamp{ position: absolute; right: 20px; top: 28px; }
+.pv-login .mask{ position: fixed; inset: 0; background: rgba(26,24,21,.5); display: flex; align-items: center; justify-content: center; z-index: 99; }
+.pv-login .sheet{ width: 320px; padding: 16px; }
+.pv-login .sh-t{ font-size: 15px; font-weight: 900; letter-spacing: 1.5px; margin-bottom: 7px; }
+.pv-login .sh-ops{ display: flex; gap: 8px; margin-top: 12px; }
+.pv-login .sh-btn{ flex: 1; height: 38px; font-size: 12px; letter-spacing: 1px; }
+.pv-login .kn-input{ background: var(--cream); border: 1.2px solid var(--ink); padding: 7px 10px; font-size: 13px; }
+.pv-login .fm-line{ margin-bottom: 8px; }
+.pv-login .fm-note{ font-size: 10px; color: var(--ink-soft); margin-bottom: 7px; letter-spacing: 0.5px; }
+.pv-login .lg-code-row{ display: flex; gap: 7px; align-items: stretch; }
+.pv-login .lg-code{ flex: 1; }
+.pv-login .lg-code-btn{ width: 105px; font-size: 11px; height: auto; letter-spacing: 0.5px; }
+.pv-login .lg-wx-row{ display: flex; gap: 7px; align-items: stretch; }
+.pv-login .lg-wx-input{ flex: 1; margin-bottom: 8px; }
+.pv-login .lg-wx-btn{ width: 100px; font-size: 11px; height: auto; letter-spacing: 0.5px; margin-bottom: 8px; }.pv-home .paper-mast{ text-align: center; padding: 12px 14px 10px; border-bottom: 1.5px solid var(--ink); position: relative; }
+.pv-home .mast-bar{ width: 120px; margin: 7px auto 0; }
+.pv-home .mast-bc{ height: 11px; }
+.pv-home .mast-stamp{ position: absolute; right: 18px; top: 35px; width: 42px; height: 42px; font-size: 9.5px; }
+.pv-home .paper-mast .date{ display: flex; justify-content: space-between; font-size: 10px; color: var(--ink-soft); letter-spacing: 1px; }
+.pv-home .mast-title{ font-size: 26px; font-weight: 900; letter-spacing: 5px; margin: 5px 0 2px; }
+.pv-home .slogan{ font-size: 9px; letter-spacing: 2px; color: var(--ink-fade); }
+.pv-home .org-bar{ display: flex; gap: 8px; padding: 10px 14px 0; }
+.pv-home .org-pick{
+  border: 1.2px solid var(--ink); background: var(--cream);
+  padding: 5px 10px; font-size: 12px; box-shadow: 2px 2px 0 var(--ink);
+}
+.pv-home .ov-row{ display: flex; gap: 8px; padding: 12px 14px 0; }
+.pv-home .ov-item{
+  flex: 1; text-align: center; background: var(--cream);
+  border: 1.2px solid var(--ink); box-shadow: 2px 2px 0 var(--ink);
+  padding: 9px 0;
+}
+.pv-home .ov-item b{ font-size: 20px; display: block; }
+.pv-home .ov-item small{ font-size: 10px; color: var(--ink-soft); }
+.pv-home .ov-item .run{ color: var(--ind); }
+.pv-home .ov-item .ok{ color: var(--green); }
+.pv-home .ov-item .verm{ color: var(--verm); }
+.pv-home .ticker{
+  display: flex; align-items: center; margin: 12px 14px 0;
+  border: 1.2px solid var(--ink); background: var(--cream); box-shadow: 2px 2px 0 var(--ink);
+}
+.pv-home .ticker .tag{
+  background: var(--verm); color: var(--paper); font-size: 10px;
+  padding: 4px 8px; letter-spacing: 2px;
+}
+.pv-home .ticker-box{ flex: 1; overflow: hidden; white-space: nowrap; }
+.pv-home .ticker .txt{ font-size: 12px; padding: 0 8px; }
+.pv-home .grid-nav{ display: flex; flex-wrap: wrap; gap: 8px; padding: 0 14px; }
+.pv-home .g-item{
+  width: calc(25% - 6.5px); text-align: center; background: var(--cream);
+  border: 1.2px solid var(--ink); box-shadow: 2px 2px 0 var(--ink);
+  padding: 0 0 7px; overflow: hidden; position: relative;
+}
+.pv-home .g-item .g-band{ height: 4px; width: 100%; }
+.pv-home .g-item .g-badge{
+  display: block; width: 32px; height: 32px; margin: 8px auto 5px;
+  color: var(--paper); font-size: 16px; line-height: 32px;
+  font-family: var(--serif); font-weight: 900;
+  border: 1px solid var(--ink); box-shadow: 1.5px 1.5px 0 var(--ink);
+}
+.pv-home .g-item b{ font-size: 11px; display: block; }
+.pv-home .g-item .g-desc{ font-size: 8px; color: var(--ink-fade); display: block; margin-top: 2px; letter-spacing: 0.5px; }
+.pv-home .wt-card{ margin: 0 14px 10px; padding: 12px 12px 10px; background: var(--ink); color: var(--paper); position: relative; }
+.pv-home .wt-head{ display: flex; justify-content: space-between; align-items: center; }
+.pv-home .wt-card .headline-tag{ background: var(--verm); color: var(--paper); font-size: 9.5px; padding: 2px 7px; letter-spacing: 1.5px; }
+.pv-home .wt-live{ font-size: 9px; color: rgba(237, 228, 206, .65); letter-spacing: 1px; }
+.pv-home .wt-title{ font-size: 18px; font-weight: 900; letter-spacing: 1px; margin: 8px 0 4px; line-height: 1.4; }
+.pv-home .wt-sub{ font-size: 10.5px; color: rgba(237, 228, 206, .75); }
+.pv-home .wt-foot{ display: flex; justify-content: space-between; align-items: center; margin-top: 10px; border-top: 1px dashed rgba(237, 228, 206, .3); padding-top: 8px; }
+.pv-home .wt-stats{ display: flex; gap: 12px; font-size: 10px; color: rgba(237, 228, 206, .8); }
+.pv-home .wt-stats b{ color: var(--paper); font-size: 13px; }
+.pv-home .wt-play{
+  width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--paper);
+  color: var(--paper); font-size: 15px; line-height: 34px; text-align: center; flex-shrink: 0;
+}
+.pv-home .hot-card{ display: flex; margin: 0 14px 12px; overflow: hidden; }
+.pv-home .hot-cover{ width: 105px; height: 59px; flex-shrink: 0; align-self: center; border: 1px solid var(--ink); }
+.pv-home .hot-info{ flex: 1; padding: 9px 10px; }
+.pv-home .hot-info b{ font-size: 13px; display: block; font-family: var(--serif); }
+.pv-home .hot-info small{ color: var(--ink-soft); font-size: 10px; display: block; margin: 2px 0 5px; }
+.pv-home .hot-tags{ display: flex; gap: 5px; }
+.pv-home .prog-card{ margin: 0 14px 12px; }
+.pv-home .pc-body{ padding: 5px 12px 12px; }
+.pv-home .pc-row{ display: flex; align-items: center; gap: 9px; padding: 10px 0; border-bottom: 1px dashed var(--ink-fade); }
+.pv-home .pc-row:last-child{ border-bottom: none; }
+.pv-home .pc-row .num{ font-size: 15px; color: var(--verm); font-weight: 700; }
+.pv-home .pc-info{ flex: 1; }
+.pv-home .pc-info b{ font-size: 12.5px; display: block; }
+.pv-home .pc-info small{ font-size: 9px; color: var(--ink-fade); }
+.pv-home .pc-track .dot{
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  border: 1.2px solid var(--ink); margin-right: 4px;
+}
+.pv-home .pc-track .dot.done{ background: var(--verm); border-color: var(--verm); }
+.pv-home .pc-row .ver{ font-size: 10px; color: var(--ink-soft); }
+.pv-home .pc-empty{ text-align: center; padding: 15px 0; color: var(--ink-soft); }
+.pv-home .home-tail{ text-align: center; font-size: 9px; color: var(--ink-fade); letter-spacing: 2px; padding: 10px 0 20px; }
+.pv-home .org-fixed{ color: var(--verm); font-weight: 700; }
+.pv-home .honor-scroll{ white-space: nowrap; padding: 2px 14px 5px; box-sizing: border-box; }
+.pv-home .honor-card{
+  display: inline-flex; flex-direction: column; align-items: center; text-align: center;
+  width: 150px; padding: 14px 10px 10px; margin-right: 10px; vertical-align: top;
+  white-space: normal;
+}
+.pv-home .honor-t{ font-size: 12px; margin-top: 7px; letter-spacing: 0.5px; line-height: 1.4; }
+.pv-home .honor-a{ font-size: 9.5px; color: var(--ink-soft); margin-top: 4px; line-height: 1.5; }
+.pv-home .honor-y{
+  margin-top: 6px; font-size: 9px; color: var(--verm); letter-spacing: 1.5px;
+  border-top: 1px dashed var(--ink-fade); padding-top: 5px; width: 80%;
+}
+.pv-home .cert-sw{ height: 90px; margin: 0 14px 10px; }
+.pv-home .cert-slide{ display: flex; align-items: center; gap: 10px; height: 76px; padding: 0 12px; }
+.pv-home .cs-medal{ width: 40px; height: 40px; font-size: 15px; }
+.pv-home .cs-info{ flex: 1; min-width: 0; }
+.pv-home .cs-info b{ font-size: 13.5px; display: block; letter-spacing: 0.5px; line-height: 1.4; }
+.pv-home .cs-info small{ font-size: 9.5px; color: var(--ink-soft); }
+.pv-home .cs-stamp{ width: 38px; height: 38px; font-size: 8.5px; flex-shrink: 0; }.pv-hall .track-bar{ display: flex; margin: 10px 14px 0; border: 1.5px solid var(--ink); }
+.pv-hall .trk{
+  flex: 1; text-align: center; padding: 9px 0;
+  font-family: var(--serif); font-weight: 900; letter-spacing: 3px; font-size: 14px;
+  background: var(--cream); color: var(--ink-soft);
+}
+.pv-hall .trk.on{ background: var(--ink); color: var(--paper); }
+.pv-hall .search-bar{ padding: 10px 14px 0; }
+.pv-hall .search-input{
+  background: var(--cream); border: 1.2px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink); padding: 7px 10px; font-size: 13px;
+}
+.pv-hall .chips{ white-space: nowrap; padding: 10px 14px 3px; }
+.pv-hall .chip{
+  display: inline-block; margin-right: 7px; padding: 4px 11px;
+  border: 1.2px solid var(--ink); background: var(--cream);
+  font-size: 11px; font-family: var(--mono);
+}
+.pv-hall .chip.on{ background: var(--marker); font-weight: 700; }
+.pv-hall .comp-card{ display: flex; margin: 9px 14px; overflow: hidden; }
+.pv-hall .comp-card.closed{ opacity: .55; }
+.pv-hall .cc-cover{ width: 105px; height: 59px; flex-shrink: 0; align-self: center; border: 1px solid var(--ink); }
+.pv-hall .cc-body{ flex: 1; padding: 9px 10px; }
+.pv-hall .cc-title{ font-family: var(--serif); font-weight: 900; font-size: 14px; line-height: 1.4; }
+.pv-hall .cc-host{ font-size: 10px; color: var(--ink-soft); margin: 3px 0 5px; }
+.pv-hall .cc-tags{ display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 5px; }
+.pv-hall .cc-foot{ display: flex; justify-content: space-between; font-size: 10px; color: var(--ink-soft); }
+.pv-hall .cc-foot .ddl.hot{ color: var(--verm); font-weight: 700; }
+.pv-hall .hall-empty{ text-align: center; padding: 40px 0; color: var(--ink-soft); font-size: 14px; }
+.pv-hall .hall-tail{ text-align: center; font-size: 9px; color: var(--ink-fade); letter-spacing: 2px; padding: 5px 0 20px; }.pv-knowledge .kn-search{ padding: 10px 14px 0; }
+.pv-knowledge .kn-input{
+  background: var(--cream); border: 1.2px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink); padding: 7px 10px; font-size: 13px;
+}
+.pv-knowledge .chips{ white-space: nowrap; padding: 10px 14px 3px; }
+.pv-knowledge .chip{
+  display: inline-block; margin-right: 7px; padding: 4px 11px;
+  border: 1.2px solid var(--ink); background: var(--cream);
+  font-size: 11px; font-family: var(--mono);
+}
+.pv-knowledge .chip.on{ background: var(--marker); font-weight: 700; }
+.pv-knowledge .kn-sort{ display: flex; gap: 12px; padding: 6px 14px; }
+.pv-knowledge .sp{ font-size: 11px; color: var(--ink-fade); }
+.pv-knowledge .sp.on{ color: var(--verm); font-weight: 700; }
+.pv-knowledge .kn-card{ margin: 8px 14px; padding: 12px 14px; }
+.pv-knowledge .kn-flags{ display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 5px; }
+.pv-knowledge .kn-title{ font-size: 15px; font-weight: 900; line-height: 1.5; }
+.pv-knowledge .kn-content{ font-size: 13px; color: var(--ink-soft); margin: 5px 0; line-height: 1.7; }
+.pv-knowledge .kn-meta{ font-size: 9.5px; color: var(--ink-fade); }
+.pv-knowledge .kn-ops{ display: flex; gap: 15px; margin-top: 7px; border-top: 1px dashed var(--ink-fade); padding-top: 7px; }
+.pv-knowledge .op{ font-size: 12px; color: var(--ink-soft); }
+.pv-knowledge .kn-empty{ text-align: center; padding: 40px 0; color: var(--ink-soft); }
+.pv-knowledge .kn-fab{
+  position: fixed; right: 18px; bottom: 30px; z-index: 50;
+  background: var(--verm); color: var(--paper);
+  border: 1.5px solid var(--verm-deep); box-shadow: 3px 3px 0 rgba(160, 53, 33, .35);
+  padding: 10px 16px; font-family: var(--serif); font-weight: 900; letter-spacing: 1.5px;
+}
+.pv-knowledge .mask{
+  position: fixed; inset: 0; background: rgba(26, 24, 21, .5);
+  display: flex; align-items: center; justify-content: center; z-index: 99;
+}
+.pv-knowledge .sheet{ width: 320px; padding: 16px; }
+.pv-knowledge .sh-t{ font-size: 16px; font-weight: 900; letter-spacing: 2px; margin-bottom: 9px; }
+.pv-knowledge .fm-line{ margin-bottom: 8px; }
+.pv-knowledge .kn-textarea{
+  width: auto; min-height: 100px; border: 1.2px solid var(--ink);
+  background: #fff; padding: 8px; font-size: 13px;
+}
+.pv-knowledge .kn-tags{ margin-top: 8px; display: flex; flex-wrap: wrap; gap: 5px; }
+.pv-knowledge .sh-ops{ display: flex; gap: 8px; margin-top: 12px; }
+.pv-knowledge .sh-btn{ flex: 1; height: 38px; font-size: 12px; letter-spacing: 1px; }
+.pv-knowledge .cm-list{ max-height: 250px; overflow-y: auto; }
+.pv-knowledge .cm-item{ padding: 7px 0; border-bottom: 1px dashed var(--ink-fade); }
+.pv-knowledge .cm-item b{ font-size: 12px; }
+.pv-knowledge .cm-item small{ font-size: 9px; color: var(--ink-fade); }
+.pv-knowledge .cm-content{ font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+.pv-knowledge .kn-no-cm{ text-align: center; color: var(--ink-soft); padding: 15px 0; }
+.pv-knowledge .cm-input-row{ display: flex; gap: 7px; margin-top: 9px; }
+.pv-knowledge .cm-input{ flex: 1; }
+.pv-knowledge .cm-send{ width: 65px; height: 38px; font-size: 12px; letter-spacing: 1px; }
+.pv-knowledge .kn-content{
+  overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.pv-knowledge .kn-more{ font-size: 11px; color: var(--verm); letter-spacing: 1px; }
+.pv-knowledge .dt-sheet{ width: 340px; max-height: 86vh; padding: 18px; display: flex; flex-direction: column; }
+.pv-knowledge .dt-title{ font-size: 16px; font-weight: 900; font-family: var(--serif); line-height: 1.5; }
+.pv-knowledge .dt-meta{ font-size: 10px; color: var(--ink-fade); margin: 5px 0 9px; font-family: var(--mono); }
+.pv-knowledge .dt-scroll{ flex: 1; min-height: 100px; max-height: 52vh; }
+.pv-knowledge .dt-content{ font-size: 13.5px; line-height: 1.9; color: var(--ink); }
+.pv-knowledge .dt-src{
+  display: flex; align-items: center; gap: 7px; margin-top: 11px;
+  background: rgba(200, 68, 42, .06); border: 1px dashed var(--verm); padding: 8px 10px;
+}
+.pv-knowledge .dt-src .name{ flex: 1; font-size: 11px; color: var(--verm); }
+.pv-knowledge .dt-src .cpy{ font-size: 11px; color: var(--paper); background: var(--verm); padding: 3px 10px; }
+.pv-knowledge .dt-cm-t{ font-size: 12px; font-weight: 900; margin: 12px 0 3px; color: var(--ink-soft); font-family: var(--serif); }.pv-watchtower .wt-stats{ display: flex; margin: 10px 14px; }
+.pv-watchtower .ws-item{ flex: 1; text-align: center; padding: 11px 0; }
+.pv-watchtower .ws-item b{ font-size: 18px; display: block; }
+.pv-watchtower .ws-item .verm{ color: var(--verm); }
+.pv-watchtower .ws-item .ok{ color: #2E7D32; }
+.pv-watchtower .ws-item small{ font-size: 9.5px; color: var(--ink-soft); }
+.pv-watchtower .wt-bar{ display: flex; gap: 7px; padding: 0 14px 4px; align-items: center; }
+.pv-watchtower .wt-search{
+  flex: 1; height: 36px; padding: 0 10px; box-sizing: border-box;
+  background: #FFFBF0; border: 1px solid var(--ink); font-size: 12px;
+}
+.pv-watchtower .wt-up{ width: 100px; height: 36px; font-size: 12px; letter-spacing: 1px; }
+.pv-watchtower .wt-tip{ padding: 0 14px 6px; font-size: 9.5px; color: var(--ink-fade); }
+.pv-watchtower .wt-course{ margin: 0 14px 11px; padding: 10px 12px; }
+.pv-watchtower .wc-intro{ font-size: 10.5px; color: var(--ink-soft); margin-bottom: 3px; }
+.pv-watchtower .wc-lect{ font-size: 9.5px; color: var(--ink-fade); margin-bottom: 5px; letter-spacing: 0.5px; }
+.pv-watchtower .wt-video{ display: flex; align-items: center; gap: 8px; padding: 8px 0; border-top: 1px dashed var(--ink-fade); }
+.pv-watchtower .wv-no{ font-size: 12px; color: var(--ink-fade); width: 24px; flex-shrink: 0; }
+.pv-watchtower .wv-info{ flex: 1; min-width: 0; }
+.pv-watchtower .wv-info b{ font-size: 12.5px; display: block; line-height: 1.4; }
+.pv-watchtower .wv-info small{ font-size: 9px; color: var(--ink-soft); }
+.pv-watchtower .wv-prog{ height: 3px; background: rgba(26,24,21,.12); margin-top: 4px; border-radius: 1.5px; overflow: hidden; }
+.pv-watchtower .wv-prog-in{ height: 100%; background: var(--verm); }
+.pv-watchtower .wv-badge{ font-size: 9px; color: var(--verm); border: 1px solid var(--verm); padding: 2px 6px; flex-shrink: 0; letter-spacing: 0.5px; }
+.pv-watchtower .wv-badge.done{ color: #2E7D32; border-color: #2E7D32; }
+.pv-watchtower .wv-del{ font-size: 10px; color: var(--ink-fade); padding: 3px 2px 3px 6px; flex-shrink: 0; }
+.pv-watchtower .wt-empty{ text-align: center; padding: 10px 0; color: var(--ink-soft); }
+.pv-watchtower .wt-empty2{ text-align: center; padding: 30px 0; color: var(--ink-soft); }
+.pv-watchtower .wt-player{ width: 345px; }
+.pv-watchtower .wv-meta{ font-size: 9.5px; color: var(--ink-soft); margin-bottom: 6px; }
+.pv-watchtower .wv-video{ width: 100%; height: 190px; background: #000; border: 1.2px solid var(--ink); }
+.pv-watchtower .wv-intro{ margin-top: 7px; font-size: 11px; color: var(--ink-soft); line-height: 1.6; }
+.pv-watchtower .wv-rule{ margin-top: 5px; font-size: 9px; color: var(--ink-fade); letter-spacing: 0.5px; }.pv-team .tm-none{ text-align: center; padding: 50px 30px; }
+.pv-team .tm-none-ic{ font-size: 45px; }
+.pv-team .tm-none-txt{ font-size: 15px; color: var(--ink-soft); margin: 12px 0 20px; }
+.pv-team .tm-create{ width: 210px; height: 46px; font-size: 15px; margin: 0 auto; }
+.pv-team .tm-head{ margin: 10px 14px; padding: 14px; }
+.pv-team .tm-name{ font-size: 20px; font-weight: 900; letter-spacing: 2px; }
+.pv-team .tm-cap{ font-size: 10px; color: var(--ink-soft); margin: 5px 0; }
+.pv-team .tm-intro{ font-size: 12.5px; color: var(--ink-soft); border-top: 1px dashed var(--ink-fade); padding-top: 7px; margin-top: 5px; }
+.pv-team .tm-tabs{ display: flex; margin: 0 14px 10px; border: 1.5px solid var(--ink); }
+.pv-team .tm-tab{
+  flex: 1; text-align: center; padding: 7px 0; font-size: 12px;
+  font-family: var(--serif); font-weight: 900;
+  background: var(--cream); color: var(--ink-soft);
+}
+.pv-team .tm-tab.on{ background: var(--ink); color: var(--paper); }
+.pv-team .tm-card{ margin: 0 14px 10px; padding: 10px 12px; }
+.pv-team .tm-sec-t{ font-size: 13px; font-weight: 900; margin-bottom: 6px; }
+.pv-team .m-row{ display: flex; align-items: center; gap: 7px; padding: 8px 0; border-bottom: 1px dashed var(--ink-fade); }
+.pv-team .m-row:last-child{ border-bottom: none; }
+.pv-team .m-name{ flex: 1; font-size: 13.5px; }
+.pv-team .m-op{ font-size: 11px; color: var(--ind); }
+.pv-team .m-op.del{ color: var(--verm); }
+.pv-team .m-op.ok{ color: var(--green); }
+.pv-team .lg-row{ display: flex; gap: 8px; padding: 7px 0; }
+.pv-team .lg-dot{ width: 9px; height: 9px; border: 1.5px solid var(--ink); border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.pv-team .lg-body b{ font-size: 12.5px; }
+.pv-team .lg-body small{ font-size: 9px; color: var(--ink-fade); }
+.pv-team .lg-content{ font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+.pv-team .f-row{ display: flex; align-items: center; gap: 6px; padding: 7px 0; border-bottom: 1px dashed var(--ink-fade); }
+.pv-team .f-row:last-child{ border-bottom: none; }
+.pv-team .f-name{ flex: 1; font-size: 12.5px; }
+.pv-team .f-row small{ font-size: 9px; color: var(--ink-fade); }
+.pv-team .p-row{ padding: 7px 0; border-bottom: 1px dashed var(--ink-fade); }
+.pv-team .p-row:last-child{ border-bottom: none; }
+.pv-team .p-row b{ font-size: 12.5px; }
+.pv-team .p-row small{ font-size: 9px; color: var(--ink-fade); }
+.pv-team .p-content{ font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+.pv-team .tm-empty{ text-align: center; padding: 15px 0; color: var(--ink-soft); }
+.pv-team .tm-add{ margin: 0 14px 12px; height: 40px; font-size: 12px; letter-spacing: 1px; }
+.pv-team .tm-stats{ display: flex; margin: 0 14px 20px; }
+.pv-team .st-item{ flex: 1; text-align: center; padding: 11px 0; }
+.pv-team .st-item b{ font-size: 18px; display: block; }
+.pv-team .st-item small{ font-size: 10px; color: var(--ink-soft); }
+.pv-team .mask{ position: fixed; inset: 0; background: rgba(26,24,21,.5); display: flex; align-items: center; justify-content: center; z-index: 99; }
+.pv-team .sheet{ width: 320px; padding: 16px; }
+.pv-team .sh-t{ font-size: 16px; font-weight: 900; letter-spacing: 2px; margin-bottom: 9px; }
+.pv-team .kn-input{ background: var(--cream); border: 1.2px solid var(--ink); padding: 7px 10px; font-size: 13px; }
+.pv-team .fm-line{ margin-bottom: 8px; }
+.pv-team .kn-textarea{ width: auto; min-height: 90px; border: 1.2px solid var(--ink); background: #fff; padding: 8px; font-size: 13px; }
+.pv-team .sh-ops{ display: flex; gap: 8px; margin-top: 12px; }
+.pv-team .sh-btn{ flex: 1; height: 38px; font-size: 12px; letter-spacing: 1px; }.pv-profile .pf-card{ margin: 10px 14px; padding: 12px 14px; }
+.pv-profile .pf-row1{ display: flex; align-items: center; gap: 10px; }
+.pv-profile .pf-avatar{
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--ink); color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 900; flex-shrink: 0;
+}
+.pv-profile .pf-info{ flex: 1; }
+.pv-profile .pf-info b{ font-size: 16px; }
+.pv-profile .pf-meta{ font-size: 9.5px; color: var(--ink-soft); }
+.pv-profile .pf-edit{ font-size: 11px; color: var(--verm); }
+.pv-profile .pf-stats{ display: flex; margin-top: 10px; border-top: 1px dashed var(--ink-fade); padding-top: 8px; }
+.pv-profile .ps-item{ flex: 1; text-align: center; }
+.pv-profile .ps-item b{ font-size: 18px; display: block; }
+.pv-profile .ps-item small{ font-size: 9.5px; color: var(--ink-soft); }
+.pv-profile .pf-entries{ display: flex; flex-wrap: wrap; gap: 8px; padding: 0 14px 4px; }
+.pv-profile .pf-entry{
+  width: calc(25% - 6px); box-sizing: border-box;
+  text-align: center; padding: 10px 0;
+}
+.pv-profile .pf-entry.admin{ outline: 1.5px solid var(--verm); }
+.pv-profile .pe-ic{
+  display: block; width: 26px; height: 26px; margin: 0 auto 4px;
+  background: var(--ink); color: var(--paper); border-radius: 50%;
+  font-size: 13px; line-height: 26px; font-family: var(--serif);
+}
+.pv-profile .pf-entry.admin .pe-ic{ background: var(--verm); }
+.pv-profile .pf-entry b{ font-size: 11px; }
+.pv-profile .pf-reg{ display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px dashed var(--ink-fade); }
+.pv-profile .pf-reg:last-child{ border-bottom: none; }
+.pv-profile .pr-l{ flex: 1; }
+.pv-profile .pr-l b{ font-size: 13px; display: block; }
+.pv-profile .pr-l small{ font-size: 9px; color: var(--ink-fade); }
+.pv-profile .pf-empty{ text-align: center; padding: 15px 0; color: var(--ink-soft); }
+.pv-profile .pf-ops{ padding: 5px 14px 30px; display: flex; flex-direction: column; gap: 8px; }
+.pv-profile .pf-btn{ width: 100%; height: 40px; font-size: 12px; letter-spacing: 1.5px; }
+.pv-profile .mask{ position: fixed; inset: 0; background: rgba(26,24,21,.5); display: flex; align-items: center; justify-content: center; z-index: 99; }
+.pv-profile .sheet{ width: 320px; padding: 16px; }
+.pv-profile .sh-t{ font-size: 16px; font-weight: 900; letter-spacing: 2px; margin-bottom: 9px; }
+.pv-profile .kn-input{ background: var(--cream); border: 1.2px solid var(--ink); padding: 7px 10px; font-size: 13px; }
+.pv-profile .fm-line{ margin-bottom: 8px; }
+.pv-profile .sh-ops{ display: flex; gap: 8px; margin-top: 12px; }
+.pv-profile .sh-btn{ flex: 1; height: 38px; font-size: 12px; letter-spacing: 1px; }
+.pv-profile .pf-cert{ display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px dashed var(--ink-fade); }
+.pv-profile .pf-cert:last-of-type{ border-bottom: none; }
+.pv-profile .pc-ic{ font-size: 20px; flex-shrink: 0; }
+.pv-profile .pc-del{ font-size: 11px; color: var(--verm); letter-spacing: 1px; padding: 4px 2px 4px 8px; }
+.pv-profile .pf-cert-btn{ width: 100%; margin-top: 9px; height: 36px; font-size: 12px; letter-spacing: 1.5px; }.pv-detail .dt-cover{ position: relative; margin: 10px 14px 0; border: 1.5px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); }
+.pv-detail .dt-cover image{ width: 100%; height: 195px; display: block; }
+.pv-detail .dt-flag{
+  position: absolute; top: 10px; left: -4px; background: var(--verm); color: var(--paper);
+  padding: 4px 12px; font-size: 12px; letter-spacing: 2px; font-weight: 900;
+}
+.pv-detail .dt-main{ margin: 12px 14px 0; padding: 14px; }
+.pv-detail .dt-title{ font-size: 19px; font-weight: 900; line-height: 1.4; }
+.pv-detail .dt-meta{ font-size: 10px; color: var(--ink-soft); margin: 5px 0; }
+.pv-detail .dt-tags{ display: flex; gap: 5px; flex-wrap: wrap; margin: 6px 0; }
+.pv-detail .dt-desc{ font-size: 13px; color: var(--ink-soft); line-height: 1.8; margin-top: 5px; }
+.pv-detail .dt-props{ margin: 0 14px; padding: 5px 14px; }
+.pv-detail .prop{ display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px dashed var(--ink-fade); font-size: 12px; }
+.pv-detail .prop:last-child{ border-bottom: none; }
+.pv-detail .prop .k{ color: var(--ink-soft); }
+.pv-detail .prop .v{ font-weight: 700; }
+.pv-detail .prop .v.yes{ color: var(--green); }
+.pv-detail .prop .v.verm{ color: var(--verm); }
+.pv-detail .dt-timeline{ margin: 0 14px; padding: 10px 14px; }
+.pv-detail .tl-row{ display: flex; align-items: center; gap: 9px; padding: 8px 0; }
+.pv-detail .tl-dot{ width: 9px; height: 9px; border: 1.5px solid var(--ink); border-radius: 50%; flex-shrink: 0; }
+.pv-detail .tl-row.now .tl-dot{ background: var(--verm); border-color: var(--verm); }
+.pv-detail .tl-body{ flex: 1; }
+.pv-detail .tl-body b{ font-size: 13px; display: block; }
+.pv-detail .tl-body small{ font-size: 10px; color: var(--ink-soft); }
+.pv-detail .dt-files{ margin: 0 14px; padding: 5px 14px; }
+.pv-detail .file-row{ display: flex; align-items: center; gap: 7px; padding: 9px 0; border-bottom: 1px dashed var(--ink-fade); }
+.pv-detail .file-row:last-child{ border-bottom: none; }
+.pv-detail .fi-name{ flex: 1; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pv-detail .fi-size{ font-size: 9px; color: var(--ink-fade); }
+.pv-detail .fi-dl{ color: var(--verm); font-size: 12px; font-weight: 700; }
+.pv-detail .dt-teams{ margin: 0 14px 12px; padding: 5px 14px; }
+.pv-detail .tm-row{ display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px dashed var(--ink-fade); }
+.pv-detail .tm-row:last-child{ border-bottom: none; }
+.pv-detail .tm-name{ flex: 1; font-size: 13px; font-weight: 700; }
+.pv-detail .tm-count{ font-size: 10px; color: var(--ink-soft); }
+.pv-detail .tm-empty{ text-align: center; padding: 15px 0; color: var(--ink-soft); }
+.pv-detail .dt-foot{
+  position: fixed; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px calc(9px + env(safe-area-inset-bottom));
+  background: var(--paper); border-top: 1.5px solid var(--ink);
+}
+.pv-detail .ft-fav{ font-size: 12px; color: var(--ink-soft); padding: 0 5px; }
+.pv-detail .ft-apply{ flex: 1; height: 44px; font-size: 15px; }.pv-form .fm-comp{ margin: 10px 14px 0; padding: 12px 14px; }
+.pv-form .fm-comp b{ font-size: 15px; font-weight: 900; }
+.pv-form .fm-meta{ font-size: 10px; color: var(--ink-soft); margin-top: 4px; }
+.pv-form .fm-sec{ margin: 0 14px 4px; padding: 12px 14px; }
+.pv-form .fm-row{ display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; }
+.pv-form .fm-row .k{ color: var(--ink-soft); }
+.pv-form .fm-tip{ margin-top: 7px; font-size: 11px; color: var(--verm-deep); }
+.pv-form .fm-modes{ display: flex; gap: 10px; margin: 0 14px 10px; }
+.pv-form .fm-mode{
+  flex: 1; text-align: center; padding: 10px 0;
+  border: 1.5px solid var(--ink); background: var(--cream);
+  font-family: var(--serif); font-weight: 900; letter-spacing: 2px;
+}
+.pv-form .fm-mode.on{ background: var(--ink); color: var(--paper); }
+.pv-form .fm-label{ font-size: 12px; font-weight: 700; margin: 9px 0 5px; }
+.pv-form .fm-label .req{ color: var(--verm); }
+.pv-form .fm-input{
+  border: 1.2px solid var(--ink); background: #fff;
+  padding: 7px 9px; font-size: 13px;
+}
+.pv-form .fm-textarea{
+  border: 1.2px solid var(--ink); background: #fff;
+  padding: 7px 9px; font-size: 13px; width: auto; min-height: 60px;
+}
+.pv-form .fm-picker{
+  border: 1.2px solid var(--ink); background: #fff;
+  padding: 8px 9px; font-size: 13px;
+}
+.pv-form .member{ display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--ink-fade); }
+.pv-form .m-name{ flex: 1; font-size: 13px; }
+.pv-form .m-del{ color: var(--verm); font-size: 11px; }
+.pv-form .m-add{ display: flex; gap: 7px; margin-top: 8px; }
+.pv-form .m-input{ flex: 1; }
+.pv-form .m-btn{ width: 75px; height: 36px; font-size: 12px; letter-spacing: 1px; }
+.pv-form .fm-upload{ width: 100%; height: 42px; font-size: 12px; letter-spacing: 1px; }
+.pv-form .fm-file{ margin-top: 7px; font-size: 12px; color: var(--green); }
+.pv-form .fm-cta{ padding: 15px 14px 30px; }
+.pv-form .fm-submit{ width: 100%; height: 48px; font-size: 16px; }
+.pv-form .fm-submit.disabled{ opacity: .5; }
+.pv-form .fm-notice{ text-align: center; font-size: 9px; color: var(--ink-fade); margin-top: 8px; letter-spacing: 1px; }.pv-approval .ap-tabs{ display: flex; margin: 10px 14px; border: 1.5px solid var(--ink); }
+.pv-approval .ap-tab{
+  flex: 1; text-align: center; padding: 8px 0; font-size: 13px;
+  font-family: var(--serif); font-weight: 900; letter-spacing: 1.5px;
+  background: var(--cream); color: var(--ink-soft);
+}
+.pv-approval .ap-tab.on{ background: var(--verm); color: var(--paper); }
+.pv-approval .ap-card{ margin: 0 14px 11px; padding: 11px 12px; }
+.pv-approval .ap-head{ position: relative; }
+.pv-approval .ap-title{ font-size: 14px; font-weight: 900; font-family: var(--serif); margin: 5px 0 3px; }
+.pv-approval .ap-meta{ font-size: 9.5px; color: var(--ink-soft); }
+.pv-approval .ap-arrow{ position: absolute; right: 0; top: 0; font-size: 10px; color: var(--ink-fade); }
+.pv-approval .ap-detail{ margin-top: 8px; border-top: 1px dashed var(--ink-fade); padding-top: 8px; }
+.pv-approval .node{ display: flex; gap: 8px; padding: 5px 0; }
+.pv-approval .nd-dot{
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px;
+  border: 1.5px solid var(--ink); background: transparent;
+}
+.pv-approval .nd-dot.pass{ background: var(--green); border-color: var(--green); }
+.pv-approval .nd-dot.reject{ background: var(--verm); border-color: var(--verm); }
+.pv-approval .nd-dot.waiting{ background: var(--marker); }
+.pv-approval .nd-body b{ font-size: 12.5px; display: block; }
+.pv-approval .nd-body small{ font-size: 9px; color: var(--ink-fade); }
+.pv-approval .ap-ops{ display: flex; gap: 9px; margin-top: 9px; }
+.pv-approval .ap-btn{ flex: 1; height: 38px; font-size: 13px; letter-spacing: 1.5px; }
+.pv-approval .ap-empty{ text-align: center; padding: 40px 0; color: var(--ink-soft); font-size: 14px; }
+.pv-approval .mask{
+  position: fixed; inset: 0; background: rgba(26, 24, 21, .5);
+  display: flex; align-items: center; justify-content: center; z-index: 99;
+}
+.pv-approval .sheet{ width: 310px; padding: 16px; }
+.pv-approval .sh-t{ font-size: 16px; font-weight: 900; letter-spacing: 2px; margin-bottom: 9px; }
+.pv-approval .sh-tip{ font-size: 12px; margin-bottom: 7px; }
+.pv-approval .sh-textarea{
+  width: auto; min-height: 70px; border: 1.2px solid var(--ink);
+  background: #fff; padding: 8px; font-size: 13px;
+}
+.pv-approval .sh-tpls{ margin-top: 7px; display: flex; flex-wrap: wrap; gap: 5px; }
+.pv-approval .sh-tpls .chip{
+  display: inline-block; font-size: 10px; padding: 3px 8px;
+  border: 1px solid var(--ink); background: var(--cream); font-family: var(--mono);
+}
+.pv-approval .sh-ops{ display: flex; gap: 8px; margin-top: 12px; }
+.pv-approval .sh-btn{ flex: 1; height: 38px; font-size: 12px; letter-spacing: 1px; }
+.pv-approval .sign-canvas{
+  width: 100%; height: 150px; background: #fff;
+  border: 1.2px solid var(--ink);
+}.pv-leave .lv-form{ margin: 0 14px 12px; padding: 12px 14px; }
+.pv-leave .lv-label{ font-size: 12px; font-weight: 700; margin: 9px 0 5px; }
+.pv-leave .lv-picker{ border: 1.2px solid var(--ink); background: #fff; padding: 8px 9px; font-size: 13px; }
+.pv-leave .lv-textarea{ width: auto; min-height: 75px; border: 1.2px solid var(--ink); background: #fff; padding: 8px; font-size: 13px; }
+.pv-leave .lv-upload{ width: 100%; height: 40px; font-size: 12px; letter-spacing: 1px; }
+.pv-leave .lv-submit{ width: 100%; height: 46px; font-size: 15px; margin-top: 12px; }
+.pv-leave .lv-submit.disabled{ opacity: .5; }
+.pv-leave .lv-note{ margin-top: 8px; font-size: 11px; }
+.pv-leave .lv-card{ margin: 0 14px 10px; padding: 11px 12px; }
+.pv-leave .lv-row1{ display: flex; justify-content: space-between; align-items: center; }
+.pv-leave .lv-row1 b{ font-size: 14px; font-family: var(--serif); }
+.pv-leave .lv-meta{ font-size: 9.5px; color: var(--ink-soft); margin: 4px 0; }
+.pv-leave .lv-reason{ font-size: 12.5px; color: var(--ink-soft); }
+.pv-leave .lv-empty{ text-align: center; padding: 30px 0; color: var(--ink-soft); }.pv-training .tr-tabs{ display: flex; margin: 10px 14px; border: 1.5px solid var(--ink); }
+.pv-training .tr-tab{
+  flex: 1; text-align: center; padding: 7px 0; font-size: 12px;
+  font-family: var(--serif); font-weight: 900;
+  background: var(--cream); color: var(--ink-soft);
+}
+.pv-training .tr-tab.on{ background: var(--ink); color: var(--paper); }
+.pv-training .tr-card{ display: flex; margin: 0 14px 10px; overflow: hidden; }
+.pv-training .tr-cover{ width: 105px; height: 59px; flex-shrink: 0; align-self: center; border: 1px solid var(--ink); }
+.pv-training .tr-body{ flex: 1; padding: 8px 10px; }
+.pv-training .tr-title{ font-family: var(--serif); font-weight: 900; font-size: 14px; }
+.pv-training .tr-meta{ font-size: 9.5px; color: var(--ink-soft); margin: 4px 0; }
+.pv-training .tr-tags{ display: flex; gap: 5px; align-items: center; }
+.pv-training .tr-count{ font-size: 9.5px; color: var(--ink-fade); }
+.pv-training .tr-empty{ text-align: center; padding: 40px 0; color: var(--ink-soft); }
+.pv-training .mask{ position: fixed; inset: 0; background: rgba(26,24,21,.5); display: flex; align-items: center; justify-content: center; z-index: 99; }
+.pv-training .sheet{ width: 320px; padding: 16px; max-height: 80vh; overflow-y: auto; }
+.pv-training .sh-t{ font-size: 16px; font-weight: 900; letter-spacing: 1.5px; margin-bottom: 9px; }
+.pv-training .tr-d-meta{ font-size: 10px; color: var(--ink-soft); margin-bottom: 4px; }
+.pv-training .tr-d-intro{ font-size: 13px; color: var(--ink-soft); line-height: 1.8; margin: 8px 0; }
+.pv-training .kn-input{ background: var(--cream); border: 1.2px solid var(--ink); padding: 7px 10px; font-size: 13px; }
+.pv-training .fm-line{ margin-bottom: 8px; }
+.pv-training .kn-textarea{ width: auto; min-height: 80px; border: 1.2px solid var(--ink); background: #fff; padding: 8px; font-size: 13px; }
+.pv-training .sh-ops{ display: flex; gap: 8px; margin-top: 12px; }
+.pv-training .sh-btn{ flex: 1; height: 38px; font-size: 12px; letter-spacing: 1px; }.pv-checkin .ck-account{ display: flex; margin: 10px 14px; }
+.pv-checkin .ac-item{ flex: 1; text-align: center; padding: 12px 0; }
+.pv-checkin .ac-item b{ font-size: 22px; display: block; }
+.pv-checkin .ac-item .verm{ color: var(--verm); }
+.pv-checkin .ac-item small{ font-size: 10px; color: var(--ink-soft); }
+.pv-checkin .ck-scenes{ display: flex; flex-wrap: wrap; gap: 8px; padding: 0 14px 4px; }
+.pv-checkin .ck-scene{ width: calc(33.3% - 5.5px); text-align: center; padding: 11px 0; }
+.pv-checkin .ck-scene b{ font-size: 13px; display: block; }
+.pv-checkin .ck-pt{ display: block; color: var(--verm); font-size: 12px; font-weight: 700; margin: 3px 0; }
+.pv-checkin .ck-scene small{ font-size: 9px; color: var(--ink-fade); }
+.pv-checkin .ck-rec{ margin: 0 14px 10px; padding: 4px 12px; }
+.pv-checkin .ck-row{ display: flex; gap: 7px; align-items: center; padding: 7px 0; border-bottom: 1px dashed var(--ink-fade); font-size: 11px; }
+.pv-checkin .ck-row:last-child{ border-bottom: none; }
+.pv-checkin .ck-scene-name{ flex: 1; font-weight: 700; }
+.pv-checkin .ck-loc{ color: var(--ink-fade); font-size: 8.5px; max-width: 90px; overflow: hidden; }
+.pv-checkin .ck-time{ color: var(--ink-fade); font-size: 8.5px; }
+.pv-checkin .ck-empty{ text-align: center; padding: 15px 0; color: var(--ink-soft); }
+.pv-checkin .ck-rank{ margin: 0 14px 20px; padding: 4px 12px; }
+.pv-checkin .rk-row{ display: flex; align-items: center; gap: 9px; padding: 8px 0; border-bottom: 1px dashed var(--ink-fade); }
+.pv-checkin .rk-row:last-child{ border-bottom: none; }
+.pv-checkin .rk-no{
+  width: 28px; height: 28px; line-height: 26px; text-align: center; flex-shrink: 0;
+  border: 1px solid var(--ink-soft); color: var(--ink-soft); font-size: 11px; border-radius: 50%;
+}
+.pv-checkin .rk-no.rk-top{ border-color: var(--verm); color: var(--verm); font-size: 13px; font-weight: 700; }
+.pv-checkin .rk-info{ flex: 1; min-width: 0; }
+.pv-checkin .rk-info b{ font-size: 13px; display: block; letter-spacing: 0.5px; }
+.pv-checkin .rk-info small{ font-size: 9px; color: var(--ink-soft); }
+.pv-checkin .rk-pt{ font-size: 13px; font-weight: 700; color: var(--verm); }
+.pv-checkin .ck-map{ width: 100%; height: 210px; border: 1.2px solid var(--ink); margin-bottom: 6px; }
+.pv-checkin .map-addr{ font-size: 9.5px; color: var(--ink-soft); }
+.pv-checkin .mask{ position: fixed; inset: 0; background: rgba(26,24,21,.5); display: flex; align-items: center; justify-content: center; z-index: 99; }
+.pv-checkin .sheet{ width: 320px; padding: 16px; }
+.pv-checkin .sh-t{ font-size: 15px; font-weight: 900; letter-spacing: 1.5px; margin-bottom: 7px; }
+.pv-checkin .ex-meta{ font-size: 10px; color: var(--ink-soft); margin-bottom: 7px; }
+.pv-checkin .kn-textarea{ width: auto; min-height: 70px; border: 1.2px solid var(--ink); background: #fff; padding: 8px; font-size: 13px; }
+.pv-checkin .sh-ops{ display: flex; gap: 8px; margin-top: 12px; }
+.pv-checkin .sh-btn{ flex: 1; height: 38px; font-size: 12px; letter-spacing: 1px; }.pv-schedule .sc-ops{ display: flex; gap: 6px; padding: 8px 14px; flex-wrap: wrap; }
+.pv-schedule .sc-btn{ flex: 1; min-width: 100px; height: 36px; font-size: 11px; letter-spacing: 0.5px; }
+.pv-schedule .sc-grid{ margin: 4px 6px; overflow: hidden; }
+.pv-schedule .sc-row{ display: flex; }
+.pv-schedule .sc-row.sc-head{ background: var(--ink); }
+.pv-schedule .sc-row.sc-head .sc-cell{ color: var(--paper); font-weight: 700; }
+.pv-schedule .sc-cell{
+  flex: 1; min-height: 38px; border-right: 0.5px solid var(--paper-4); border-bottom: 0.5px solid var(--paper-4);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-size: 9px; padding: 1px; box-sizing: border-box;
+}
+.pv-schedule .sc-cell.sc-time{ flex: 0 0 55px; background: var(--paper-2); }
+.pv-schedule .sc-cell.sc-time b{ font-size: 11px; font-family: var(--mono); }
+.pv-schedule .sc-cell.sc-time small{ font-size: 7px; color: var(--ink-fade); font-family: var(--mono); }
+.pv-schedule .sc-cell.busy{ background: var(--marker); }
+.pv-schedule .sc-cell.busy.start{ border: 1px solid var(--ink); }
+.pv-schedule .sc-course{ font-size: 9px; font-weight: 700; line-height: 1.2; text-align: center; }
+.pv-schedule .sc-place{ font-size: 7px; color: var(--ink-soft); }
+.pv-schedule .sc-legend{ display: flex; gap: 15px; padding: 5px 14px; font-size: 9px; color: var(--ink-soft); }
+.pv-schedule .sc-legend .free-lg{ color: var(--ink-fade); }
+.pv-schedule .sc-list{ padding: 0 14px 20px; }
+.pv-schedule .sc-item{ display: flex; align-items: center; padding: 10px 12px; margin-bottom: 8px; }
+.pv-schedule .sc-item-l{ flex: 1; }
+.pv-schedule .sc-item-l b{ font-size: 13.5px; display: block; }
+.pv-schedule .sc-item-l small{ font-size: 9.5px; color: var(--ink-soft); display: block; }
+.pv-schedule .sc-del{ color: var(--verm); font-size: 12px; padding: 5px; }
+.pv-schedule .sc-empty{ text-align: center; padding: 20px 0; color: var(--ink-soft); }
+.pv-schedule .mask{ position: fixed; inset: 0; background: rgba(26,24,21,.5); display: flex; align-items: center; justify-content: center; z-index: 99; }
+.pv-schedule .sheet{ width: 330px; padding: 16px; max-height: 85vh; overflow-y: auto; }
+.pv-schedule .sh-t{ font-size: 15px; font-weight: 900; letter-spacing: 1.5px; margin-bottom: 9px; }
+.pv-schedule .kn-input{ background: var(--cream); border: 1.2px solid var(--ink); padding: 7px 10px; font-size: 13px; }
+.pv-schedule .fm-line{ margin-bottom: 8px; }
+.pv-schedule .sh-ops{ display: flex; gap: 8px; margin-top: 12px; }
+.pv-schedule .sh-btn{ flex: 1; height: 38px; font-size: 12px; letter-spacing: 1px; }
+.pv-schedule .sh-full{ width: 100%; height: 40px; font-size: 13px; letter-spacing: 2px; margin-top: 5px; }
+.pv-schedule .q-res{ margin-top: 10px; }
+.pv-schedule .q-t{ font-weight: 900; font-family: var(--serif); margin: 7px 0 4px; }
+.pv-schedule .q-t.ok{ color: var(--green); }
+.pv-schedule .q-t.rej{ color: var(--verm); }
+.pv-schedule .q-name{ display: inline-block; border: 1px solid var(--ink); background: var(--cream); padding: 3px 8px; margin: 0 5px 5px 0; font-size: 11.5px; }
+.pv-schedule .q-name small{ color: var(--ink-fade); font-size: 9px; }
+.pv-schedule .q-name.dim{ opacity: .5; }
+.pv-schedule .q-tip{ text-align: center; color: var(--ink-soft); padding: 8px 0; }
+.pv-schedule .imp-scroll{ max-height: 240px; }
+.pv-schedule .imp-row{ padding: 7px 0; border-bottom: 1px dashed var(--ink-fade); }
+.pv-schedule .imp-row:last-child{ border-bottom: none; }
+.pv-schedule .imp-row b{ font-size: 13px; display: block; }
+.pv-schedule .imp-row small{ font-size: 9.5px; color: var(--ink-soft); }
+.pv-schedule .imp-tip{ margin-top: 6px; font-size: 10px; color: var(--ink-fade); }.pv-news .nw-card{ margin: 10px 14px; padding: 12px 14px; }
+.pv-news .nw-flags{ display: flex; gap: 5px; margin-bottom: 5px; }
+.pv-news .nw-title{ font-size: 15px; font-weight: 900; line-height: 1.5; }
+.pv-news .nw-content{ font-size: 13px; color: var(--ink-soft); margin: 5px 0; line-height: 1.7; }
+.pv-news .nw-meta{ font-size: 9.5px; color: var(--ink-fade); }
+.pv-news .nw-empty{ text-align: center; padding: 40px 0; color: var(--ink-soft); }
+.pv-news .mask{ position: fixed; inset: 0; background: rgba(26,24,21,.5); display: flex; align-items: center; justify-content: center; z-index: 99; }
+.pv-news .sheet{ width: 320px; padding: 16px; }
+.pv-news .sh-t{ font-size: 16px; font-weight: 900; letter-spacing: 2px; margin-bottom: 9px; }
+.pv-news .kn-input{ background: var(--cream); border: 1.2px solid var(--ink); padding: 7px 10px; font-size: 13px; }
+.pv-news .fm-line{ margin-bottom: 8px; }
+.pv-news .kn-textarea{ width: auto; min-height: 90px; border: 1.2px solid var(--ink); background: #fff; padding: 8px; font-size: 13px; }
+.pv-news .sh-ops{ display: flex; gap: 8px; margin-top: 12px; }
+.pv-news .sh-btn{ flex: 1; height: 38px; font-size: 12px; letter-spacing: 1px; }.pv-stats .st-grid{ display: flex; flex-wrap: wrap; gap: 8px; padding: 0 14px; }
+.pv-stats .st-cell{ width: calc(50% - 4px); box-sizing: border-box; text-align: center; padding: 13px 0; }
+.pv-stats .st-cell b{ font-size: 23px; display: block; }
+.pv-stats .st-cell .run{ color: var(--ind); }
+.pv-stats .st-cell .ok{ color: var(--green); }
+.pv-stats .st-cell small{ font-size: 10px; color: var(--ink-soft); }
+.pv-stats .st-rate{ margin: 0 14px 10px; padding: 15px; display: flex; align-items: center; gap: 15px; }
+.pv-stats .rate-ring{
+  width: 80px; height: 80px; border-radius: 50%;
+  border: 4px solid var(--verm); display: flex; align-items: center; justify-content: center;
+}
+.pv-stats .rate-ring b{ font-size: 18px; color: var(--verm); }
+.pv-stats .rate-txt{ font-size: 12.5px; color: var(--ink-soft); }
+.pv-stats .st-bars{ margin: 0 14px 15px; padding: 10px 12px; }
+.pv-stats .bar-row{ display: flex; align-items: center; gap: 7px; padding: 6px 0; }
+.pv-stats .bar-name{ flex: 0 0 150px; font-size: 10.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pv-stats .bar-track{ flex: 1; height: 13px; border: 1px solid var(--ink); background: var(--cream); }
+.pv-stats .bar-fill{ height: 100%; background: var(--verm); }
+.pv-stats .bar-num{ font-size: 10px; width: 25px; text-align: right; }
+.pv-stats .st-empty{ text-align: center; color: var(--ink-soft); padding: 10px; }
+.pv-stats .st-tip{ text-align: center; color: var(--ink-soft); padding: 20px 30px; }
+.pv-stats .st-exports{ display: flex; gap: 10px; margin: 0 14px 20px; }
+.pv-stats .st-exports .btn{ flex: 1; height: 44px; font-size: 13px; }.pv-admin .ad-deny{ text-align: center; padding: 50px 0; color: var(--ink-soft); font-size: 15px; }
+.pv-admin .ad-tabs{ display: flex; margin: 10px 14px; border: 1.5px solid var(--ink); }
+.pv-admin .ad-tab{
+  flex: 1; text-align: center; padding: 7px 0; font-size: 12px;
+  font-family: var(--serif); font-weight: 900;
+  background: var(--cream); color: var(--ink-soft);
+}
+.pv-admin .ad-tab.on{ background: var(--verm); color: var(--paper); }
+.pv-admin .ad-card{ margin: 0 14px 9px; padding: 10px 12px; }
+.pv-admin .ad-row1{ display: flex; align-items: center; gap: 7px; }
+.pv-admin .ad-row1 b{ flex: 1; font-size: 13.5px; font-family: var(--serif); }
+.pv-admin .ad-meta{ font-size: 9.5px; color: var(--ink-soft); margin: 4px 0; }
+.pv-admin .ad-ops{ display: flex; gap: 12px; margin-top: 5px; border-top: 1px dashed var(--ink-fade); padding-top: 6px; }
+.pv-admin .ad-op{ font-size: 11.5px; color: var(--ind); }
+.pv-admin .ad-op.del{ color: var(--verm); }
+.pv-admin .ad-empty{ text-align: center; padding: 30px 0; color: var(--ink-soft); }
+.pv-admin .ad-chain{ font-size: 12px; color: var(--ink-soft); line-height: 1.8; margin-top: 4px; }
+.pv-admin .ad-tip{ text-align: center; padding: 10px 20px 20px; color: var(--ink-soft); }.pv-board .bd-mast{ text-align: center; padding: 12px 14px 10px; border-bottom: 1.5px solid var(--ink); }
+.pv-board .bd-kicker{ font-size: 9px; letter-spacing: 2px; color: var(--ink-fade); }
+.pv-board .bd-title{ font-size: 24px; font-weight: 900; letter-spacing: 4px; margin: 5px 0 3px; }
+.pv-board .bd-sub{ font-size: 9px; color: var(--ink-soft); letter-spacing: 1px; }
+.pv-board .bd-kpis{ display: flex; gap: 7px; padding: 12px 14px 0; }
+.pv-board .bd-kpi{
+  flex: 1; text-align: center; background: var(--cream);
+  border: 1.2px solid var(--ink); box-shadow: 2px 2px 0 var(--ink); padding: 9px 0;
+}
+.pv-board .bd-kpi b{ font-size: 21px; display: block; }
+.pv-board .bd-kpi.gold b{ color: var(--verm); }
+.pv-board .bd-kpi small{ font-size: 9.5px; color: var(--ink-soft); }
+.pv-board .bd-card{ margin: 0 14px 12px; padding: 5px 12px 9px; }
+.pv-board .bd-row{ display: flex; align-items: center; gap: 7px; padding: 7px 0; border-bottom: 1px dashed var(--ink-fade); }
+.pv-board .bd-row:last-child{ border-bottom: none; }
+.pv-board .bd-name{ width: 150px; flex-shrink: 0; }
+.pv-board .bd-name b{ font-size: 11px; display: block; line-height: 1.35; }
+.pv-board .bd-name small{ font-size: 8.5px; color: var(--verm); }
+.pv-board .bd-track{ flex: 1; height: 13px; background: var(--paper); border: 1px solid var(--ink); }
+.pv-board .bd-bar{ height: 100%; }
+.pv-board .bd-bar.verm{ background: var(--verm); }
+.pv-board .bd-bar.ind{ background: var(--ind); }
+.pv-board .bd-bar.green{ background: var(--green); }
+.pv-board .bd-num{ width: 32px; text-align: right; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.pv-board .bd-na{ display: flex; gap: 9px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--ink-fade); }
+.pv-board .bd-na:last-child{ border-bottom: none; }
+.pv-board .bd-medal{ width: 32px; height: 32px; font-size: 13px; flex-shrink: 0; }
+.pv-board .bd-na-info{ flex: 1; min-width: 0; }
+.pv-board .bd-na-info b{ font-size: 11.5px; display: block; line-height: 1.4; }
+.pv-board .bd-na-info small{ font-size: 9px; color: var(--ink-soft); display: block; margin-top: 1px; }
+.pv-board .bd-na-t{ color: var(--ink-fade); }
+.pv-board .bd-tail{ text-align: center; font-size: 9px; color: var(--ink-fade); letter-spacing: 1px; padding: 5px 14px 20px; }
+/* ================= V3.2 参考图风格重排（新增共享类 + 首页重排） ================= */
+.safe { padding: 0 14px; box-sizing: border-box; }
+.gap-sm { height: 7px; }
+.gap { height: 12px; }
+.gap-lg { height: 20px; }
+.addr-bar { display: flex; align-items: center; gap: 8px; padding: 9px 14px 6px; box-sizing: border-box; }
+.addr-pick { flex: 1; display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 700; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 999px; padding: 7px 13px; box-shadow: 2px 2px 0 var(--ink); letter-spacing: 0.5px; }
+.addr-pick .pin { color: var(--verm); font-size: 14px; }
+.addr-pick .caret { margin-left: auto; opacity: .55; font-size: 11px; }
+.addr-tools { display: flex; align-items: center; gap: 5px; }
+.addr-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--verm); }
+.addr-tools .ic { width: 20px; height: 20px; border: 1.5px solid var(--ink); border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--paper); box-shadow: 1.5px 1.5px 0 var(--ink); font-size: 11px; line-height: 1; }
+.search-pill { display: flex; align-items: center; gap: 6px; margin: 2px 14px 9px; height: 38px; box-sizing: border-box; }
+.search-pill .input { flex: 1; height: 100%; background: var(--paper-2); border: 1.2px solid var(--ink); border-radius: 999px; padding: 0 14px; font-size: 13px; color: var(--ink-fade); box-shadow: 1.5px 1.5px 0 var(--ink); }
+.search-pill .btn { height: 100%; padding: 0 16px; box-sizing: border-box; background: var(--verm); color: var(--paper); border: 1.2px solid var(--verm-deep); border-radius: 999px; font-size: 13px; font-weight: 700; letter-spacing: 2px; font-family: var(--serif); box-shadow: 1.5px 1.5px 0 rgba(160,53,33,.35); display: flex; align-items: center; justify-content: center; }
+.banner-sw { margin: 2px 14px 10px; height: 160px; border-radius: 12px; overflow: hidden; border: 1.5px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); position: relative; box-sizing: border-box; }
+.banner-slide { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--paper); text-align: center; }
+.banner-slide.ink { background: linear-gradient(135deg, #2A2723, #1A1815); }
+.banner-slide.warm { background: linear-gradient(135deg, #C8442A, #A03521); }
+.banner-slide.green { background: linear-gradient(135deg, #4F7A5B, #3E6B4F); }
+.banner-slide.blue { background: linear-gradient(135deg, #4A6E94, #2E4A6E); }
+.banner-slide .kicker { font-family: var(--serif); font-size: 12px; letter-spacing: 4px; opacity: .9; margin-bottom: 4px; }
+.banner-slide .title { font-family: var(--serif); font-weight: 900; font-size: 26px; letter-spacing: 4px; line-height: 1.25; text-shadow: 0 1px 3px rgba(0,0,0,.25); }
+.banner-slide .sub { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; margin-top: 8px; opacity: .85; }
+.banner-slide .pager { position: absolute; right: 9px; bottom: 7px; background: rgba(26,24,21,.55); color: var(--paper); font-family: var(--mono); font-size: 9px; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.5px; }
+.icon-grid { display: flex; flex-wrap: wrap; margin: 4px 12px 12px; background: var(--cream); border: 1.2px solid var(--ink); border-radius: 10px; padding: 12px 0; box-shadow: 3px 3px 0 var(--ink); box-sizing: border-box; }
+.icon-grid .g5 { width: 20%; box-sizing: border-box; padding: 4px 0; }
+.icon-grid .g5 .badge { width: 40px; height: 40px; margin: 0 auto 5px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--paper); border: 1.2px solid var(--ink); box-shadow: 1.5px 1.5px 0 var(--ink); font-family: var(--serif); }
+.icon-grid .g5 .name { text-align: center; font-size: 11px; color: var(--ink); font-family: var(--serif); letter-spacing: 0.5px; }
+.info-card { margin: 0 14px 9px; background: var(--cream); border: 1.2px solid var(--ink); border-radius: 10px; padding: 12px 14px; box-sizing: border-box; box-shadow: 3px 3px 0 var(--ink); }
+.info-card .title { font-family: var(--serif); font-weight: 900; font-size: 15px; letter-spacing: 2px; display: flex; align-items: center; gap: 6px; padding-bottom: 8px; margin-bottom: 8px; border-bottom: 1px dashed var(--ink-fade); }
+.info-card .title .sq { width: 7px; height: 7px; background: var(--verm); }
+.banner-c { display: flex; align-items: center; gap: 9px; margin: 0 14px 10px; padding: 12px 14px; border-radius: 12px; border: 1.2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); box-sizing: border-box; position: relative; overflow: hidden; }
+.banner-c .left { flex: 1; min-width: 0; }
+.banner-c .ttl { font-family: var(--serif); font-weight: 900; font-size: 17px; letter-spacing: 2px; line-height: 1.2; }
+.banner-c .sub { font-family: var(--mono); font-size: 9px; letter-spacing: 1px; opacity: .8; margin-top: 3px; }
+.banner-c .pill { display: inline-flex; align-items: center; justify-content: center; padding: 4px 12px; border-radius: 999px; font-family: var(--mono); font-weight: 700; font-size: 10px; letter-spacing: 1px; background: var(--ink); color: var(--paper); border: 1.2px solid var(--ink); margin-top: 6px; }
+.banner-c .illu { margin-left: auto; flex: none; width: 70px; height: 70px; border-radius: 50%; border: 1.5px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 30px; background: rgba(255,255,255,.35); }
+.banner-c.green { background: linear-gradient(135deg, #4F7A5B, #3E6B4F); color: var(--paper); }
+.banner-c.green .pill { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.mask { position: fixed; left: 0; right: 0; top: 0; bottom: 0; background: rgba(26,24,21,.55); z-index: 99; display: flex; align-items: center; justify-content: center; }
+.sheet { width: 320px; max-width: calc(100vw - 30px); max-height: 86vh; overflow-y: auto; background: var(--cream); border: 1.5px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); padding: 16px; box-sizing: border-box; }
+.sheet .sh-t { font-family: var(--serif); font-weight: 900; font-size: 16px; letter-spacing: 3px; text-align: center; margin-bottom: 11px; }
+.sheet .sh-ops { display: flex; gap: 8px; margin-top: 11px; }
+.sheet .sh-btn { flex: 1; height: 38px; }
+.pv-home .paper-mast { padding: 10px 14px 12px; }
+.pv-home .mast-title { font-size: 24px; }
+.pv-home .ov-row { display: flex; gap: 7px; padding: 0; }
+.pv-home .ov-item { background: var(--paper); border-radius: 6px; box-shadow: none; padding: 8px 0; }
+.pv-home .ov-item b { font-size: 18px; }
+.pv-home .ticker { margin: 9px 0 0; border-radius: 6px; }
+</style></head>
+<body>
+<header>
+  <h1>竞赛一体化管理平台 V2.0 · 页面设计预览</h1>
+  <p>共 18 个页面 · 与小程序真实代码（WXML/WXSS）同源生成 · 每个手机框内可以上下滚动 · 数据为示例占位</p>
+</header>
+<div class="gallery"><div class="phone"><div class="p-title">📱 登录 <code>pages/login</code></div><div class="screen pv-login"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+
+<div class="lg-mast" style="">
+  <div class="mast-kicker mono" style="">COMPETITION INTEGRATION PLATFORM</div>
+  <div class="mast-title serif" style="">竞赛一体化管理平台</div>
+  <div class="mast-sub mono" style="">VOL.2026 · 全国高校师生通用 · 3000+ 所高校已收录</div>
+  <div class="stamp lg-stamp" style="">官方<div class="" style="">平台</div>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">第 一 步 · 找 到 你 的 学 校</div><div class="ln" style=""></div></div>
+
+<div class="sch-wrap" style="">
+  <div class="sch-box card" style="">
+    <div class="sch-input ph" style="">输入学校关键词，如：燕京理工 / 清华</div>
+    <div class="sch-cur" style="">
+      <div class="" style="">张三</div>
+      <div class="mono" style="">示例 · 示例B类学科竞赛</div>
+    </div>
+  </div>
+  <div class="sch-list card" style="">
+    <div class="sch-item" style="">
+      <div class="sch-item-l" style="">
+        <div class="" style="">张三</div>
+        <div class="" style="">示例 · 示例</div>
+      </div>
+      <div class="sch-tags mono" style="">
+        <span class="" style="">B类</span>
+        <span class="" style="">学科竞赛</span>
+      </div>
+    </div>
+    <div class="sch-more mono" style="">仅显示前 30 条，输入更精确的关键词</div>
+  </div>
+  <div class="sch-empty mono" style="">没有找到「示例」，换个关键词试试（支持简称）</div>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">第 二 步 · 选 择 你 的 身 份</div><div class="ln" style=""></div></div>
+
+<div class="ticket-wrap" style="">
+  <div class="ticket card {{role === item.key ? 'on' : ''}}" style="">
+    <div class="tk-l" style="">
+      <div class="serif" style="">张三登录</div>
+      <div class="" style="">这里是示例内容文字</div>
+    </div>
+    <div class="tk-r mono" style="">学生</div>
+  </div>
+</div>
+
+
+<div class="fixed-wrap" style="">
+  <div class="fx-t mono" style="">以下角色由学院 / 管理员指定：</div>
+  <div class="fx-grid" style="">
+    <div class="fx-item" style="">
+      <div class="" style="">张三</div>
+      <div class="" style="">这里是示例内容文字</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="lg-cta" style="">
+  <div class="btn btn-ink lg-btn" style="">微信一键登录</div>
+  <div class="lg-tip mono" style="">首次登录只需填写姓名即可建立档案，无需手机号与密码</div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">建 立 档 案</div>
+    <div class="fm-note mono" style="">张三 · 张三</div>
+    <div class="lg-wx-row" style="">
+      <div class="kn-input fm-line lg-wx-input ph" style="">姓名（必填）</div>
+      <div class="btn btn-line lg-wx-btn" style="">用微信昵称</div>
+    </div>
+    <div class="kn-input fm-line ph" style="">学号 / 工号（选填，便于证书与积分归档）</div>
+    <div class="fm-note hand" style="">已通过微信授权确认身份，无需手机号、密码与短信验证码。</div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">取消</div>
+      <div class="btn btn-verm sh-btn" style="">完成注册并登录</div>
+    </div>
+  </div>
+</div>
+</div></div><div class="phone"><div class="p-title">📱 首页 <code>pages/home</code></div><div class="screen pv-home"><div class="statusbar">9:41</div><div class="sbh" style="height:24px"></div>
+
+<div class="addr-bar">
+  <div class="addr-pick"><span class="pin serif">🏛</span><span class="serif">计算机科学与技术（本科）</span><span class="caret serif">▾</span></div>
+  <div class="addr-tools"><div class="addr-dot"></div><div class="ic">✉</div></div>
+</div>
+
+<div class="paper-mast">
+  <div class="date mono"><span>2026 年 9 月 4 日 · 星期五</span><span>第 2026-36 期</span></div>
+  <div class="mast-title serif">信息科学与技术学院</div>
+  <div class="slogan mono">燕京理工学院 · 竞赛一体化管理平台</div>
+  <div class="mast-bar"><div class="barcode mast-bc"></div><div class="barcode-cap mono">ISSN YIT-2026-INFO · 学院官方平台</div></div>
+  <div class="stamp mast-stamp">学院<br/>认证</div>
+</div>
+
+<div class="search-pill">
+  <div class="input">搜索竞赛 · 知识点 · 队伍</div>
+  <div class="btn serif">搜 索</div>
+</div>
+
+<div class="banner-sw">
+  <div class="banner-slide ink">
+    <div>
+      <div class="kicker">科创瞭望台</div>
+      <div class="title serif">宣 传 片 · 视 频 课 堂</div>
+      <div class="sub">管理员发布 · 师生共学</div>
+    </div>
+    <div class="pager mono">1 / 4</div>
+  </div>
+</div>
+
+<div class="icon-grid">
+  <div class="g5"><div class="badge" style="background:#C8442A">竞</div><div class="name serif">学生竞赛</div></div>
+  <div class="g5"><div class="badge" style="background:#3A4F6E">教</div><div class="name serif">教师竞赛</div></div>
+  <div class="g5"><div class="badge" style="background:#3C6E47">瞭</div><div class="name serif">科创瞭望台</div></div>
+  <div class="g5"><div class="badge" style="background:#8A5A2B">训</div><div class="name serif">培训中心</div></div>
+  <div class="g5"><div class="badge" style="background:#6E4A8A">知</div><div class="name serif">知识广场</div></div>
+  <div class="g5"><div class="badge" style="background:#2B6E8A">队</div><div class="name serif">我的队伍</div></div>
+  <div class="g5"><div class="badge" style="background:#A03A5C">签</div><div class="name serif">签到打卡</div></div>
+  <div class="g5"><div class="badge" style="background:#5A6E3A">课</div><div class="name serif">我的课表</div></div>
+  <div class="g5"><div class="badge" style="background:#B8722A">批</div><div class="name serif">审批中心</div></div>
+  <div class="g5"><div class="badge" style="background:#8A2B2B">据</div><div class="name serif">数据大屏</div></div>
+</div>
+
+<div class="info-card">
+  <div class="title"><div class="sq"></div><span class="serif">数 据 概 览</span></div>
+  <div class="ov-row">
+    <div class="ov-item"><b class="mono">12</b><small>总参赛</small></div>
+    <div class="ov-item"><b class="mono run">3</b><small>进行中</small></div>
+    <div class="ov-item"><b class="mono ok">8</b><small>获奖/通过</small></div>
+    <div class="ov-item"><b class="mono verm">2</b><small>待审批 ▸</small></div>
+  </div>
+  <div class="ticker"><span class="tag mono">新闻</span><div class="ticker-box"><span class="txt">【置顶】全国大学生数学建模竞赛报名启动　·　</span></div></div>
+</div>
+
+<div class="banner-c green">
+  <div class="left">
+    <div class="ttl serif">科创瞭望台</div>
+    <div class="sub">宣传片 · 视频课堂 · 每周更新</div>
+    <div class="pill mono">12 个视频 · 340 次观看</div>
+  </div>
+  <div class="illu">▶</div>
+</div>
+
+<div class="sec-band"><div class="sq"></div><b class="serif">热 门 竞 赛</b><div class="ln"></div></div>
+<div class="hot-card card">
+  <div class="hot-cover" style="background:linear-gradient(135deg,#E4D9BE,#DCD2BC);display:flex;align-items:center;justify-content:center;font-size:10px;color:#8A8172">封面</div>
+  <div class="hot-info"><b>全国大学生数学建模竞赛</b><small>中国工业与应用数学学会</small><div class="hot-tags"><span class="pill">国家级 A 类</span><span class="pill red">截止 2026-09-15</span></div></div>
+</div>
+<div class="hot-card card">
+  <div class="hot-cover" style="background:linear-gradient(135deg,#E4D9BE,#D8C8A8);display:flex;align-items:center;justify-content:center;font-size:10px;color:#8A8172">封面</div>
+  <div class="hot-info"><b>中国国际「互联网+」创新创业大赛</b><small>教育部 · 校赛选拔</small><div class="hot-tags"><span class="pill">国家级 A 类</span><span class="pill red">截止 2026-09-30</span></div></div>
+</div>
+
+<div class="sec-band"><div class="sq"></div><b class="serif">最 新 证 书</b><div class="ln"></div></div>
+<div class="cert-sw">
+  <div class="cert-slide card">
+    <div class="medal gold cs-medal">奖</div>
+    <div class="cs-info"><b>全国大学生数学建模竞赛</b><small class="mono">张三 · 国家一等奖 · 2026</small></div>
+    <div class="stamp cs-stamp">审核<br/>通过</div>
+  </div>
+</div>
+
+<div class="sec-band"><div class="sq"></div><b class="serif">荣 誉 墙</b><div class="ln"></div></div>
+<div class="honor-scroll">
+  <div class="honor-card card"><div class="medal gold">金</div><b class="honor-t">全国大学生数学建模竞赛</b><small class="mono honor-a">国家一等奖 · 张三</small><span class="honor-y mono">2026</span></div>
+  <div class="honor-card card"><div class="medal silver">银</div><b class="honor-t">中国大学生计算机设计大赛</b><small class="mono honor-a">国家二等奖 · 李四</small><span class="honor-y mono">2026</span></div>
+</div>
+
+<div class="sec-band"><div class="sq"></div><b class="serif">我 的 报 名 进 度</b><div class="ln"></div></div>
+<div class="prog-card card">
+  <div class="pc-body">
+    <div class="pc-row">
+      <span class="num mono">01</span>
+      <div class="pc-info"><b>全国大学生数学建模竞赛 · 夜航西飞</b><small class="mono">reg-0817</small></div>
+      <div class="pc-track"><span class="dot done"></span><span class="dot done"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      <span class="ver mono">v2</span>
+    </div>
+  </div>
+</div>
+
+<div class="tail mono">墨纸编辑部 · 出品</div>
+<div class="tabbar"><div class="tb-i on">首页</div><div class="tb-i">竞赛</div><div class="tb-i">广场</div><div class="tb-i">队伍</div><div class="tb-i">我的</div></div></div></div>
+<div class="phone"><div class="p-title">📱 竞赛大厅 <code>pages/hall</code></div><div class="screen pv-hall"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">竞 赛 大 厅</span>
+  <span class="pill mono" style="">12 项</span>
+</div>
+
+
+<div class="track-bar" style="">
+  <div class="trk {{track === item.key ? 'on' : ''}}" style="">张三</div>
+</div>
+
+
+<div class="search-bar" style="">
+  <div class="search-input ph" style="">搜索竞赛名称 / 编号 / 主办方</div>
+</div>
+
+
+<div class="chips" style="" data-scroll="1">
+  <span class="chip {{filter === f ? 'on' : ''}}" style="">示例</span>
+</div>
+
+
+<div class="comp-card card {{item.closed ? 'closed' : ''}}" style="">
+  <img class="cc-cover" style="" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27160%27%20height%3D%27110%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%23E4D9BE%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2754%25%27%20font-size%3D%2714%27%20fill%3D%27%238A8172%27%20text-anchor%3D%27middle%27%3E%E5%9B%BE%E7%89%87%3C/text%3E%3C/svg%3E">
+  <div class="cc-body" style="">
+    <div class="cc-title" style="">全国大学生数学建模竞赛</div>
+    <div class="cc-host" style="">示例</div>
+    <div class="cc-tags" style="">
+      <span class="pill" style="">张三</span>
+      <span class="pill" style="">学科竞赛</span>
+      <span class="st-pill {{item.closed ? 'st-rej' : 'st-run'}}" style="">审批中</span>
+    </div>
+    <div class="cc-foot mono" style="">
+      <span class="" style="">示例-示例 人组队</span>
+      <span class="ddl {{item.closed ? '' : 'hot'}}" style="">⏳ 剩余 12</span>
+    </div>
+  </div>
+</div>
+
+<div class="hall-empty hand" style="">这个分类下暂时没有竞赛，换个筛选试试。</div>
+<div class="hall-tail mono" style="">— 共 12 项 —</div>
+<div class="tabbar"><div class="tb-i">首页</div><div class="tb-i on">竞赛</div><div class="tb-i">广场</div><div class="tb-i">队伍</div><div class="tb-i">我的</div></div></div></div><div class="phone"><div class="p-title">📱 知识广场 <code>pages/knowledge</code></div><div class="screen pv-knowledge"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">知 识 广 场</span>
+  <span class="pill mono" style="">12 帖</span>
+</div>
+
+
+<div class="kn-search" style="">
+  <div class="kn-input ph" style="">搜索标题 / 内容关键词</div>
+</div>
+
+
+<div class="chips" style="" data-scroll="1">
+  <span class="chip {{tag === t ? 'on' : ''}}" style="">示例</span>
+</div>
+<div class="kn-sort" style="">
+  <span class="sp {{sort === 'hot' ? 'on' : ''}}" style="">🔥 最热</span>
+  <span class="sp {{sort === 'new' ? 'on' : ''}}" style="">🕐 最新</span>
+</div>
+
+
+<div class="kn-card card" style="">
+  <div class="kn-flags" style="">
+    <span class="pill red" style="">置顶</span>
+    <span class="pill" style="">★ 精选</span>
+    <span class="pill" style="">示例</span>
+  </div>
+  <div class="kn-title serif" style="">全国大学生数学建模竞赛</div>
+  <div class="kn-content" style="">这里是示例内容文字</div>
+  <div class="kn-more" style="">阅读全文 ▸</div>
+  <div class="kn-meta mono" style="">示例<span class="" style=""> · 张三</span> · 示例</div>
+  <div class="kn-ops" style="">
+    <span class="op" style="">👍 示例</span>
+    <span class="op" style="">💬 12</span>
+    <span class="op" style="">示例</span>
+    <span class="op" style="">示例</span>
+  </div>
+</div>
+
+<div class="kn-empty hand" style="">这里还空着，来发第一条经验贴吧。</div>
+
+
+<div class="kn-fab" style="">✎ 发布</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">发 布 知 识 点</div>
+    <div class="kn-input fm-line ph" style="">标题（一句话说清主题）</div>
+    <div class="kn-textarea ph" style="">正文：经验 / 模板 / 踩坑记录…</div>
+    <div class="kn-tags" style="">
+      <span class="chip {{pubTags.indexOf(t) > -1 ? 'on' : ''}}" style="">示例</span>
+    </div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">取消</div>
+      <div class="btn btn-verm sh-btn" style="">发布</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">评 论</div>
+    <div class="cm-list" style="">
+      <div class="cm-item" style="">
+        <div class="" style="">示例</div><div class="mono" style="">　示例</div>
+        <div class="cm-content" style="">这里是示例内容文字</div>
+      </div>
+      <div class="hand kn-no-cm" style="">还没有评论，抢个沙发。</div>
+    </div>
+    <div class="cm-input-row" style="">
+      <div class="kn-input cm-input ph" style="">写下你的评论</div>
+      <div class="btn btn-ink cm-send" style="">发送</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="dt-sheet card" style="">
+    <div class="dt-title" style="">全国大学生数学建模竞赛</div>
+    <div class="dt-meta" style="">示例<span class="" style=""> · 张三</span> · 示例　👍 示例</div>
+    <div class="dt-scroll" style="" data-scroll="1">
+      <span class="dt-content" style="">这里是示例内容文字</span>
+    </div>
+    <div class="dt-src" style="">
+      <span class="name" style="">🔗 张三</span>
+      <span class="cpy" style="">复制链接</span>
+    </div>
+    <div class="dt-cm-t" style="">评论（12）</div>
+    <div class="cm-list" style="">
+      <div class="cm-item" style="">
+        <div class="" style="">示例</div><div class="mono" style="">　示例</div>
+        <div class="cm-content" style="">这里是示例内容文字</div>
+      </div>
+      <div class="hand kn-no-cm" style="">还没有评论，抢个沙发。</div>
+    </div>
+    <div class="cm-input-row" style="">
+      <div class="kn-input cm-input ph" style="">写下你的评论</div>
+      <div class="btn btn-verm cm-send" style="">发送</div>
+    </div>
+  </div>
+</div>
+<div class="tabbar"><div class="tb-i">首页</div><div class="tb-i">竞赛</div><div class="tb-i on">广场</div><div class="tb-i">队伍</div><div class="tb-i">我的</div></div></div></div><div class="phone"><div class="p-title">📱 watchtower <code>pages/watchtower</code></div><div class="screen pv-watchtower"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">科 创 瞭 望 台</span>
+  <span class="pill mono red" style="">张三</span>
+</div>
+
+
+<div class="wt-stats card" style="">
+  <div class="ws-item" style=""><div class="mono verm" style="">12</div><div class="" style="">视频课程</div></div>
+  <div class="ws-item" style=""><div class="mono" style="">12</div><div class="" style="">总观看人次</div></div>
+  <div class="ws-item" style=""><div class="mono" style="">12</div><div class="" style="">我看过的</div></div>
+  <div class="ws-item" style=""><div class="mono ok" style="">示例%</div><div class="" style="">我的完播率</div></div>
+</div>
+
+
+<div class="wt-bar" style="">
+  <div class="wt-search ph" style="">🔍 搜索视频标题</div>
+  <div class="btn btn-verm wt-up" style="">⬆ 上传视频</div>
+</div>
+<div class="wt-tip hand" style="">管理员可增删改查；教学秘书可增删查；视频文件将存入云存储。</div>
+
+
+<div class="" style="">
+  <div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">张三</div><div class="ln" style=""></div></div>
+  <div class="wt-course card" style="">
+    <div class="wc-intro hand" style="">这里是示例内容文字</div>
+    <div class="wc-lect mono" style="">主讲：张三 全国大学生数学建模竞赛</div>
+    <div class="wt-video" style="">
+      <div class="wv-no mono" style="">{{index + 1 < 10 ? '0' : ''}}示例</div>
+      <div class="wv-info" style="">
+        <div class="" style="">全国大学生数学建模竞赛</div>
+        <div class="mono" style="">示例 · 张三 · 示例 次观看</div>
+        <div class="wv-prog" style="">
+          <div class="wv-prog-in" style="width:{{v.watchPct}}%"></div>
+        </div>
+      </div>
+      <div class="wv-badge {{v.watch && v.watch.finished ? 'done' : ''}} mono" style="">
+        示例
+      </div>
+      <span class="wv-del" style="">删除</span>
+    </div>
+    <div class="hand wt-empty" style="">本课程还没有视频。</div>
+  </div>
+</div>
+<div class="hand wt-empty2" style="">没有找到相关视频课程。</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card wt-player" style="">
+    <div class="sh-t serif" style="">全国大学生数学建模竞赛</div>
+    <div class="wv-meta mono" style="">张三 · 示例 · 示例 次观看</div>
+    <div class="wv-video ph" style="">视频</div>
+    <div class="wv-intro hand" style="">这里是示例内容文字</div>
+    <div class="wv-rule mono" style="">📌 学生观看不可拖拽进度、不可倍速，看到 90% 记为完播</div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">关闭</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">上 传 视 频 课 程</div>
+    <div class="kn-input fm-line ph" style="">视频标题（必填，最多50字）</div>
+    <div class="" style="">
+      <div class="kn-input fm-line" style="">所属课程：张三 ▾</div>
+    </div>
+    <div class="" style="">
+      <div class="kn-input fm-line" style="">主讲人：张三 ▾</div>
+    </div>
+    <div class="kn-textarea ph" style="">视频简介（选填）</div>
+    <div class="kn-input fm-line ph" style="">排序权重（数字越大越靠前，选填）</div>
+    <div class="btn btn-line sh-full" style="">张三</div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">取消</div>
+      <div class="btn btn-verm sh-btn" style="">发布</div>
+    </div>
+  </div>
+</div>
+</div></div><div class="phone"><div class="p-title">📱 队伍 <code>pages/team</code></div><div class="screen pv-team"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">我 的 队 伍</span>
+</div>
+
+
+<div class="tm-none" style="">
+  <div class="tm-none-ic" style="">🏕</div>
+  <div class="hand tm-none-txt" style="">你还没有队伍。创建一个，你就是队长。</div>
+  <div class="btn btn-ink tm-create" style="">创 建 队 伍</div>
+</div>
+
+<div class="" style="">
+  
+  <div class="tm-head card" style="">
+    <div class="tm-name serif" style="">张三</div>
+    <div class="tm-cap mono" style="">队长：张三　·　12 名队员</div>
+    <div class="tm-intro" style="">这里是示例内容文字</div>
+  </div>
+
+  
+  <div class="tm-tabs" style="">
+    <div class="tm-tab {{sub === item.key ? 'on' : ''}}" style="">张三</div>
+  </div>
+
+  
+  <div class="" style="">
+    <div class="tm-card card" style="">
+      <div class="m-row" style="">
+        <span class="m-name" style="">张三</span>
+        <span class="pill red" style="">队长</span>
+        <span class="pill" style="">副队长</span>
+        <div class="" style="">
+          <span class="m-op" style="">撤销副队长</span>
+          
+          <span class="m-op del" style="">移除</span>
+        </div>
+      </div>
+    </div>
+    <div class="tm-card card" style="">
+      <div class="tm-sec-t serif" style="">入队申请（12）</div>
+      <div class="m-row" style="">
+        <span class="m-name" style="">张三</span>
+        <span class="m-op ok" style="">通过</span>
+        <span class="m-op del" style="">拒绝</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="" style="">
+    <div class="tm-card card" style="">
+      <div class="lg-row" style="">
+        <div class="lg-dot" style=""></div>
+        <div class="lg-body" style="">
+          <div class="" style="">张三</div><div class="mono" style="">　14:00</div>
+          <div class="lg-content" style="">这里是示例内容文字</div>
+        </div>
+      </div>
+      <div class="hand tm-empty" style="">还没有学习记录，今天学了什么？</div>
+    </div>
+    <div class="btn btn-line tm-add" style="">✎ 记录今日学习（每日 1 条）</div>
+  </div>
+
+  
+  <div class="" style="">
+    <div class="tm-card card" style="">
+      <div class="f-row" style="">
+        <span class="fi-ic" style="">📎</span>
+        <span class="f-name" style="">张三</span>
+        <div class="mono" style="">张三 · 14:00</div>
+      </div>
+      <div class="hand tm-empty" style="">资料夹空空的，上传一份模板吧。</div>
+    </div>
+    <div class="btn btn-line tm-add" style="">📎 登记资料文件名</div>
+  </div>
+
+  
+  <div class="" style="">
+    <div class="tm-card card" style="">
+      <div class="p-row" style="">
+        <div class="" style="">张三</div><div class="mono" style="">　14:00</div>
+        <div class="p-content" style="">这里是示例内容文字</div>
+      </div>
+      <div class="hand tm-empty" style="">讨论墙静悄悄的，说点什么吧。</div>
+    </div>
+    <div class="btn btn-line tm-add" style="">💬 发一条讨论</div>
+  </div>
+
+  
+  <div class="tm-stats card" style="">
+    <div class="st-item" style=""><div class="mono" style="">120</div><div class="" style="">队伍积分</div></div>
+    <div class="st-item" style=""><div class="mono" style="">示例</div><div class="" style="">签到人次 ▸</div></div>
+    <div class="st-item" style=""><div class="mono" style="">示例</div><div class="" style="">知识点数</div></div>
+  </div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">创 建 队 伍</div>
+    <div class="kn-input fm-line ph" style="">队伍名称（创建后你自动成为队长）</div>
+    <div class="kn-textarea ph" style="">一句话介绍队伍目标（选填）</div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">取消</div>
+      <div class="btn btn-ink sh-btn" style="">创建</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">示例</div>
+    <div class="kn-textarea ph" style="">{{inputKind === 'files' ? '输入资料文件名 / 说明' : '写点什么…'}}</div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">取消</div>
+      <div class="btn btn-verm sh-btn" style="">发布</div>
+    </div>
+  </div>
+</div>
+<div class="tabbar"><div class="tb-i">首页</div><div class="tb-i">竞赛</div><div class="tb-i">广场</div><div class="tb-i on">队伍</div><div class="tb-i">我的</div></div></div></div><div class="phone"><div class="p-title">📱 我的 <code>pages/profile</code></div><div class="screen pv-profile"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">我 的 档 案</span>
+  <span class="pill mono red" style="">张三</span>
+</div>
+
+
+<div class="pf-card card" style="">
+  <div class="pf-row1" style="">
+    <div class="pf-avatar serif" style="">张三</div>
+    <div class="pf-info" style="">
+      <div class="serif" style="">张三</div>
+      <div class="pf-meta mono" style="">信息工程学院 计算机2301</div>
+      <div class="pf-meta mono" style="">示例 · 138****5678</div>
+    </div>
+    <span class="pf-edit" style="">编辑 ✎</span>
+  </div>
+  <div class="pf-stats" style="">
+    <div class="ps-item" style=""><div class="mono" style="">12</div><div class="" style="">报名</div></div>
+    <div class="ps-item" style=""><div class="mono" style="">示例</div><div class="" style="">进行中</div></div>
+    <div class="ps-item" style=""><div class="mono" style="">120</div><div class="" style="">可用积分</div></div>
+    <div class="ps-item" style=""><div class="mono" style="">12</div><div class="" style="">收藏</div></div>
+  </div>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">功 能 一 览</div><div class="ln" style=""></div></div>
+<div class="pf-entries" style="">
+  <div class="pf-entry card {{item.admin ? 'admin' : ''}}" style="">
+    <span class="pe-ic" style="">示例</span>
+    <div class="" style="">张三</div>
+  </div>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">我 的 报 名 卷 宗</div><div class="ln" style=""></div></div>
+<div class="pf-card card" style="">
+  <div class="pf-reg" style="">
+    <div class="pr-l" style="">
+      <div class="" style="">全国大学生数学建模竞赛</div>
+      <div class="mono" style="">张三 · v示例 · 截止 示例</div>
+    </div>
+    <span class="st-pill {{item.status === 'passed' ? 'st-ok' : item.status === 'approving' ? 'st-run' : 'st-rej'}}" style="">审批中</span>
+  </div>
+  <div class="hand pf-empty" style="">还没有报名记录。</div>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">我 的 证 书</div><div class="ln" style=""></div></div>
+<div class="pf-card card" style="">
+  <div class="pf-cert" style="">
+    <span class="pc-ic" style="">📜</span>
+    <div class="pr-l" style="">
+      <div class="" style="">全国大学生数学建模竞赛</div>
+      <div class="mono" style="">14:00</div>
+    </div>
+    <span class="st-pill {{item.status === 'passed' ? 'st-ok' : item.status === 'rejected' ? 'st-rej' : 'st-run'}}" style="">
+      审批中
+    </span>
+    <span class="pc-del" style="">删除</span>
+  </div>
+  <div class="hand pf-empty" style="">还没有证书，上传你的获奖证书（PDF / 图片），审核通过后将在首页轮播。</div>
+  <div class="btn btn-line pf-cert-btn" style="">⬆ 上传证书（PDF / 图片）</div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">证 书 信 息</div>
+    <div class="fm-note mono" style="">📎 张三</div>
+    <div class="kn-input fm-line ph" style="">竞赛名称（必填）</div>
+    <div class="" style="">
+      <div class="kn-input fm-line" style="">获奖等级：示例 ▾</div>
+    </div>
+    <div class="" style="">
+      <div class="kn-input fm-line" style="">获奖年份：示例 年 ▾</div>
+    </div>
+    <div class="fm-note hand" style="">提交后进入管理员审核，通过后在首页轮播展示。</div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">取消</div>
+      <div class="btn btn-verm sh-btn" style="">提交审核</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="pf-ops" style="">
+  <div class="btn btn-line pf-btn" style="">切换身份（演示）</div>
+  <div class="btn btn-line pf-btn" style="">操作记录</div>
+  <div class="btn btn-line pf-btn" style="">重置演示数据</div>
+  <div class="btn btn-ghost pf-btn" style="">退出登录</div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">编 辑 资 料</div>
+    <div class="kn-input fm-line ph" style="">姓名</div>
+    <div class="kn-input fm-line ph" style="">学号 / 工号</div>
+    <div class="kn-input fm-line" style="">
+      <div class="" style="{{edit.major ? '' : 'color:#86909C'}}">计算机2301 ▾</div>
+    </div>
+    <div class="kn-input fm-line ph" style="">手机号</div>
+    <div class="kn-input fm-line ph" style="">邮箱（选填）</div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">取消</div>
+      <div class="btn btn-verm sh-btn" style="">保存</div>
+    </div>
+  </div>
+</div>
+<div class="tabbar"><div class="tb-i">首页</div><div class="tb-i">竞赛</div><div class="tb-i">广场</div><div class="tb-i">队伍</div><div class="tb-i on">我的</div></div></div></div><div class="phone"><div class="p-title">📱 竞赛详情 <code>pages/detail</code></div><div class="screen pv-detail"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">竞 赛 档 案</span>
+  <span class="pill mono" style="">NO.No.20260903</span>
+</div>
+
+<div class="" style="">
+  
+  <div class="dt-cover" style="">
+    <img class="" style="" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27160%27%20height%3D%27110%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%23E4D9BE%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2754%25%27%20font-size%3D%2714%27%20fill%3D%27%238A8172%27%20text-anchor%3D%27middle%27%3E%E5%9B%BE%E7%89%87%3C/text%3E%3C/svg%3E">
+    <div class="dt-flag serif" style="">张三</div>
+  </div>
+
+  
+  <div class="dt-main card" style="">
+    <div class="dt-title serif" style="">全国大学生数学建模竞赛</div>
+    <div class="dt-meta mono" style="">示例</div>
+    <div class="dt-tags" style="">
+      <span class="pill" style="">王老师</span>
+      <span class="pill" style="">学科竞赛</span>
+      <span class="st-pill {{comp.closed ? 'st-rej' : 'st-run'}}" style="">示例</span>
+    </div>
+    <div class="dt-desc" style="">这里是示例内容文字</div>
+  </div>
+
+  
+  <div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">竞 赛 属 性</div><div class="ln" style=""></div></div>
+  <div class="dt-props card" style="">
+    <div class="prop" style=""><span class="k" style="">是否教育部名单赛事</span><span class="v {{comp.isEduList ? 'yes' : ''}}" style="">示例</span></div>
+    <div class="prop" style=""><span class="k" style="">颁发部门</span><span class="v" style="">信息工程学院</span></div>
+    <div class="prop" style=""><span class="k" style="">竞赛分类</span><span class="v" style="">学科竞赛</span></div>
+    <div class="prop" style=""><span class="k" style="">组队要求</span><span class="v" style="">示例-示例 人</span></div>
+    <div class="prop" style=""><span class="k" style="">报名截止</span><span class="v verm" style="">示例</span></div>
+    <div class="prop" style=""><span class="k" style="">审批流程</span><span class="v" style="">张三</span></div>
+  </div>
+
+  
+  <div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">赛 程 安 排</div><div class="ln" style=""></div></div>
+  <div class="dt-timeline card" style="">
+    <div class="tl-row {{item.now ? 'now' : ''}}" style="">
+      <div class="tl-dot" style=""></div>
+      <div class="tl-body" style="">
+        <div class="" style="">张三</div>
+        <div class="mono" style="">示例</div>
+      </div>
+      <span class="pill red" style="">进行中</span>
+    </div>
+  </div>
+
+  
+  <div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">附 件 下 载</div><div class="ln" style=""></div></div>
+  <div class="dt-files card" style="">
+    <div class="file-row" style="">
+      <span class="fi-ic" style="">📎</span>
+      <span class="fi-name" style="">张三</span>
+      <span class="fi-size mono" style="">示例</span>
+      <span class="fi-dl" style="">下载</span>
+    </div>
+  </div>
+
+  
+  <div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">已 报 名 队 伍</div><div class="ln" style=""></div></div>
+  <div class="dt-teams card" style="">
+    <div class="tm-row" style="">
+      <span class="tm-name" style="">张三</span>
+      <span class="tm-count mono" style="">12 人</span>
+      <span class="st-pill {{item.status === 'passed' ? 'st-ok' : item.status === 'rejected' ? 'st-rej' : 'st-run'}}" style="">
+        审批中
+      </span>
+    </div>
+    <div class="tm-empty hand" style="">虚位以待，第一个报名的会是你吗？</div>
+  </div>
+
+  
+  <div class="dt-foot" style="">
+    <div class="ft-fav" style="">示例</div>
+    <div class="btn {{comp.closed ? 'btn-ghost' : 'btn-verm'}} ft-apply" style="">
+      示例
+    </div>
+  </div>
+</div>
+</div></div><div class="phone"><div class="p-title">📱 报名表单 <code>pages/form</code></div><div class="screen pv-form"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">报 名 受 理 单</span>
+  <span class="pill mono" style="">NO.No.20260903</span>
+</div>
+
+<div class="" style="">
+  
+  <div class="fm-comp card" style="">
+    <div class="serif" style="">全国大学生数学建模竞赛</div>
+    <div class="fm-meta mono" style="">示例 · 截止 示例 · 示例-示例 人</div>
+  </div>
+
+  
+  <div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">基 本 信 息</div><div class="ln" style=""></div></div>
+  <div class="fm-sec card" style="">
+    <div class="fm-row" style=""><span class="k" style="">姓名</span><span class="v" style="">张三</span></div>
+    <div class="fm-row" style=""><span class="k" style="">学号/工号</span><span class="v" style="">示例</span></div>
+    <div class="fm-row" style=""><span class="k" style="">学院专业</span><span class="v" style="">信息工程学院 计算机2301</span></div>
+    <div class="fm-row" style=""><span class="k" style="">手机号</span><span class="v" style="">138****5678</span></div>
+    <div class="fm-tip hand" style="">信息有误？去「我的 → 编辑资料」修改后自动带入。</div>
+  </div>
+
+  
+  <div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">报 名 模 式</div><div class="ln" style=""></div></div>
+  <div class="fm-modes" style="">
+    <div class="fm-mode {{mode === 'solo' ? 'on' : ''}}" style="">个人报名</div>
+    <div class="fm-mode {{mode === 'team' ? 'on' : ''}}" style="">组队报名</div>
+  </div>
+
+  
+  <div class="fm-sec card" style="">
+    <div class="fm-label" style="">队伍名称 <span class="req" style="">*</span></div>
+    <div class="fm-input hand ph" style="">起一个响亮的队名</div>
+    <div class="fm-label" style="">队员名单（12/示例）</div>
+    <div class="member" style="">
+      <span class="m-name" style="">张三</span>
+      <span class="pill red" style="">队长</span>
+      
+    </div>
+    <div class="m-add" style="">
+      <div class="fm-input m-input ph" style="">输入队员姓名</div>
+      <div class="btn btn-line m-btn" style="">＋ 添加</div>
+    </div>
+  </div>
+
+  
+  <div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">选 择 指 导 教 师 / 辅 导 员</div><div class="ln" style=""></div></div>
+  <div class="fm-sec card" style="">
+    <div class="" style="">
+      <div class="fm-picker" style="">
+        全国大学生数学建模竞赛 ▾
+      </div>
+    </div>
+    <div class="fm-tip hand" style="">此人将成为第 1 级审批人；无指导教师的项目建议选辅导员。</div>
+  </div>
+
+  
+  <div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">补 充 信 息</div><div class="ln" style=""></div></div>
+  <div class="fm-sec card" style="">
+    <div class="fm-label" style="">个人简介</div>
+    <div class="fm-textarea ph" style="">简单介绍自己 / 团队的参赛优势</div>
+    <div class="fm-label" style="">GitHub / 作品集链接</div>
+    <div class="fm-input ph" style="">https://github.com/...（选填）</div>
+    <div class="fm-label" style="">获奖经历</div>
+    <div class="fm-textarea ph" style="">往届竞赛获奖情况（选填）</div>
+  </div>
+
+  
+  <div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">附 件 上 传</div><div class="ln" style=""></div></div>
+  <div class="fm-sec card" style="">
+    <div class="btn btn-line fm-upload" style="">示例</div>
+    <div class="fm-file" style="">✓ 示例</div>
+  </div>
+
+  
+  <div class="fm-cta" style="">
+    <div class="btn btn-verm fm-submit {{submitting ? 'disabled' : ''}}" style="">
+      示例
+    </div>
+    <div class="fm-notice mono" style="">提交即代表同意《参赛承诺与诚信声明》</div>
+  </div>
+</div>
+</div></div><div class="phone"><div class="p-title">📱 审批中心 <code>pages/approval</code></div><div class="screen pv-approval"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">审 批 中 心</span>
+  <span class="pill mono red" style="">示例 待办</span>
+</div>
+
+
+<div class="ap-tabs" style="">
+  <div class="ap-tab {{tab === 'todo' ? 'on' : ''}}" style="">待审批示例</div>
+  <div class="ap-tab {{tab === 'done' ? 'on' : ''}}" style="">已审批</div>
+  <div class="ap-tab {{tab === 'mine' ? 'on' : ''}}" style="">我发起的</div>
+</div>
+
+
+<div class="" style="">
+  <div class="ap-card card" style="">
+    <div class="ap-head" style="">
+      <span class="pill" style="">张三</span>
+      <div class="ap-title" style="">全国大学生数学建模竞赛</div>
+      <div class="ap-meta mono" style="">张三 · 示例 · 当前节点：张三</div>
+      <span class="ap-arrow" style="">示例</span>
+    </div>
+    <div class="ap-detail" style="">
+      <div class="node" style="">
+        <div class="nd-dot {{n.status}}" style=""></div>
+        <div class="nd-body" style="">
+          <div class="" style="">张三 <span class="pill red" style="">需手签</span></div>
+          <div class="mono" style="">示例 · 14:00</div>
+          <div class="rej-note" style="">这里是示例内容文字</div>
+        </div>
+      </div>
+      <div class="ap-ops" style="">
+        <div class="btn btn-ink ap-btn" style="">✓ 通过</div>
+        <div class="btn btn-verm ap-btn" style="">✕ 驳回</div>
+      </div>
+    </div>
+  </div>
+  <div class="ap-empty hand" style="">待办清零，喝杯茶吧。</div>
+</div>
+
+
+<div class="" style="">
+  <div class="ap-card card" style="">
+    <div class="ap-head" style="">
+      <span class="pill" style="">张三</span>
+      <div class="ap-title" style="">全国大学生数学建模竞赛</div>
+      <span class="st-pill {{item.status === 'passed' ? 'st-ok' : 'st-rej'}}" style="">审批中</span>
+    </div>
+    <div class="ap-detail" style="">
+      <div class="node" style="">
+        <div class="nd-dot {{n.status}}" style=""></div>
+        <div class="nd-body" style="">
+          <div class="" style="">张三</div>
+          <div class="mono" style="">示例 · 14:00</div>
+          <div class="rej-note" style="">这里是示例内容文字</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ap-empty hand" style="">还没有审批记录。</div>
+</div>
+
+
+<div class="" style="">
+  <div class="ap-card card" style="">
+    <div class="ap-head" style="">
+      <span class="pill" style="">张三</span>
+      <div class="ap-title" style="">全国大学生数学建模竞赛</div>
+      <div class="ap-meta mono" style="">v示例 · 示例</div>
+      <span class="st-pill {{item.status === 'passed' ? 'st-ok' : item.status === 'rejected' ? 'st-rej' : item.status === 'withdrawn' ? 'st-rej' : 'st-run'}}" style="">审批中</span>
+    </div>
+    <div class="ap-detail" style="">
+      <div class="node" style="">
+        <div class="nd-dot {{n.status}}" style=""></div>
+        <div class="nd-body" style="">
+          <div class="" style="">张三</div>
+          <div class="mono" style="">示例 · 14:00</div>
+          <div class="rej-note" style="">这里是示例内容文字</div>
+        </div>
+      </div>
+      <div class="ap-ops" style="">
+        <div class="btn btn-line ap-btn" style="">⚡ 催办12</div>
+        <div class="btn btn-ghost ap-btn" style="">撤回</div>
+      </div>
+      <div class="ap-ops" style="">
+        <div class="btn btn-verm ap-btn" style="">↻ 修改后重报（v示例）</div>
+      </div>
+    </div>
+  </div>
+  <div class="ap-empty hand" style="">你还没有发起过任何申请。</div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">驳回原因（至少 10 字）</div>
+    <div class="sh-textarea ph" style="">请写明驳回理由，将退回给申请人修改</div>
+    <div class="sh-tpls" style="">
+      <span class="chip" style="">示例</span>
+    </div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">取消</div>
+      <div class="btn btn-verm sh-btn" style="">确认驳回</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">手写签字确认</div>
+    <div class="sh-tip hand" style="">请在下方框内手写你的签名（此环节按制度要求手签）</div>
+    <div class="sign-canvas ph" style="">手写字区域</div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">清除重写</div>
+      <div class="btn btn-ghost sh-btn" style="">取消</div>
+      <div class="btn btn-ink sh-btn" style="">签字通过</div>
+    </div>
+  </div>
+</div>
+</div></div><div class="phone"><div class="p-title">📱 请假 <code>pages/leave</code></div><div class="screen pv-leave"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">请 假 管 理</span>
+  <span class="pill mono" style="">去审批 ▸</span>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">发 起 请 假</div><div class="ln" style=""></div></div>
+<div class="lv-form card" style="">
+  <div class="lv-label" style="">请假类型</div>
+  <div class="" style="">
+    <div class="lv-picker" style="">学科竞赛 ▾</div>
+  </div>
+
+  <div class="lv-label" style="">开始日期</div>
+  <div class="" style="">
+    <div class="lv-picker" style="">14:00 ▾</div>
+  </div>
+
+  <div class="lv-label" style="">结束日期</div>
+  <div class="" style="">
+    <div class="lv-picker" style="">14:00 ▾</div>
+  </div>
+
+  <div class="lv-label" style="">请假事由</div>
+  <div class="lv-textarea ph" style="">说明请假原因（至少 5 个字）</div>
+
+  <div class="lv-label" style="">附件（证明材料的文件名，选填）</div>
+  <div class="btn btn-line lv-upload" style="">📎 示例</div>
+
+  <div class="btn btn-verm lv-submit {{submitting ? 'disabled' : ''}}" style="">提 交 请 假 申 请</div>
+  <div class="lv-note hand" style="">流程：队长手签 → 辅导员手签；终审通过前可在审批中心撤回。</div>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">我 的 请 假 记 录</div><div class="ln" style=""></div></div>
+<div class="lv-card card" style="">
+  <div class="lv-row1" style="">
+    <div class="" style="">学科竞赛</div>
+    <span class="st-pill {{item.status === 'passed' ? 'st-ok' : item.status === 'approving' ? 'st-run' : 'st-rej'}}" style="">审批中</span>
+  </div>
+  <div class="lv-meta mono" style="">14:00 至 14:00 · v示例</div>
+  <div class="lv-reason" style="">这里是示例内容文字</div>
+  <div class="rej-note" style="">
+    这里是示例内容文字
+  </div>
+</div>
+<div class="lv-empty hand" style="">清清爽爽，一次假都没请过。</div>
+</div></div><div class="phone"><div class="p-title">📱 培训 <code>pages/training</code></div><div class="screen pv-training"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">培 训 中 心</span>
+  <span class="pill mono red" style="">+ 发布</span>
+</div>
+
+
+<div class="tr-tabs" style="">
+  <div class="tr-tab {{tab === item.key ? 'on' : ''}}" style="">张三</div>
+</div>
+
+
+<div class="tr-card card" style="">
+  <img class="tr-cover" style="" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27160%27%20height%3D%27110%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%23E4D9BE%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2754%25%27%20font-size%3D%2714%27%20fill%3D%27%238A8172%27%20text-anchor%3D%27middle%27%3E%E5%9B%BE%E7%89%87%3C/text%3E%3C/svg%3E">
+  <div class="tr-body" style="">
+    <div class="tr-title" style="">全国大学生数学建模竞赛</div>
+    <div class="tr-meta mono" style="">讲师：示例 · 14:00</div>
+    <div class="tr-tags" style="">
+      <span class="pill" style="">示例</span>
+      <span class="st-pill {{item.state === 'done' ? 'st-rej' : 'st-run'}}" style="">审批中</span>
+      <span class="tr-count mono" style="">12 人报名</span>
+    </div>
+  </div>
+</div>
+<div class="tr-empty hand" style="">这个分类下暂时没有培训。</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">全国大学生数学建模竞赛</div>
+    <div class="tr-d-meta mono" style="">讲师：示例 · 示例 · 教学楼A座301</div>
+    <div class="tr-d-meta mono" style="">14:00 至 14:00</div>
+    <div class="tr-d-intro" style="">这里是示例内容文字</div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-line sh-btn" style="">📍 培训签到</div>
+      <div class="btn btn-ghost sh-btn" style="">取消报名</div>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">发 布 培 训</div>
+    <div class="kn-input fm-line ph" style="">培训标题</div>
+    <div class="kn-input fm-line ph" style="">讲师姓名</div>
+    <div class="" style="">
+      <div class="kn-input fm-line" style="">开始日期：14:00 ▾</div>
+    </div>
+    <div class="kn-input fm-line ph" style="">地点 / 线上链接</div>
+    <div class="kn-textarea ph" style="">培训介绍</div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">取消</div>
+      <div class="btn btn-verm sh-btn" style="">发布</div>
+    </div>
+  </div>
+</div>
+</div></div><div class="phone"><div class="p-title">📱 签到积分 <code>pages/checkin</code></div><div class="screen pv-checkin"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">签 到 打 卡</span>
+  <span class="pill mono" style="">12 分</span>
+</div>
+
+
+<div class="ck-account card" style="">
+  <div class="ac-item" style=""><div class="mono verm" style="">12</div><div class="" style="">可用积分</div></div>
+  <div class="ac-item" style=""><div class="mono" style="">12</div><div class="" style="">总积分</div></div>
+  <div class="ac-item" style=""><div class="mono" style="">12</div><div class="" style="">打卡次数</div></div>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">选 择 场 景 打 卡</div><div class="ln" style=""></div></div>
+<div class="ck-scenes" style="">
+  <div class="ck-scene card" style="">
+    <div class="serif" style="">张三</div>
+    <span class="ck-pt mono" style="">+120 分</span>
+    <div class="" style="">示例</div>
+  </div>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">打 卡 记 录</div><div class="ln" style=""></div></div>
+<div class="ck-rec card" style="">
+  <div class="ck-row" style="">
+    <span class="ck-scene-name" style="">张三</span>
+    <span class="mono ck-loc" style="">教学楼A座301</span>
+    <span class="mono" style="">+120分</span>
+    <span class="mono ck-time" style="">示例</span>
+  </div>
+  <div class="hand ck-empty" style="">还没有打卡记录，点上面的场景开始第一次打卡。</div>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">全 院 积 分 排 行 榜</div><div class="ln" style=""></div></div>
+<div class="ck-rank card" style="">
+  <div class="rk-row" style="">
+    <span class="rk-no mono {{item.rank <= 3 ? 'rk-top' : ''}}" style="">示例</span>
+    <div class="rk-info" style="">
+      <div class="" style="">张三</div>
+      <div class="" style="">计算机2301</div>
+    </div>
+    <span class="rk-pt mono" style="">12 分</span>
+  </div>
+  <div class="hand ck-empty" style="">暂无排行数据，打卡后这里就会出现名次。</div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">确 认 打 卡 位 置</div>
+    <div class="ck-map" style=""></div>
+    <div class="map-addr mono" style="">你的实时位置：示例, 示例</div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">取消</div>
+      <div class="btn btn-verm sh-btn" style="">就在这里打卡</div>
+    </div>
+  </div>
+</div>
+</div></div><div class="phone"><div class="p-title">📱 课表 <code>pages/schedule</code></div><div class="screen pv-schedule"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">我 的 课 表</span>
+  <div class="" style="">
+    <span class="pill mono" style="">示例 ▾</span>
+  </div>
+</div>
+
+
+<div class="sc-ops" style="">
+  <div class="btn btn-verm sc-btn" style="">⬆ Excel/CSV 导入课表</div>
+  <div class="btn btn-line sc-btn" style="">⬆ 上传图片/PDF</div>
+  <div class="btn btn-line sc-btn" style="">✎ 手动添加课程</div>
+  <div class="btn btn-line sc-btn" style="">🔍 查空闲学生</div>
+</div>
+
+
+<div class="sc-grid card" style="">
+  <div class="sc-row sc-head" style="">
+    <div class="sc-cell sc-time" style="">节次</div>
+    <div class="sc-cell" style="">示例</div>
+  </div>
+  <div class="sc-row" style="">
+    <div class="sc-cell sc-time" style="">
+      <div class="" style="">No.20260903</div>
+      <div class="" style="">示例</div>
+    </div>
+    <div class="sc-cell {{cell.course ? 'busy' : 'free'}} {{cell.course && cell.start ? 'start' : ''}}" style="">
+      <span class="sc-course" style="">张三</span>
+      <span class="sc-place" style="">教学楼A座301</span>
+    </div>
+  </div>
+</div>
+
+<div class="sc-legend mono" style="">
+  <span class="" style="">■ 有课</span><span class="free-lg" style="">□ 空闲</span><span class="" style="">共 12 门课</span>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">课 程 清 单</div><div class="ln" style=""></div></div>
+<div class="sc-list" style="">
+  <div class="sc-item card" style="">
+    <div class="sc-item-l" style="">
+      <div class="" style="">张三</div>
+      <div class="mono" style="">12 · 示例 · 教学楼A座301</div>
+      <div class="mono" style="">教师：王老师</div>
+    </div>
+    <span class="sc-del" style="">删除</span>
+  </div>
+  <div class="hand sc-empty" style="">本学期还没有课程，点「手动添加」或上传课表文件。</div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">导 入 预 览（12 门）</div>
+    <div class="imp-scroll" style="" data-scroll="1">
+      <div class="imp-row" style="">
+        <div class="" style="">张三</div>
+        <div class="mono" style="">12 · 示例教学楼A座301王老师</div>
+      </div>
+    </div>
+    <div class="imp-tip hand" style="">与现有课程时间冲突的行会自动跳过。</div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">取消</div>
+      <div class="btn btn-verm sh-btn" style="">确认导入</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">手 动 添 加 课 程</div>
+    <div class="kn-input fm-line ph" style="">课程名称（必填）</div>
+    <div class="kn-input fm-line ph" style="">任课教师（选填）</div>
+    <div class="kn-input fm-line ph" style="">上课地点（选填）</div>
+    <div class="" style="">
+      <div class="kn-input fm-line" style="">星期：张三 ▾</div>
+    </div>
+    <div class="" style="">
+      <div class="kn-input fm-line" style="">节次：示例（示例）▾</div>
+    </div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">取消</div>
+      <div class="btn btn-verm sh-btn" style="">保存</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">空 闲 学 生 查 询</div>
+    <div class="" style="">
+      <div class="kn-input fm-line" style="">星期：张三 ▾</div>
+    </div>
+    <div class="" style="">
+      <div class="kn-input fm-line" style="">节次：示例（示例）▾</div>
+    </div>
+    <div class="btn btn-ink sh-full" style="">开 始 查 询</div>
+
+    <div class="" style="">
+      <div class="q-res" style="">
+        <div class="q-t ok" style="">✓ 空闲（12 人）</div>
+        <div class="q-name" style="">张三 <div class="" style="">计算机2301</div></div>
+        <div class="q-t rej" style="">✕ 有课（12 人）</div>
+        <div class="q-name dim" style="">张三</div>
+        <div class="q-tip hand" style="">本学期还没有学生上传课表。</div>
+      </div>
+      <div class="btn btn-line sh-full" style="">⬇ 导出空闲名单（Excel）</div>
+    </div>
+
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">关闭</div>
+    </div>
+  </div>
+</div>
+</div></div><div class="phone"><div class="p-title">📱 新闻 <code>pages/news</code></div><div class="screen pv-news"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">新 闻 动 态</span>
+  <span class="pill mono red" style="">+ 投稿</span>
+</div>
+
+<div class="nw-card card" style="">
+  <div class="nw-flags" style="">
+    <span class="pill red" style="">置顶</span>
+    <span class="pill" style="">学科竞赛</span>
+    <span class="st-pill {{item.status === 'passed' ? 'st-ok' : item.status === 'rejected' ? 'st-rej' : 'st-run'}}" style="">审批中</span>
+  </div>
+  <div class="nw-title serif" style="">全国大学生数学建模竞赛</div>
+  <div class="nw-content" style="">这里是示例内容文字</div>
+  <div class="nw-meta mono" style="">张三 · 示例<span class="" style=""> · 定时 示例</span></div>
+</div>
+<div class="nw-empty hand" style="">还没有新闻。</div>
+
+
+<div class="mask" style="">
+  <div class="sheet card" style="">
+    <div class="sh-t serif" style="">投 稿 新 闻</div>
+    <div class="" style="">
+      <div class="kn-input fm-line" style="">类型：学科竞赛 ▾</div>
+    </div>
+    <div class="kn-input fm-line ph" style="">标题</div>
+    <div class="kn-textarea ph" style="">正文内容</div>
+    <div class="kn-input fm-line ph" style="">定时发布时间（选填，如 2026-09-10 09:00）</div>
+    <div class="sh-ops" style="">
+      <div class="btn btn-ghost sh-btn" style="">取消</div>
+      <div class="btn btn-verm sh-btn" style="">提交审核</div>
+    </div>
+  </div>
+</div>
+</div></div><div class="phone"><div class="p-title">📱 数据统计 <code>pages/stats</code></div><div class="screen pv-stats"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">统 计 分 析</span>
+  <span class="pill mono" style="">导出说明 ▸</span>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">我 的 数 据</div><div class="ln" style=""></div></div>
+<div class="st-grid" style="">
+  <div class="st-cell card" style=""><div class="mono" style="">12</div><div class="" style="">总报名</div></div>
+  <div class="st-cell card" style=""><div class="mono run" style="">示例</div><div class="" style="">审批中</div></div>
+  <div class="st-cell card" style=""><div class="mono ok" style="">示例</div><div class="" style="">已通过</div></div>
+  <div class="st-cell card" style=""><div class="mono" style="">示例</div><div class="" style="">签到次数</div></div>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">获 奖 / 通 过 率</div><div class="ln" style=""></div></div>
+<div class="st-rate card" style="">
+  <div class="rate-ring" style="">
+    <div class="mono" style="">示例%</div>
+  </div>
+  <div class="rate-txt" style="">报名 12 项 · 通过 示例 项</div>
+</div>
+
+
+<div class="" style="">
+  <div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">全 院 数 据</div><div class="ln" style=""></div></div>
+  <div class="st-grid" style="">
+    <div class="st-cell card" style=""><div class="mono" style="">示例</div><div class="" style="">注册用户</div></div>
+    <div class="st-cell card" style=""><div class="mono" style="">示例</div><div class="" style="">总报名单</div></div>
+    <div class="st-cell card" style=""><div class="mono ok" style="">示例</div><div class="" style="">终审通过</div></div>
+  </div>
+
+  <div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">各 竞 赛 报 名 热 度</div><div class="ln" style=""></div></div>
+  <div class="st-bars card" style="">
+    <div class="bar-row" style="">
+      <span class="bar-name" style="">全国大学生数学建模竞赛</span>
+      <div class="bar-track" style=""><div class="bar-fill" style="width:{{item.pct}}%"></div></div>
+      <span class="mono bar-num" style="">12</span>
+    </div>
+    <div class="hand st-empty" style="">暂无数据</div>
+  </div>
+
+  <div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">数 据 导 出</div><div class="ln" style=""></div></div>
+  <div class="st-exports" style="">
+    <div class="btn btn-ink" style="">⬇ 报名名单.xlsx</div>
+    <div class="btn btn-line" style="">⬇ 经费台账.xlsx</div>
+  </div>
+</div>
+
+<div class="st-tip hand" style="">全院数据看板仅管理员 / 院长 / 副院长 / 教学秘书可见。</div>
+</div></div><div class="phone"><div class="p-title">📱 系统管理 <code>pages/admin</code></div><div class="screen pv-admin"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+<div class="p-head" style="">
+  <span class="t serif" style="">系 统 管 理</span>
+  <span class="pill mono red" style="">管理员</span>
+</div>
+
+<div class="ad-deny hand" style="">只有管理员能进入这里。</div>
+
+<div class="" style="">
+  <div class="ad-tabs" style="">
+    <div class="ad-tab {{tab === item.key ? 'on' : ''}}" style="">张三</div>
+  </div>
+
+  
+  <div class="" style="">
+    <div class="ad-card card" style="">
+      <div class="ad-row1" style="">
+        <div class="" style="">张三</div>
+        <span class="pill" style="">张三</span>
+        <span class="st-pill {{item.disabled ? 'st-rej' : 'st-ok'}}" style="">示例</span>
+      </div>
+      <div class="ad-meta mono" style="">信息工程学院 计算机2301 · 示例</div>
+      <div class="ad-ops" style="">
+        <span class="ad-op" style="">调整角色</span>
+        <span class="ad-op {{item.disabled ? '' : 'del'}}" style="">示例</span>
+      </div>
+    </div>
+    <div class="ad-empty hand" style="">还没有注册用户。</div>
+  </div>
+
+  
+  <div class="" style="">
+    <div class="ad-card card" style="">
+      <div class="ad-row1" style="">
+        <div class="" style="">张三</div>
+        <span class="pill" style="">示例</span>
+        <span class="st-pill {{item.status === 'passed' ? 'st-ok' : item.status === 'rejected' ? 'st-rej' : 'st-run'}}" style="">审批中</span>
+      </div>
+      <div class="ad-meta mono" style="">全国大学生数学建模竞赛 · 示例 年这里是示例内容文字</div>
+      <div class="ad-ops" style="">
+        <span class="ad-op" style="">✅ 通过</span>
+        <span class="ad-op del" style="">❌ 驳回</span>
+      </div>
+    </div>
+    <div class="ad-empty hand" style="">还没有学生上传证书。</div>
+  </div>
+
+  
+  <div class="" style="">
+    <div class="ad-card card" style="">
+      <div class="ad-row1" style=""><div class="" style="">张三</div></div>
+      <div class="ad-chain" style="">示例</div>
+    </div>
+    <div class="ad-tip hand" style="">审批流的级数与角色在代码 utils/config.js 中配置，改完重新上传即可。</div>
+  </div>
+</div>
+</div></div><div class="phone"><div class="p-title">📱 board <code>pages/board</code></div><div class="screen pv-board"><div class="statusbar">9:41</div><div class="sbh" style="height:{{sbh}}px"></div>
+
+
+<div class="bd-mast" style="">
+  <div class="bd-kicker mono" style="">DATA BOARD · 2026 H1</div>
+  <div class="bd-title serif" style="">竞赛数据大屏</div>
+  <div class="bd-sub mono" style="">信息科学与技术学院 · 2026 上半年学科竞赛获奖统计（真实数据）</div>
+</div>
+
+
+<div class="bd-kpis" style="">
+  <div class="bd-kpi" style=""><div class="mono" style="">12</div><div class="" style="">获奖总数</div></div>
+  <div class="bd-kpi gold" style=""><div class="mono" style="">示例</div><div class="" style="">国家级</div></div>
+  <div class="bd-kpi" style=""><div class="mono" style="">示例</div><div class="" style="">省部级</div></div>
+  <div class="bd-kpi" style=""><div class="mono" style="">12</div><div class="" style="">赛事项目</div></div>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">赛 事 获 奖 排 行</div><div class="ln" style=""></div></div>
+<div class="bd-card card" style="">
+  <div class="bd-row" style="">
+    <div class="bd-name" style="">
+      <div class="" style="">张三</div>
+      <div class="mono" style="">含国家级 示例 项</div>
+    </div>
+    <div class="bd-track" style="">
+      <div class="bd-bar verm" style="width:{{item.pct}}%"></div>
+    </div>
+    <span class="bd-num mono" style="">12</span>
+  </div>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">专 业 获 奖 分 布</div><div class="ln" style=""></div></div>
+<div class="bd-card card" style="">
+  <div class="bd-row" style="">
+    <div class="bd-name" style=""><div class="" style="">张三</div></div>
+    <div class="bd-track" style="">
+      <div class="bd-bar ind" style="width:{{item.pct}}%"></div>
+    </div>
+    <span class="bd-num mono" style="">12</span>
+  </div>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">月 份 获 奖 趋 势</div><div class="ln" style=""></div></div>
+<div class="bd-card card" style="">
+  <div class="bd-row" style="">
+    <div class="bd-name" style=""><div class="" style="">张三</div></div>
+    <div class="bd-track" style="">
+      <div class="bd-bar green" style="width:{{item.pct}}%"></div>
+    </div>
+    <span class="bd-num mono" style="">12</span>
+  </div>
+</div>
+
+
+<div class="sec-band" style=""><div class="sq" style=""></div><div class="" style="">国 家 级 获 奖 明 细（示例 项）</div><div class="ln" style=""></div></div>
+<div class="bd-card card" style="">
+  <div class="bd-na" style="">
+    <div class="medal gold bd-medal" style="">金</div>
+    <div class="bd-na-info" style="">
+      <div class="" style="">示例 · 示例</div>
+      <div class="mono" style="">张三 · 计算机2301</div>
+      <div class="mono bd-na-t" style="">指导教师：王老师 · 示例</div>
+    </div>
+  </div>
+</div>
+
+<div class="bd-tail mono" style="">数据来源：学院 2026 上半年学科竞赛情况统计表 · 墨纸编辑部</div>
+</div></div></div>
+</body></html>

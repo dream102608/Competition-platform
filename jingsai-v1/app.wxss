@@ -169,3 +169,347 @@ page {
 /* 通用小图标容器 */
 .ic { width: 40rpx; height: 40rpx; display: inline-block; vertical-align: middle; }
 .ic image, .ic icon { width: 100%; height: 100%; }
+
+/* ========== V2.3 精致化增强（在墨纸编辑部之上做加法） ========== */
+/* 更柔和的纸张光影：顶部一层淡淡的暖光 */
+page::before {
+  content: ""; position: fixed; left: 0; right: 0; top: 0; height: 400rpx;
+  background: linear-gradient(180deg, rgba(200, 68, 42, .05), transparent);
+  pointer-events: none; z-index: 0;
+}
+
+/* 票根齿孔分隔线：--●----●----●-- */
+.stub-line {
+  display: flex; align-items: center; gap: 0; margin: 20rpx 28rpx;
+}
+.stub-line::before, .stub-line::after {
+  content: ""; width: 24rpx; height: 24rpx; border-radius: 50%;
+  background: var(--paper); border: 2rpx solid var(--ink); flex: none;
+}
+.stub-line i {
+  flex: 1; border-bottom: 3rpx dashed var(--ink-fade); margin: 0 6rpx;
+}
+
+/* 卡片按压反馈（手指按下去像盖章回弹） */
+.card { transition: transform .12s ease; }
+.card:active { transform: scale(.985); }
+
+/* 按钮按压反馈 */
+.btn { transition: transform .1s ease, box-shadow .1s ease; }
+.btn-ink:active, .btn-verm:active { transform: translate(3rpx, 3rpx); box-shadow: 2rpx 2rpx 0 rgba(26, 24, 21, .3); }
+
+/* 花饰分隔：◆ ◆ ◆ */
+.divider-orn {
+  text-align: center; color: var(--ink-fade); font-size: 18rpx;
+  letter-spacing: 12rpx; margin: 28rpx 0 8rpx;
+}
+
+/* 复古输入框统一样式 */
+.input-retro {
+  background: var(--cream); border: 2.4rpx solid var(--ink);
+  box-shadow: 4rpx 4rpx 0 rgba(26, 24, 21, .15);
+  padding: 16rpx 22rpx; font-size: 26rpx; border-radius: 4rpx;
+}
+.input-retro:focus, .input-retro.on { border-color: var(--verm); }
+
+/* 角标缎带（热门/推荐） */
+.ribbon {
+  position: absolute; top: 16rpx; right: -30rpx; transform: rotate(38deg);
+  background: var(--verm); color: var(--paper); font-size: 18rpx;
+  padding: 4rpx 34rpx; letter-spacing: 3rpx; font-weight: 700;
+}
+
+/* ================= V2.4 精品配件 ================= */
+/* 刊号条形码（报纸配件，纯CSS模拟） */
+.barcode {
+  height: 26rpx;
+  background: repeating-linear-gradient(90deg,
+    var(--ink) 0 3rpx, transparent 3rpx 6rpx,
+    var(--ink) 6rpx 8rpx, transparent 8rpx 13rpx,
+    var(--ink) 13rpx 17rpx, transparent 17rpx 21rpx,
+    var(--ink) 21rpx 22rpx, transparent 22rpx 28rpx);
+  opacity: .8;
+}
+.barcode-cap { font-size: 16rpx; letter-spacing: 4rpx; color: var(--ink-fade); text-align: center; margin-top: 6rpx; }
+
+/* 圆形红印章（官方认证/已审核） */
+.stamp {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 96rpx; height: 96rpx; border-radius: 50%;
+  border: 5rpx double var(--verm); color: var(--verm);
+  font-family: var(--serif); font-size: 20rpx; font-weight: 900;
+  letter-spacing: 2rpx; text-align: center; line-height: 1.3;
+  transform: rotate(-12deg); opacity: .88;
+  text-shadow: 0 0 2rpx rgba(200, 68, 42, .35);
+}
+
+/* 奖牌圆标（金/银/铜，荣誉墙用） */
+.medal {
+  width: 72rpx; height: 72rpx; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 30rpx; font-weight: 900;
+  border: 3rpx solid rgba(26, 24, 21, .25);
+  box-shadow: inset 0 -6rpx 10rpx rgba(0, 0, 0, .18), 3rpx 3rpx 0 rgba(26, 24, 21, .12);
+}
+.medal.gold { background: radial-gradient(circle at 35% 30%, #F5D77E, #C9A227 70%); color: #6B4E00; }
+.medal.silver { background: radial-gradient(circle at 35% 30%, #EDEDED, #A9A9A9 70%); color: #444; }
+.medal.bronze { background: radial-gradient(circle at 35% 30%, #E0A070, #9C6B30 70%); color: #4A2E10; }
+
+/* 编号角标（卷宗号 No.0001） */
+.corner-no {
+  font-size: 18rpx; letter-spacing: 2rpx; color: var(--ink-fade);
+  border: 2rpx solid var(--ink-fade); padding: 2rpx 12rpx; border-radius: 2rpx;
+}
+
+/* 头条红标签 */
+.headline-tag {
+  display: inline-block; background: var(--verm); color: var(--paper);
+  font-size: 18rpx; padding: 2rpx 12rpx; letter-spacing: 3rpx; font-weight: 700;
+}
+
+/* 表单说明文字（通用） */
+.fm-note { font-size: 20rpx; color: var(--ink-soft); margin-bottom: 14rpx; letter-spacing: 1rpx; }
+
+/* ================= V3.2 参考图风格重排（在墨纸编辑部之上做加法） =================
+   设计语言：纸 #F4EDDF / 墨 #1A1815 / 朱砂 #C8442A
+   新增：大圆角、圆图标、胶囊搜索、彩色 banner、移动端适配
+   原则：保留硬边/硬投影/印章/条码 等水墨元素，只在外层结构上采用大圆角呼吸感
+*/
+
+/* 安全区：内容左右 28rpx，顶部 24rpx（与报头/导航形成节奏） */
+.safe { padding: 0 28rpx; box-sizing: border-box; }
+.safe-l { padding-left: 28rpx; box-sizing: border-box; }
+.safe-r { padding-right: 28rpx; box-sizing: border-box; }
+
+/* ========== 顶部地址条（参考图城市选择器风格） ========== */
+.addr-bar {
+  display: flex; align-items: center; gap: 16rpx;
+  padding: 18rpx 28rpx 12rpx; box-sizing: border-box;
+}
+.addr-pick {
+  flex: 1; display: flex; align-items: center; gap: 10rpx;
+  font-size: 28rpx; font-weight: 700; color: var(--ink);
+  background: var(--paper);
+  border: 3rpx solid var(--ink); border-radius: 999rpx;
+  padding: 14rpx 26rpx; box-shadow: 4rpx 4rpx 0 var(--ink);
+  letter-spacing: 1rpx;
+}
+.addr-pick .pin { color: var(--verm); font-size: 28rpx; }
+.addr-pick .caret { margin-left: auto; opacity: .55; font-size: 22rpx; }
+.addr-tools { display: flex; align-items: center; gap: 10rpx; }
+.addr-dot {
+  width: 14rpx; height: 14rpx; border-radius: 50%;
+  background: var(--ink);
+}
+.addr-tools .ic {
+  width: 40rpx; height: 40rpx; border: 3rpx solid var(--ink); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--paper); box-shadow: 3rpx 3rpx 0 var(--ink);
+  font-size: 22rpx; line-height: 1;
+}
+
+/* ========== 胶囊搜索栏（参考图风格） ========== */
+.search-pill {
+  display: flex; align-items: center; gap: 12rpx;
+  margin: 4rpx 28rpx 18rpx;
+  height: 76rpx; box-sizing: border-box;
+}
+.search-pill .input {
+  flex: 1; height: 100%;
+  background: var(--paper-2);
+  border: 2.4rpx solid var(--ink); border-radius: 999rpx;
+  padding: 0 28rpx; font-size: 26rpx; color: var(--ink);
+  box-shadow: 3rpx 3rpx 0 var(--ink);
+}
+.search-pill .input.on, .search-pill .input:focus { border-color: var(--verm); }
+.search-pill .btn {
+  height: 100%; padding: 0 32rpx; box-sizing: border-box;
+  background: var(--verm); color: var(--paper);
+  border: 2.4rpx solid var(--verm-deep); border-radius: 999rpx;
+  font-size: 26rpx; font-weight: 700; letter-spacing: 4rpx;
+  font-family: var(--serif);
+  box-shadow: 3rpx 3rpx 0 rgba(160, 53, 33, .35);
+  display: flex; align-items: center; justify-content: center;
+}
+.search-pill .btn::after { border: none; }
+
+/* ========== 大圆角卡片（参考图风格） ========== */
+.card-soft {
+  background: var(--cream);
+  border: 2.4rpx solid var(--ink);
+  border-radius: 20rpx;
+  box-shadow: 6rpx 6rpx 0 var(--ink);
+  box-sizing: border-box;
+}
+
+/* ========== 大轮播 Banner（参考图风格） ========== */
+.banner-sw {
+  margin: 4rpx 28rpx 20rpx;
+  height: 320rpx; border-radius: 24rpx; overflow: hidden;
+  border: 3rpx solid var(--ink); box-shadow: 6rpx 6rpx 0 var(--ink);
+  position: relative; box-sizing: border-box;
+}
+.banner-sw swiper { height: 100%; }
+.banner-slide {
+  position: relative; width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--paper); text-align: center;
+}
+.banner-slide .kicker {
+  font-family: var(--serif); font-size: 24rpx; letter-spacing: 8rpx;
+  opacity: .9; margin-bottom: 8rpx;
+}
+.banner-slide .title {
+  font-family: var(--serif); font-weight: 900;
+  font-size: 52rpx; letter-spacing: 8rpx; line-height: 1.25;
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, .25);
+}
+.banner-slide .sub {
+  font-family: var(--mono); font-size: 20rpx; letter-spacing: 4rpx;
+  margin-top: 16rpx; opacity: .85;
+}
+.banner-slide .pager {
+  position: absolute; right: 18rpx; bottom: 14rpx;
+  background: rgba(26, 24, 21, .55); color: var(--paper);
+  font-family: var(--mono); font-size: 18rpx;
+  padding: 4rpx 14rpx; border-radius: 999rpx; letter-spacing: 1rpx;
+}
+.banner-sw .wx-swiper-dots { position: absolute; bottom: 14rpx; left: 0; right: 0; }
+
+/* ========== 圆图标宫格（参考图 2 行 × 5 列风格） ========== */
+.icon-grid {
+  display: flex; flex-wrap: wrap;
+  margin: 8rpx 24rpx 24rpx;
+  background: var(--cream);
+  border: 2.4rpx solid var(--ink); border-radius: 20rpx;
+  padding: 24rpx 0;
+  box-shadow: 6rpx 6rpx 0 var(--ink);
+  box-sizing: border-box;
+}
+.icon-grid .g5 { width: 20%; box-sizing: border-box; padding: 6rpx 0; }
+.icon-grid .g5 .badge {
+  width: 80rpx; height: 80rpx; margin: 0 auto 10rpx;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36rpx; color: var(--paper);
+  border: 2.4rpx solid var(--ink);
+  box-shadow: 3rpx 3rpx 0 var(--ink);
+  font-family: var(--serif);
+}
+.icon-grid .g5 .name {
+  text-align: center; font-size: 22rpx; color: var(--ink);
+  font-family: var(--serif); letter-spacing: 1rpx;
+}
+
+/* ========== 彩色 Banner（参考图「私人定制旅行」绿色 banner 风格） ========== */
+.banner-c {
+  display: flex; align-items: center; gap: 18rpx;
+  margin: 0 28rpx 20rpx;
+  padding: 24rpx 28rpx;
+  border-radius: 24rpx;
+  border: 2.4rpx solid var(--ink);
+  box-shadow: 6rpx 6rpx 0 var(--ink);
+  box-sizing: border-box;
+  position: relative; overflow: hidden;
+}
+.banner-c .ttl { font-family: var(--serif); font-weight: 900; font-size: 34rpx; letter-spacing: 4rpx; line-height: 1.2; }
+.banner-c .sub { font-family: var(--mono); font-size: 18rpx; letter-spacing: 2rpx; opacity: .8; margin-top: 6rpx; }
+.banner-c .pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 10rpx 28rpx; border-radius: 999rpx;
+  font-family: var(--serif); font-weight: 700; font-size: 22rpx; letter-spacing: 3rpx;
+  background: var(--ink); color: var(--paper);
+  border: 2.4rpx solid var(--ink); margin-top: 12rpx;
+}
+.banner-c .illu {
+  margin-left: auto; flex: none;
+  width: 140rpx; height: 140rpx; border-radius: 50%;
+  border: 3rpx solid var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 70rpx; background: rgba(255, 255, 255, .35);
+}
+.banner-c.ink   { background: var(--ink);   color: var(--paper); }
+.banner-c.ink   .pill { background: var(--paper); color: var(--ink); }
+.banner-c.cream { background: var(--cream); color: var(--ink); }
+.banner-c.green { background: linear-gradient(135deg, #4F7A5B, #3E6B4F); color: var(--paper); }
+.banner-c.blue  { background: linear-gradient(135deg, #4A6E94, #2E4A6E); color: var(--paper); }
+.banner-c.warm  { background: linear-gradient(135deg, #C8442A, #A03521); color: var(--paper); }
+
+/* ========== 大圆角信息卡（用于概览/统计/档案） ========== */
+.info-card {
+  margin: 0 28rpx 18rpx;
+  background: var(--cream);
+  border: 2.4rpx solid var(--ink);
+  border-radius: 20rpx;
+  padding: 24rpx 28rpx;
+  box-sizing: border-box;
+  box-shadow: 6rpx 6rpx 0 var(--ink);
+}
+.info-card .title {
+  font-family: var(--serif); font-weight: 900; font-size: 30rpx; letter-spacing: 4rpx;
+  display: flex; align-items: center; gap: 12rpx;
+  padding-bottom: 16rpx; margin-bottom: 16rpx;
+  border-bottom: 2rpx dashed var(--ink-fade);
+}
+.info-card .title .sq { width: 14rpx; height: 14rpx; background: var(--verm); }
+
+/* ========== 通用分隔条（参考图大留白节奏） ========== */
+.gap-sm { height: 14rpx; }
+.gap    { height: 24rpx; }
+.gap-lg { height: 40rpx; }
+
+/* ========== 弹窗统一（修复 620/660/680/690 各种宽度） ========== */
+.mask { position: fixed; left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(26, 24, 21, .55); z-index: 99;
+  display: flex; align-items: center; justify-content: center; }
+.sheet {
+  width: 640rpx; max-width: calc(100vw - 60rpx);
+  max-height: 86vh; overflow-y: auto;
+  background: var(--cream);
+  border: 3rpx solid var(--ink);
+  border-radius: 20rpx;
+  box-shadow: 8rpx 8rpx 0 var(--ink);
+  padding: 32rpx; box-sizing: border-box;
+}
+.sheet .sh-t {
+  font-family: var(--serif); font-weight: 900; font-size: 32rpx; letter-spacing: 6rpx;
+  text-align: center; margin-bottom: 22rpx;
+}
+.sheet .sh-ops { display: flex; gap: 16rpx; margin-top: 22rpx; }
+.sheet .sh-btn { flex: 1; height: 76rpx; }
+.sheet .sh-btn.btn::after { border: none; }
+
+/* ========== 横滑 chip 列表（统一在通用区） ========== */
+.chips { white-space: nowrap; padding: 18rpx 28rpx 6rpx; box-sizing: border-box; }
+.chip {
+  display: inline-block; font-size: 24rpx; padding: 10rpx 24rpx;
+  border: 2.4rpx solid var(--ink); border-radius: 999rpx;
+  background: var(--paper); color: var(--ink); margin-right: 12rpx;
+  font-family: var(--serif); letter-spacing: 2rpx;
+}
+.chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* ========== 列表行通用 ========== */
+.row {
+  display: flex; align-items: center; gap: 16rpx;
+  padding: 22rpx 0; border-bottom: 2rpx dashed var(--ink-fade);
+  box-sizing: border-box;
+}
+.row:last-child { border-bottom: none; }
+.row .num { font-family: var(--mono); font-size: 28rpx; color: var(--verm); font-weight: 700; flex: none; }
+.row .body { flex: 1; min-width: 0; }
+.row .body b { font-size: 26rpx; display: block; font-family: var(--serif); }
+.row .body small { font-family: var(--mono); font-size: 18rpx; color: var(--ink-fade); display: block; margin-top: 4rpx; }
+.row .op { font-size: 22rpx; color: var(--ink-soft); flex: none; }
+
+/* ========== 空态 / 尾注 ========== */
+.empty { text-align: center; padding: 60rpx 28rpx; color: var(--ink-soft); font-family: var(--hand); font-size: 28rpx; }
+.tail { text-align: center; font-family: var(--mono); font-size: 18rpx; color: var(--ink-fade); letter-spacing: 4rpx; padding: 18rpx 0 40rpx; }
+
+/* ========== 移动端适配（窄屏防溢出） ========== */
+@media screen and (max-width: 320px) {
+  .addr-pick, .search-pill .input, .search-pill .btn, .icon-grid .g5 .badge, .banner-c .illu {
+    transform: scale(.92);
+  }
+  .icon-grid .g5 .name { font-size: 20rpx; }
+}

@@ -1,0 +1,99 @@
+/* pages/team/team.wxss —— 我的队伍 V3.0（参考图风格重排） */
+
+/* 无队伍引导（参考图大圆角居中卡） */
+.tm-none {
+  text-align: center; padding: 100rpx 28rpx;
+  margin: 40rpx 28rpx;
+  background: var(--cream); border: 3rpx solid var(--ink); border-radius: 20rpx;
+  box-shadow: 6rpx 6rpx 0 var(--ink);
+  box-sizing: border-box;
+}
+.tm-none-ic { font-size: 90rpx; }
+.tm-none-txt { font-size: 30rpx; color: var(--ink-soft); margin: 24rpx 0 40rpx; font-family: var(--hand); }
+.tm-create { width: 460rpx; height: 92rpx; font-size: 28rpx; margin: 0 auto; letter-spacing: 6rpx; }
+.tm-create.btn::after { border: none; }
+
+/* 队伍头部（参考图大圆角卡片） */
+.tm-head {
+  margin: 20rpx 28rpx; padding: 28rpx;
+  background: var(--cream); border: 3rpx solid var(--ink); border-radius: 20rpx;
+  box-shadow: 6rpx 6rpx 0 var(--ink); box-sizing: border-box;
+}
+.tm-name { font-size: 40rpx; font-weight: 900; letter-spacing: 4rpx; }
+.tm-cap { font-size: 20rpx; color: var(--ink-soft); margin: 10rpx 0; }
+.tm-intro {
+  font-size: 25rpx; color: var(--ink-soft);
+  border-top: 2rpx dashed var(--ink-fade);
+  padding-top: 14rpx; margin-top: 14rpx;
+}
+
+/* 子 Tab（参考图胶囊切换） */
+.tm-tabs { display: flex; gap: 10rpx; margin: 0 28rpx 20rpx; }
+.tm-tab {
+  flex: 1; text-align: center; height: 72rpx; line-height: 72rpx;
+  font-size: 24rpx; font-family: var(--serif); font-weight: 700;
+  background: var(--cream); color: var(--ink-soft);
+  border: 2.4rpx solid var(--ink); border-radius: 999rpx;
+  letter-spacing: 2rpx;
+}
+.tm-tab.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* 内容卡（统一大圆角） */
+.tm-card {
+  margin: 0 28rpx 20rpx; padding: 20rpx 24rpx;
+  background: var(--cream); border: 3rpx solid var(--ink); border-radius: 16rpx;
+  box-shadow: 6rpx 6rpx 0 var(--ink); box-sizing: border-box;
+}
+.tm-sec-t { font-size: 26rpx; font-weight: 900; margin-bottom: 12rpx; letter-spacing: 2rpx; }
+
+/* 队员行 */
+.m-row {
+  display: flex; align-items: center; gap: 14rpx;
+  padding: 16rpx 0; border-bottom: 2rpx dashed var(--ink-fade);
+}
+.m-row:last-child { border-bottom: none; }
+.m-name { flex: 1; font-size: 27rpx; }
+.m-op { font-size: 22rpx; color: var(--ind); }
+.m-op.del { color: var(--verm); }
+.m-op.ok { color: var(--green); }
+
+/* 学习日志时间轴 */
+.lg-row { display: flex; gap: 16rpx; padding: 14rpx 0; }
+.lg-dot {
+  width: 18rpx; height: 18rpx; border: 3rpx solid var(--ink); border-radius: 50%;
+  margin-top: 10rpx; flex-shrink: 0;
+}
+.lg-body b { font-size: 25rpx; }
+.lg-body small { font-size: 18rpx; color: var(--ink-fade); }
+.lg-content { font-size: 25rpx; color: var(--ink-soft); margin-top: 4rpx; }
+
+/* 资料行 */
+.f-row {
+  display: flex; align-items: center; gap: 12rpx;
+  padding: 14rpx 0; border-bottom: 2rpx dashed var(--ink-fade);
+}
+.f-row:last-child { border-bottom: none; }
+.f-name { flex: 1; font-size: 25rpx; }
+.f-row small { font-size: 18rpx; color: var(--ink-fade); }
+
+/* 讨论 */
+.p-row { padding: 14rpx 0; border-bottom: 2rpx dashed var(--ink-fade); }
+.p-row:last-child { border-bottom: none; }
+.p-row b { font-size: 25rpx; }
+.p-row small { font-size: 18rpx; color: var(--ink-fade); }
+.p-content { font-size: 25rpx; color: var(--ink-soft); margin-top: 4rpx; }
+
+/* 通用 */
+.tm-empty { text-align: center; padding: 30rpx 0; color: var(--ink-soft); font-family: var(--hand); }
+.tm-add { margin: 0 28rpx 24rpx; height: 80rpx; font-size: 24rpx; letter-spacing: 4rpx; }
+.tm-add.btn::after { border: none; }
+
+/* 底部统计（3 格） */
+.tm-stats { display: flex; gap: 14rpx; }
+.st-item {
+  flex: 1; text-align: center;
+  background: var(--paper); border: 2.4rpx solid var(--ink); border-radius: 12rpx;
+  padding: 18rpx 0; box-sizing: border-box;
+}
+.st-item b { font-size: 36rpx; display: block; }
+.st-item small { font-size: 18rpx; color: var(--ink-soft); font-family: var(--serif); letter-spacing: 1rpx; }

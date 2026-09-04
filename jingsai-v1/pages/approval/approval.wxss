@@ -1,76 +1,49 @@
-/* S6 审批中心 · 签批版式 */
-.h-ic { font-size: 38rpx; color: var(--ink); }
-
-.ap-tabs { display: flex; gap: 0; border-bottom: 3rpx solid var(--ink); margin: 0 28rpx; }
-.at {
-  padding: 18rpx 26rpx; font-size: 27rpx; letter-spacing: 3rpx;
-  font-family: "Noto Serif SC", "SimSun", serif; font-weight: 700;
-  color: var(--ink-fade); border: 3rpx solid transparent; border-bottom: none;
+/* pages/approval/approval.wxss —— 审批中心 */
+.ap-tabs { display: flex; margin: 20rpx 28rpx; border: 3rpx solid var(--ink); }
+.ap-tab {
+  flex: 1; text-align: center; padding: 16rpx 0; font-size: 26rpx;
+  font-family: var(--serif); font-weight: 900; letter-spacing: 3rpx;
+  background: var(--cream); color: var(--ink-soft);
 }
-.at.on {
-  color: var(--ink); background: var(--cream);
-  border-color: var(--ink); position: relative; top: 3rpx;
+.ap-tab.on { background: var(--verm); color: var(--paper); }
+
+.ap-card { margin: 0 28rpx 22rpx; padding: 22rpx 24rpx; }
+.ap-head { position: relative; }
+.ap-title { font-size: 28rpx; font-weight: 900; font-family: var(--serif); margin: 10rpx 0 6rpx; }
+.ap-meta { font-size: 19rpx; color: var(--ink-soft); }
+.ap-arrow { position: absolute; right: 0; top: 0; font-size: 20rpx; color: var(--ink-fade); }
+
+.ap-detail { margin-top: 16rpx; border-top: 2rpx dashed var(--ink-fade); padding-top: 16rpx; }
+.node { display: flex; gap: 16rpx; padding: 10rpx 0; }
+.nd-dot {
+  width: 20rpx; height: 20rpx; border-radius: 50%; flex-shrink: 0; margin-top: 8rpx;
+  border: 3rpx solid var(--ink); background: transparent;
 }
-.bdg {
-  margin-left: 10rpx; font-size: 19rpx; color: var(--paper);
-  background: var(--verm); padding: 0 10rpx; border-radius: 40rpx;
+.nd-dot.pass { background: var(--green); border-color: var(--green); }
+.nd-dot.reject { background: var(--verm); border-color: var(--verm); }
+.nd-dot.waiting { background: var(--marker); }
+.nd-body b { font-size: 25rpx; display: block; }
+.nd-body small { font-size: 18rpx; color: var(--ink-fade); }
+
+.ap-ops { display: flex; gap: 18rpx; margin-top: 18rpx; }
+.ap-btn { flex: 1; height: 76rpx; font-size: 26rpx; letter-spacing: 3rpx; }
+
+.ap-empty { text-align: center; padding: 80rpx 0; color: var(--ink-soft); font-size: 28rpx; }
+
+/* 弹窗专属 */
+.sh-tip { font-size: 24rpx; margin-bottom: 14rpx; color: var(--ink-soft); }
+.sh-textarea {
+  width: 100%; box-sizing: border-box; min-height: 140rpx;
+  border: 2.4rpx solid var(--ink); background: var(--paper-2);
+  padding: 16rpx; font-size: 26rpx; border-radius: 12rpx;
 }
-
-.ap-empty { margin: 40rpx 28rpx; padding: 60rpx 0; text-align: center; }
-.ap-empty .hand { font-size: 32rpx; color: var(--verm); }
-.ap-empty .sub { margin-top: 10rpx; font-size: 17rpx; color: var(--ink-fade); letter-spacing: 4rpx; }
-
-.ap-item { margin: 24rpx 28rpx; padding: 24rpx; }
-.ai-h { display: flex; align-items: center; gap: 16rpx; }
-.ai-t { flex: 1; min-width: 0; }
-.ai-t b { font-size: 28rpx; display: block; line-height: 1.5; }
-.who { font-size: 18rpx; color: var(--ink-fade); margin-top: 6rpx; display: flex; align-items: center; gap: 12rpx; }
-.arrow { font-size: 30rpx; color: var(--ink-fade); }
-
-.seal.mini { width: 118rpx; height: 118rpx; }
-.seal.mini .stxt { font-size: 21rpx; }
-
-/* 签批轨迹 */
-.ap-track { margin-top: 22rpx; border-left: 4rpx solid var(--ink); padding-left: 28rpx; }
-.ap-step { position: relative; display: flex; align-items: baseline; gap: 14rpx; padding: 12rpx 0; }
-.ap-step .st {
-  position: absolute; left: -48rpx; top: 14rpx;
-  width: 32rpx; height: 32rpx; border-radius: 50%;
-  background: var(--paper); border: 3rpx solid var(--ink-fade);
-  color: var(--paper); font-size: 18rpx; line-height: 28rpx; text-align: center;
+.sh-tpls { margin-top: 14rpx; display: flex; flex-wrap: wrap; gap: 10rpx; }
+.sh-tpls .chip {
+  display: inline-block; font-size: 20rpx; padding: 6rpx 16rpx;
+  border: 2rpx solid var(--ink); background: var(--paper-2);
+  font-family: var(--mono); border-radius: 999rpx;
 }
-.ap-step.ok .st { background: var(--verm); border-color: var(--verm-deep); }
-.ap-step.rej .st { background: var(--ink); border-color: var(--ink); }
-.asn { flex: 1; min-width: 0; }
-.asn b { font-size: 26rpx; display: block; }
-.ap-step.ok .asn b { color: var(--ink); }
-.ap-step.rej .asn b { color: var(--verm); text-decoration: line-through; text-decoration-thickness: 3rpx; }
-.asn small { font-size: 19rpx; color: var(--ink-fade); }
-.tm { font-size: 17rpx; color: var(--ink-fade); }
-
-.final-seal { display: flex; justify-content: flex-end; padding: 20rpx 0 0; }
-
-/* 超时条 */
-.overtime {
-  display: flex; align-items: center; gap: 12rpx;
-  margin-top: 16rpx; padding: 14rpx 18rpx;
-  border: 3rpx dashed var(--verm); background: rgba(200, 68, 42, .06);
-  color: var(--verm-deep); font-size: 22rpx;
+.sign-canvas {
+  width: 100%; height: 300rpx; background: #fff;
+  border: 2.4rpx solid var(--ink); border-radius: 12rpx;
 }
-.ot-ic { color: var(--verm); font-size: 28rpx; }
-
-/* 签名区 */
-.sign-area {
-  margin-top: 20rpx; border: 3rpx dashed var(--ink-fade);
-  background: rgba(244, 237, 223, .4);
-  padding: 24rpx; text-align: center;
-}
-.sh { font-size: 22rpx; letter-spacing: 8rpx; color: var(--ink-soft); margin-bottom: 10rpx; }
-.sig { font-size: 64rpx; color: var(--ink); transform: rotate(-3deg); line-height: 1.3; }
-.sig-sub { margin-top: 10rpx; font-size: 15rpx; color: var(--ink-fade); }
-
-/* 动作按钮 */
-.ap-actions, .mine-acts { display: flex; gap: 16rpx; margin-top: 24rpx; }
-.ap-btn { flex: 1; height: 84rpx; font-size: 28rpx; display: flex; align-items: center; justify-content: center; }
-.ap-btn.reject { border: 3rpx solid var(--verm); color: var(--verm); background: transparent; }
-.ap-btn.ghost { border: 3rpx solid var(--ink); color: var(--ink); background: transparent; letter-spacing: 3rpx; font-weight: 400; font-size: 25rpx; }

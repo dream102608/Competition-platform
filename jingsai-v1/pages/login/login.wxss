@@ -1,58 +1,73 @@
-/* S1 登录 · 墨纸创刊号 */
-@import "../../styles/illus.wxss";
-.login-wrap { padding: 30rpx 36rpx 60rpx; }
+/* pages/login/login.wxss —— 登录页 */
+.lg-mast { text-align: center; padding: 60rpx 30rpx 30rpx; }
+.mast-kicker { font-size: 18rpx; letter-spacing: 6rpx; color: var(--ink-fade); }
+.mast-title { font-size: 56rpx; font-weight: 900; letter-spacing: 8rpx; margin: 16rpx 0 8rpx; }
+.mast-sub { font-size: 20rpx; letter-spacing: 4rpx; color: var(--ink-soft); }
 
-.mast { border-bottom: 4rpx solid var(--ink); padding-bottom: 24rpx; position: relative; }
-.issue { font-size: 20rpx; color: var(--verm); letter-spacing: 6rpx; }
-.mast-row { display: flex; align-items: flex-end; gap: 24rpx; margin-top: 20rpx; }
-.mast .title { font-size: 84rpx; font-weight: 900; line-height: 1.15; letter-spacing: 4rpx; }
-.mast .title em { font-style: normal; color: var(--verm); }
-.v-slogan {
-  writing-mode: vertical-rl;
-  font-size: 22rpx; letter-spacing: 8rpx;
-  color: var(--ink-soft);
-  border-left: 2rpx solid var(--ink);
-  border-right: 2rpx solid var(--ink);
-  padding: 12rpx 8rpx; align-self: flex-start;
+/* ---------- 学校搜索 ---------- */
+.sch-wrap { padding: 0 28rpx 8rpx; }
+.sch-box { padding: 24rpx; }
+.sch-input {
+  width: 100%; box-sizing: border-box; height: 76rpx; padding: 0 20rpx;
+  background: #FFFBF0; border: 2rpx solid var(--ink);
+  font-family: Georgia, 'Songti SC', serif; font-size: 28rpx; color: var(--ink);
 }
-.mast-rule {
-  display: flex; justify-content: space-between; margin-top: 24rpx;
-  border-top: 2rpx solid var(--ink); padding-top: 12rpx;
-  font-size: 19rpx; letter-spacing: 3rpx; color: var(--ink-soft);
-}
+.sch-cur { margin-top: 18rpx; display: flex; align-items: baseline; gap: 14rpx; flex-wrap: wrap; }
+.sch-cur b { font-size: 30rpx; letter-spacing: 2rpx; color: var(--verm); }
+.sch-cur small { font-size: 20rpx; color: var(--ink-soft); letter-spacing: 1rpx; }
 
-/* 主视觉插画 */
-.hero { margin: 36rpx 40rpx 8rpx; }
-/* 插画定义见 styles/illus.wxss（顶部 @import） */
-
-/* 身份票根 */
-.roles { margin-top: 24rpx; }
-.role {
-  display: flex; align-items: center;
-  border: 3rpx solid var(--ink);
-  background: var(--cream);
-  box-shadow: 6rpx 6rpx 0 var(--ink);
-  padding: 24rpx 28rpx;
-  margin-bottom: 20rpx;
-  position: relative;
+.sch-list { margin-top: 14rpx; padding: 8rpx 0; max-height: 560rpx; }
+.sch-item {
+  display: flex; align-items: center; padding: 18rpx 24rpx;
+  border-bottom: 2rpx dashed var(--ink-fade);
 }
-.role.on { border-color: var(--verm); box-shadow: 6rpx 6rpx 0 var(--verm); }
-.role.off { opacity: .55; border-style: dashed; box-shadow: none; }
-.role-l { flex: 1; display: flex; flex-direction: column; gap: 6rpx; }
-.role-l b { font-size: 32rpx; font-weight: 900; }
-.role.on .role-l b { color: var(--verm-deep); }
-.role-l small { font-size: 22rpx; color: var(--ink-fade); letter-spacing: 2rpx; }
-.role-r { display: flex; align-items: center; gap: 16rpx; }
-.ver-tag { font-size: 18rpx; border: 2rpx solid var(--ink); padding: 2rpx 8rpx; color: var(--ink-soft); }
-.role.on .ver-tag { border-color: var(--verm); color: var(--verm); }
-/* 荧光黄「已选」拍纸 */
-.picked {
-  background: var(--marker); color: var(--ink);
-  font-family: "KaiTi", "STKaiti", cursive;
-  font-size: 24rpx; padding: 4rpx 12rpx;
-  transform: rotate(-8deg);
-  border: 2rpx solid var(--ink);
+.sch-item:last-child { border-bottom: none; }
+.sch-item-l { flex: 1; min-width: 0; }
+.sch-item-l b { font-size: 26rpx; display: block; letter-spacing: 1rpx; }
+.sch-item-l small { font-size: 20rpx; color: var(--ink-soft); }
+.sch-tags { display: flex; gap: 8rpx; margin-left: 16rpx; }
+.sch-tags text {
+  font-size: 18rpx; padding: 4rpx 10rpx; letter-spacing: 1rpx;
+  border: 2rpx solid var(--ink-soft); color: var(--ink-soft);
 }
+.sch-more { padding: 14rpx 24rpx; font-size: 20rpx; color: var(--ink-fade); letter-spacing: 1rpx; }
+.sch-empty { padding: 20rpx 28rpx 0; font-size: 22rpx; color: var(--ink-fade); letter-spacing: 1rpx; }
 
-.login-btn { margin-top: 40rpx; height: 96rpx; font-size: 32rpx; }
-.login-sub { text-align: center; margin-top: 18rpx; font-size: 18rpx; letter-spacing: 4rpx; color: var(--ink-fade); }
+.ticket-wrap { padding: 0 28rpx; display: flex; flex-direction: column; gap: 24rpx; }
+.ticket { display: flex; align-items: center; padding: 28rpx; position: relative; }
+.ticket.on { outline: 4rpx solid var(--verm); box-shadow: 8rpx 8rpx 0 var(--verm); }
+.ticket .tk-l { flex: 1; }
+.ticket .tk-l b { font-size: 32rpx; letter-spacing: 4rpx; display: block; }
+.ticket .tk-l small { color: var(--ink-soft); font-size: 22rpx; }
+.ticket .tk-r { font-size: 20rpx; border: 2rpx dashed var(--ink-soft); padding: 8rpx 16rpx; color: var(--ink-soft); }
+.ticket.on .tk-r { color: var(--verm); border-color: var(--verm); }
+
+.fixed-wrap { padding: 36rpx 28rpx 0; }
+.fx-t { font-size: 20rpx; color: var(--ink-fade); letter-spacing: 3rpx; margin-bottom: 16rpx; }
+.fx-grid { display: flex; flex-wrap: wrap; gap: 14rpx; }
+.fx-item {
+  border: 2rpx dashed var(--ink-fade); padding: 12rpx 20rpx; opacity: .55;
+}
+.fx-item b { font-size: 24rpx; display: block; }
+.fx-item small { font-size: 18rpx; color: var(--ink-fade); }
+
+.lg-cta { padding: 48rpx 28rpx 80rpx; text-align: center; }
+.lg-btn { height: 96rpx; font-size: 32rpx; }
+.lg-tip { margin-top: 20rpx; font-size: 20rpx; color: var(--ink-fade); letter-spacing: 2rpx; }
+
+/* 登录页印章装饰 */
+.lg-mast { position: relative; }
+.lg-stamp { position: absolute; right: 40rpx; top: 56rpx; }
+
+/* ---------- 注册表单弹窗（弹窗基础用 app.wxss 通用） ---------- */
+.kn-input { background: var(--paper-2); border: 2.4rpx solid var(--ink); padding: 14rpx 20rpx; font-size: 26rpx; border-radius: 12rpx; box-sizing: border-box; }
+.fm-line { margin-bottom: 16rpx; }
+.fm-note { font-size: 20rpx; color: var(--ink-soft); margin-bottom: 14rpx; letter-spacing: 1rpx; }
+.lg-code-row { display: flex; gap: 14rpx; align-items: stretch; }
+.lg-code { flex: 1; }
+.lg-code-btn { width: 210rpx; font-size: 22rpx; height: auto; letter-spacing: 1rpx; }
+
+/* ---------- 微信一键登录（姓名 + 昵称快捷带出） ---------- */
+.lg-wx-row { display: flex; gap: 14rpx; align-items: stretch; }
+.lg-wx-input { flex: 1; margin-bottom: 16rpx; }
+.lg-wx-btn { width: 200rpx; font-size: 22rpx; height: auto; letter-spacing: 1rpx; margin-bottom: 16rpx; }

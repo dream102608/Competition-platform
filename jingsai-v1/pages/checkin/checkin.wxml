@@ -1,0 +1,63 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="p-head">
+  <text class="t serif">签 到 打 卡</text>
+  <text class="pill mono">{{points.total}} 分</text>
+</view>
+
+<!-- 积分账户 -->
+<view class="ck-account card">
+  <view class="ac-item"><b class="mono verm">{{points.total - points.used}}</b><small>可用积分</small></view>
+  <view class="ac-item"><b class="mono">{{points.total}}</b><small>总积分</small></view>
+  <view class="ac-item"><b class="mono">{{checkins.length}}</b><small>打卡次数</small></view>
+</view>
+
+<!-- 签到场景 -->
+<view class="sec-band"><view class="sq"></view><b>选 择 场 景 打 卡</b><view class="ln"></view></view>
+<view class="ck-scenes">
+  <view class="ck-scene card" wx:for="{{scenes}}" wx:key="key" data-i="{{index}}" bindtap="doCheckin">
+    <b class="serif">{{item.name}}</b>
+    <text class="ck-pt mono">+{{item.points}} 分</text>
+    <small>{{item.key === 'training' ? '定位+拍照' : '定位/拍照'}}</small>
+  </view>
+</view>
+
+<!-- 签到记录 -->
+<view class="sec-band"><view class="sq"></view><b>打 卡 记 录</b><view class="ln"></view></view>
+<view class="ck-rec card">
+  <view class="ck-row" wx:for="{{checkins}}" wx:key="_id">
+    <text class="ck-scene-name">{{item.sceneName}}</text>
+    <text class="mono ck-loc">{{item.place || (item.location ? '📍 已定位' : '普通打卡')}}</text>
+    <text class="mono">+{{item.points}}分</text>
+    <text class="mono ck-time">{{item.createdAt}}</text>
+  </view>
+  <view wx:if="{{checkins.length === 0}}" class="hand ck-empty">还没有打卡记录，点上面的场景开始第一次打卡。</view>
+</view>
+
+<!-- 全院积分排行榜 -->
+<view class="sec-band"><view class="sq"></view><b>全 院 积 分 排 行 榜</b><view class="ln"></view></view>
+<view class="ck-rank card">
+  <view class="rk-row" wx:for="{{rankList}}" wx:key="rank">
+    <text class="rk-no mono {{item.rank <= 3 ? 'rk-top' : ''}}">{{item.label}}</text>
+    <view class="rk-info">
+      <b>{{item.name}}</b>
+      <small>{{item.major || item.school || '信息科学与技术学院'}}</small>
+    </view>
+    <text class="rk-pt mono">{{item.total}} 分</text>
+  </view>
+  <view wx:if="{{rankList.length === 0}}" class="hand ck-empty">暂无排行数据，打卡后这里就会出现名次。</view>
+</view>
+
+<!-- 定位确认弹窗（地图实时确认） -->
+<view class="mask" wx:if="{{mapShow}}">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">确 认 打 卡 位 置</view>
+    <map class="ck-map" latitude="{{mapLat}}" longitude="{{mapLng}}" scale="17"
+         markers="{{mapMarkers}}" show-location></map>
+    <view class="map-addr mono">你的实时位置：{{mapLat}}, {{mapLng}}</view>
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="cancelMapCheckin">取消</button>
+      <button class="btn btn-verm sh-btn" bindtap="confirmMapCheckin">就在这里打卡</button>
+    </view>
+  </view>
+</view>

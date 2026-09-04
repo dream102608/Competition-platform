@@ -1,40 +1,88 @@
 <view class="sbh" style="height:{{sbh}}px"></view>
 
-<view class="login-wrap">
-  <!-- 刊头：像一份创刊号 -->
-  <view class="mast">
-    <view class="issue mono">第 2026-35 期 · 创 刊 号</view>
-    <view class="mast-row">
-      <view class="title serif">竞赛<em>一体化</em><br/>管理平台</view>
-      <view class="v-slogan serif">一站式竞赛管理</view>
-    </view>
-    <view class="mast-rule">
-      <span class="mono">JINGSAI DAILY</span>
-      <span class="mono">EST. 2026</span>
-    </view>
-  </view>
+<!-- 报头 -->
+<view class="lg-mast">
+  <view class="mast-kicker mono">COMPETITION INTEGRATION PLATFORM</view>
+  <view class="mast-title serif">竞赛一体化管理平台</view>
+  <view class="mast-sub mono">VOL.2026 · 全国高校师生通用 · 3000+ 所高校已收录</view>
+  <view class="stamp lg-stamp">官方<br/>平台</view>
+</view>
 
-  <!-- 主视觉：unDraw 指纹插画（朱砂重着色，base64 内嵌） -->
-  <view class="hero illus-login"></view>
+<!-- 第一步：选择学校 -->
+<view class="sec-band"><view class="sq"></view><b>第 一 步 · 找 到 你 的 学 校</b><view class="ln"></view></view>
 
-  <!-- 身份票根 -->
-  <view class="roles">
-    <view
-      wx:for="{{roles}}" wx:key="key"
-      class="role {{role === item.key ? 'on' : ''}} {{!item.on ? 'off' : ''}}"
-      bindtap="pick" data-role="{{item.key}}">
-      <view class="role-l">
-        <b class="serif">{{item.name}}</b>
-        <small>{{item.desc}}</small>
-      </view>
-      <view class="role-r">
-        <text class="ver-tag mono">{{item.ver}}</text>
-        <text wx:if="{{role === item.key}}" class="picked">已选</text>
-      </view>
+<view class="sch-wrap">
+  <view class="sch-box card">
+    <input class="sch-input" placeholder="输入学校关键词，如：燕京理工 / 清华"
+           value="{{schoolKw}}" bindinput="onSchoolInput"
+           confirm-type="search" bindconfirm="onSearchConfirm"/>
+    <view class="sch-cur" wx:if="{{school}}">
+      <b>{{school.name}}</b>
+      <small class="mono">{{school.province}} · {{school.city}}{{school.level ? ' · ' + school.level : ''}}{{school.type ? ' · ' + school.type : ''}}</small>
     </view>
   </view>
+  <view class="sch-list card" wx:if="{{schoolList.length}}">
+    <view class="sch-item" wx:for="{{schoolList}}" wx:key="name" data-index="{{index}}" bindtap="pickSchool">
+      <view class="sch-item-l">
+        <b>{{item.name}}</b>
+        <small>{{item.province}} · {{item.city}}</small>
+      </view>
+      <view class="sch-tags mono">
+        <text wx:if="{{item.level}}">{{item.level}}</text>
+        <text wx:if="{{item.type}}">{{item.type}}</text>
+      </view>
+    </view>
+    <view class="sch-more mono" wx:if="{{schoolList.length >= 30}}">仅显示前 30 条，输入更精确的关键词</view>
+  </view>
+  <view class="sch-empty mono" wx:if="{{schoolKw && !schoolList.length && schoolSearched}}">没有找到「{{schoolKw}}」，换个关键词试试（支持简称）</view>
+</view>
 
-  <!-- 接入按钮 -->
-  <button class="btn btn-ink login-btn" bindtap="onLogin">微 信 一 键 接 入</button>
-  <view class="login-sub mono">首次登录自动绑定学号 · 角色写入 USERS 集合</view>
+<!-- 第二步：选择身份 -->
+<view class="sec-band"><view class="sq"></view><b>第 二 步 · 选 择 你 的 身 份</b><view class="ln"></view></view>
+
+<view class="ticket-wrap">
+  <view class="ticket card {{role === item.key ? 'on' : ''}}"
+        wx:for="{{autoRoles}}" wx:key="key"
+        data-role="{{item.key}}" bindtap="pick">
+    <view class="tk-l">
+      <b class="serif">{{item.name}}登录</b>
+      <small>{{item.desc}}</small>
+    </view>
+    <view class="tk-r mono">{{role === item.key ? '✓ 已选' : '选择'}}</view>
+  </view>
+</view>
+
+<!-- 指定角色（置灰说明） -->
+<view class="fixed-wrap">
+  <view class="fx-t mono">以下角色由学院 / 管理员指定：</view>
+  <view class="fx-grid">
+    <view class="fx-item" wx:for="{{fixedRoles}}" wx:key="key" bindtap="locked">
+      <b>{{item.name}}</b>
+      <small>{{item.note || '后台分配'}}</small>
+    </view>
+  </view>
+</view>
+
+<!-- 登录按钮（微信一键登录） -->
+<view class="lg-cta">
+  <button class="btn btn-ink lg-btn" bindtap="onLogin">微信一键登录</button>
+  <view class="lg-tip mono">首次登录只需填写姓名即可建立档案，无需手机号与密码</view>
+</view>
+
+<!-- 注册表单弹窗（简化版：微信一键登录 + 姓名） -->
+<view class="mask" wx:if="{{regShow}}">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">建 立 档 案</view>
+    <view class="fm-note mono">{{school.name}} · {{roleName}}</view>
+    <view class="lg-wx-row">
+      <input class="kn-input fm-line lg-wx-input" placeholder="姓名（必填）" value="{{reg.name}}" data-k="name" bindinput="onRegField"/>
+      <button class="btn btn-line lg-wx-btn" bindtap="fillWxName">用微信昵称</button>
+    </view>
+    <input class="kn-input fm-line" placeholder="学号 / 工号（选填，便于证书与积分归档）" value="{{reg.studentId}}" data-k="studentId" bindinput="onRegField"/>
+    <view class="fm-note hand">已通过微信授权确认身份，无需手机号、密码与短信验证码。</view>
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="closeReg">取消</button>
+      <button class="btn btn-verm sh-btn" bindtap="confirmReg">完成注册并登录</button>
+    </view>
+  </view>
 </view>

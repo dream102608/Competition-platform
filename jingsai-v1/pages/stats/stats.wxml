@@ -1,0 +1,52 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="p-head">
+  <text class="t serif">统 计 分 析</text>
+  <text class="pill mono" bindtap="exportTip">导出说明 ▸</text>
+</view>
+
+<!-- 个人统计 -->
+<view class="sec-band"><view class="sq"></view><b>我 的 数 据</b><view class="ln"></view></view>
+<view class="st-grid" wx:if="{{my}}">
+  <view class="st-cell card"><b class="mono">{{my.total}}</b><small>总报名</small></view>
+  <view class="st-cell card"><b class="mono run">{{my.approving}}</b><small>审批中</small></view>
+  <view class="st-cell card"><b class="mono ok">{{my.passed}}</b><small>已通过</small></view>
+  <view class="st-cell card"><b class="mono">{{my.checkins}}</b><small>签到次数</small></view>
+</view>
+
+<!-- 获奖率 -->
+<view class="sec-band"><view class="sq"></view><b>获 奖 / 通 过 率</b><view class="ln"></view></view>
+<view class="st-rate card">
+  <view class="rate-ring">
+    <b class="mono">{{winRate}}%</b>
+  </view>
+  <view class="rate-txt">报名 {{my.total || 0}} 项 · 通过 {{my.passed || 0}} 项</view>
+</view>
+
+<!-- 全院竞赛统计（管理者） -->
+<block wx:if="{{isManager}}">
+  <view class="sec-band"><view class="sq"></view><b>全 院 数 据</b><view class="ln"></view></view>
+  <view class="st-grid" wx:if="{{all}}">
+    <view class="st-cell card"><b class="mono">{{all.users}}</b><small>注册用户</small></view>
+    <view class="st-cell card"><b class="mono">{{all.regs}}</b><small>总报名单</small></view>
+    <view class="st-cell card"><b class="mono ok">{{all.passed}}</b><small>终审通过</small></view>
+  </view>
+
+  <view class="sec-band"><view class="sq"></view><b>各 竞 赛 报 名 热 度</b><view class="ln"></view></view>
+  <view class="st-bars card" wx:if="{{all}}">
+    <view class="bar-row" wx:for="{{all.perComp}}" wx:key="title">
+      <text class="bar-name">{{item.title}}</text>
+      <view class="bar-track"><view class="bar-fill" style="width:{{item.pct}}%"></view></view>
+      <text class="mono bar-num">{{item.count}}</text>
+    </view>
+    <view wx:if="{{all.perComp.length === 0}}" class="hand st-empty">暂无数据</view>
+  </view>
+
+  <view class="sec-band"><view class="sq"></view><b>数 据 导 出</b><view class="ln"></view></view>
+  <view class="st-exports">
+    <button class="btn btn-ink" bindtap="exportRegs">⬇ 报名名单.xlsx</button>
+    <button class="btn btn-line" bindtap="exportExpenses">⬇ 经费台账.xlsx</button>
+  </view>
+</block>
+
+<view wx:if="{{!isManager}}" class="st-tip hand">全院数据看板仅教师 / 管理员 / 院长 / 副院长 / 教学秘书 / 教研室主任可见。</view>

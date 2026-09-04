@@ -1,114 +1,123 @@
-<view class="page">
-  <!-- 自定义导航 -->
-  <view class="p-head" style="padding-top:{{sbh}}px;">
-    <view class="p-title">我的档案</view>
-    <view class="p-issue">ARCHIVE · NO.{{user.sid || '----'}}</view>
-  </view>
+<view class="sbh" style="height:{{sbh}}px"></view>
 
-  <!-- 档案封面：用户信息 -->
-  <view class="me-head card">
-    <view class="me-avatar">{{user.name ? user.name[0] : '客'}}</view>
-    <view class="me-info">
-      <view class="me-name-row" bindtap="editName">
-        <text class="me-name">{{user.name || '未登录'}}</text>
-        <text class="me-pencil">✎</text>
-      </view>
-      <view class="me-sid">学号 {{user.sid || '——'}} · {{user.college || '——'}}</view>
-      <view class="me-role-tag">{{user.role === 'teacher' ? '指导教师' : (user.role === 'admin' ? '教务管理员' : '在校学生')}}</view>
-    </view>
-    <view class="me-corner">卷宗一号</view>
-  </view>
-
-  <!-- 三格统计 -->
-  <view class="me-stats card">
-    <view class="stat-cell">
-      <view class="stat-num">{{stats.total}}</view>
-      <view class="stat-label">累计报名</view>
-    </view>
-    <view class="stat-div"></view>
-    <view class="stat-cell">
-      <view class="stat-num stat-verm">{{stats.active}}</view>
-      <view class="stat-label">进行中</view>
-    </view>
-    <view class="stat-div"></view>
-    <view class="stat-cell">
-      <view class="stat-num">{{stats.awards}}</view>
-      <view class="stat-label">历史获奖</view>
-    </view>
-  </view>
-
-  <!-- 我的报名（卷宗条目） -->
-  <view class="sec-band">
-    <text>我的报名</text>
-    <text class="sec-en">REGISTRATIONS</text>
-  </view>
-
-  <view wx:if="{{!regs.length}}" class="card empty-box">
-    <view class="hand empty-hand">档案柜空空如也，去大厅转转？</view>
-    <view class="btn-ink btn-s" bindtap="goHall">去逛大厅</view>
-  </view>
-
-  <view wx:for="{{regs}}" wx:key="_id" class="card me-reg" data-id="{{item._id}}" bindtap="goApproval">
-    <view class="reg-top">
-      <view class="reg-title">{{item.compTitle}}</view>
-      <view class="pill {{item.status === 'approving' ? 'st-run' : (item.status === 'rejected' ? 'st-rej' : 'st-ok')}}">
-        {{item.status === 'approving' ? '审批中' : (item.status === 'rejected' ? '已驳回' : '已通过')}}
-      </view>
-    </view>
-    <view class="reg-team hand">{{item.teamName}} <text wx:if="{{item.version > 1}}" class="ver-pill">v{{item.version}}</text></view>
-    <view class="mini-track">
-      <view wx:for="{{item.trackFlags}}" wx:for-item="f" wx:key="*this"
-            class="mt-dot {{f ? 'mt-done' : ''}}"></view>
-    </view>
-    <view class="reg-foot">
-      <text class="reg-ddl">DDL {{item.deadline}}</text>
-      <text class="reg-arrow">查看进度 →</text>
-    </view>
-  </view>
-
-  <!-- 我的证书（留白空状态） -->
-  <view class="sec-band">
-    <text>我的证书</text>
-    <text class="sec-en">CERTIFICATES</text>
-  </view>
-  <view class="card cert-box">
-    <view class="illus-myfiles"></view>
-    <view class="hand cert-hand">获奖证书还在印刷厂排队的路上……</view>
-    <view class="btn-line btn-s" bindtap="goHall">去争取第一张</view>
-  </view>
-
-  <!-- 菜单 -->
-  <view class="sec-band">
-    <text>档案管理</text>
-    <text class="sec-en">MANAGE</text>
-  </view>
-  <view class="card me-menu">
-    <view class="menu-row" bindtap="showLogs">
-      <text class="menu-idx">01</text>
-      <text class="menu-name">操作记录</text>
-      <text class="menu-arrow">→</text>
-    </view>
-    <view class="menu-row">
-      <text class="menu-idx">02</text>
-      <text class="menu-name">收藏夹</text>
-      <text class="menu-arrow">{{favCount}} 项 →</text>
-    </view>
-    <view class="menu-row" bindtap="settings">
-      <text class="menu-idx">03</text>
-      <text class="menu-name">账号设置</text>
-      <text class="menu-arrow">→</text>
-    </view>
-    <view class="menu-row" bindtap="resetDemo">
-      <text class="menu-idx">04</text>
-      <text class="menu-name">重置演示数据</text>
-      <text class="menu-arrow">恢复初始 →</text>
-    </view>
-    <view class="menu-row menu-danger" bindtap="logout">
-      <text class="menu-idx">05</text>
-      <text class="menu-name">退出登录</text>
-      <text class="menu-arrow">→</text>
-    </view>
-  </view>
-
-  <view class="foot-note">—— 本卷宗由竞赛一体化管理平台归档 ——</view>
+<!-- 报头（保留水墨） -->
+<view class="p-head">
+  <text class="t serif">我 的 档 案</text>
+  <text class="pill mono red">{{roleName}}</text>
 </view>
+
+<!-- 档案 banner（参考图大圆角彩色 banner 风格） -->
+<view class="banner-c ink" wx:if="{{user}}">
+  <view class="pf-avatar serif">{{user.name[0] || '我'}}</view>
+  <view style="flex:1; min-width:0;">
+    <view class="ttl" style="font-size:40rpx; letter-spacing:6rpx;">{{user.name}}</view>
+    <view class="sub" style="font-size:20rpx; opacity:.85;">{{user.college}} · {{user.major}}</view>
+    <view class="sub" style="font-size:18rpx; opacity:.7; margin-top:4rpx;">{{user.studentId || '学号未填'}} · {{user.phone || '手机未填'}}</view>
+    <view class="pill" style="margin-top:12rpx;" bindtap="openEdit">编 辑 资 料</view>
+  </view>
+  <view class="illu" style="background:rgba(244,237,223,.18); border-color:var(--paper); color:var(--paper);">档</view>
+</view>
+
+<!-- 4 格统计 -->
+<view class="info-card" wx:if="{{user}}">
+  <view class="title"><view class="sq"></view><text class="serif">我 的 统 计</text></view>
+  <view class="ov-row">
+    <view class="ov-item"><b class="mono">{{stats.total}}</b><small>报名</small></view>
+    <view class="ov-item"><b class="mono run">{{stats.active}}</b><small>进行中</small></view>
+    <view class="ov-item"><b class="mono ok">{{stats.points}}</b><small>积分</small></view>
+    <view class="ov-item"><b class="mono verm">{{favCount}}</b><small>收藏</small></view>
+  </view>
+</view>
+
+<!-- 功能入口（参考图 5×2 圆图标宫格） -->
+<view class="info-card">
+  <view class="title"><view class="sq"></view><text class="serif">功 能 一 览</text></view>
+  <view class="icon-grid" style="margin:0; box-shadow:none; background:transparent; border:none; padding:0;">
+    <view class="g5" wx:for="{{entries}}" wx:key="name" data-url="{{item.url}}" bindtap="goEntry">
+      <view class="badge" style="background:{{item.color || '#3A4F6E'}}">{{item.icon}}</view>
+      <view class="name serif">{{item.name}}</view>
+    </view>
+  </view>
+</view>
+
+<!-- 我的报名 -->
+<view class="info-card">
+  <view class="title"><view class="sq"></view><text class="serif">我 的 报 名 卷 宗</text></view>
+  <view class="pf-reg" wx:for="{{regs}}" wx:key="_id" data-id="{{item._id}}" bindtap="goApproval">
+    <view class="pr-l">
+      <b class="serif">{{item.compTitle}}</b>
+      <small class="mono">{{item.teamName || '个人'}} · v{{item.version}} · 截止 {{item.deadline}}</small>
+    </view>
+    <text class="st-pill {{item.status === 'passed' ? 'st-ok' : item.status === 'approving' ? 'st-run' : 'st-rej'}}">{{item.statusText}}</text>
+  </view>
+  <view wx:if="{{regs.length === 0}}" class="empty hand">还没有报名记录，去竞赛大厅看看。</view>
+</view>
+
+<!-- 我的证书 -->
+<view class="info-card">
+  <view class="title"><view class="sq"></view><text class="serif">我 的 证 书</text></view>
+  <view class="pf-cert" wx:for="{{certs}}" wx:key="id" data-i="{{index}}" bindtap="openCert">
+    <text class="pc-ic">📜</text>
+    <view class="pr-l">
+      <b class="serif">{{item.compTitle || item.name}}</b>
+      <small class="mono">{{item.award ? item.award + ' · ' + item.year : item.time}}</small>
+    </view>
+    <text class="st-pill {{item.status === 'passed' ? 'st-ok' : item.status === 'rejected' ? 'st-rej' : 'st-run'}}" wx:if="{{item.status}}">
+      {{item.status === 'passed' ? '已轮播' : item.status === 'rejected' ? '已驳回' : '待审核'}}
+    </text>
+    <text class="pc-del" data-i="{{index}}" catchtap="removeCert">删除</text>
+  </view>
+  <view wx:if="{{certs.length === 0}}" class="empty hand">还没有证书，上传你的获奖证书（PDF / 图片），审核通过后将在首页轮播。</view>
+  <button class="btn btn-line pf-cert-btn" bindtap="uploadCert">⬆ 上传证书（PDF / 图片）</button>
+</view>
+
+<!-- 证书信息弹窗 -->
+<view class="mask" wx:if="{{certShow}}">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">证 书 信 息</view>
+    <view class="fm-note mono">📎 {{certForm.fileName}}</view>
+    <input class="kn-input fm-line" placeholder="竞赛名称（必填）" value="{{certForm.compTitle}}" data-k="compTitle" bindinput="onCertField"/>
+    <picker range="{{certAwards}}" bindchange="onCertAward">
+      <view class="kn-input fm-line">获奖等级：{{certForm.award}} ▾</view>
+    </picker>
+    <picker mode="date" fields="year" value="{{certForm.year}}" bindchange="onCertYear">
+      <view class="kn-input fm-line">获奖年份：{{certForm.year}} 年 ▾</view>
+    </picker>
+    <view class="fm-note hand">提交后进入管理员审核，通过后在首页轮播展示。</view>
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="closeCertForm">取消</button>
+      <button class="btn btn-verm sh-btn" bindtap="confirmCert">提交审核</button>
+    </view>
+  </view>
+</view>
+
+<!-- 底部操作 -->
+<view class="info-card">
+  <view class="title"><view class="sq"></view><text class="serif">设 置</text></view>
+  <view class="pf-ops">
+    <button class="btn btn-line pf-btn" bindtap="switchRole">切换身份（演示）</button>
+    <button class="btn btn-line pf-btn" bindtap="showLogs">操作记录</button>
+    <button class="btn btn-line pf-btn" bindtap="resetDemo">重置演示数据</button>
+    <button class="btn btn-ghost pf-btn" bindtap="logout">退出登录</button>
+  </view>
+</view>
+
+<!-- 编辑资料弹窗 -->
+<view class="mask" wx:if="{{editShow}}" bindtap="closeEdit">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">编 辑 资 料</view>
+    <input class="kn-input fm-line" placeholder="姓名" value="{{edit.name}}" data-k="name" bindinput="onEditField"/>
+    <input class="kn-input fm-line" placeholder="学号 / 工号" value="{{edit.studentId}}" data-k="studentId" bindinput="onEditField"/>
+    <picker class="kn-input fm-line" range="{{majors}}" range-key="name" value="{{majorIdx}}" bindchange="onMajorPick">
+      <view style="{{edit.major ? '' : 'color:#86909C'}}">{{edit.major || '选择专业（本科 7 个 / 专科 2 个）'}} ▾</view>
+    </picker>
+    <input class="kn-input fm-line" placeholder="手机号" value="{{edit.phone}}" data-k="phone" bindinput="onEditField"/>
+    <input class="kn-input fm-line" placeholder="邮箱（选填）" value="{{edit.email}}" data-k="email" bindinput="onEditField"/>
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="closeEdit">取消</button>
+      <button class="btn btn-verm sh-btn" bindtap="saveEdit">保存</button>
+    </view>
+  </view>
+</view>
+
+<view class="tail">墨纸编辑部 · 出品</view>

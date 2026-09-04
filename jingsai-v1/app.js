@@ -16,9 +16,10 @@ App({
     } catch (e) { /* 保底 24 */ }
 
     // 尝试接入云开发；失败则回退本地 Storage（演示模式）
+    // DYNAMIC_CURRENT_ENV = 自动使用当前 AppID 开通的默认云环境，无需填写环境 ID
     if (wx.cloud) {
       try {
-        wx.cloud.init({ traceUser: true });
+        wx.cloud.init({ env: wx.cloud.DYNAMIC_CURRENT_ENV, traceUser: true });
         this.globalData.db = wx.cloud.database();
         this.globalData.cloudReady = true;
       } catch (e) {
@@ -31,22 +32,36 @@ App({
     if (user) this.globalData.user = user;
   },
 
-  /** 登录：wx.login 换 code，演示模式下直接绑定 mock 用户 */
-  login(role) {
+  /** 登录：云模式下调用云函数换取真实 openid 用户档案；演示模式用 mock 用户。school 为所选学校名，profile 为注册表单字段 */
+  login(role, school, profile) {
+    const data = require('./utils/data');
+    const p = profile || {};
     return new Promise((resolve) => {
+      const finish = (user) => {
+        if (school && user && !user.school) user.school = school;
+        // 注册表单里的姓名/学号/手机号补进档案（云端老用户未填时）
+        ['name', 'studentId', 'phone'].forEach((k) => {
+          if (p[k] && user && !user[k]) user[k] = p[k];
+        });
+        this.globalData.user = user;
+        wx.setStorageSync('user', user);
+        resolve(user);
+      };
+      if (this.globalData.cloudReady) {
+        wx.cloud.callFunction({
+          name: 'api',
+          data: { action: 'login', role: role || 'student', school: school || '', name: p.name || '', studentId: p.studentId || '', phone: p.phone || '' }
+        })
+          .then((r) => {
+            if (r.result && r.result.ok && r.result.user) finish(r.result.user);
+            else finish(Object.assign(data.mockUser(role, school), p));
+          })
+          .catch(() => finish(Object.assign(data.mockUser(role, school), p)));
+        return;
+      }
       wx.login({
-        success: () => {
-          const user = require('./utils/data').mockUser(role);
-          this.globalData.user = user;
-          wx.setStorageSync('user', user);
-          resolve(user);
-        },
-        fail: () => {
-          const user = require('./utils/data').mockUser(role);
-          this.globalData.user = user;
-          wx.setStorageSync('user', user);
-          resolve(user);
-        }
+        success: () => finish(Object.assign(data.mockUser(role, school), p)),
+        fail: () => finish(Object.assign(data.mockUser(role, school), p))
       });
     });
   },

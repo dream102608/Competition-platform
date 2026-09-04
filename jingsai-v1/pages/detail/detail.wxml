@@ -1,60 +1,83 @@
 <view class="sbh" style="height:{{sbh}}px"></view>
 
-<!-- 档案封面：头图 + 渐晕 -->
-<view class="detail-hero">
-  <image src="https://images.pexels.com/photos/8199217/pexels-photo-8199217.jpeg?auto=compress&cs=tinysrgb&w=800" mode="aspectFill"/>
-  <view class="veil"></view>
-  <view class="back-btn" bindtap="back">‹</view>
-  <view class="dt">
-    <view class="pill mono">NO.{{comp.no}} · {{comp.track === 'subject' ? '学科竞赛' : '创新创业'}}赛道</view>
+<view class="p-head">
+  <text class="t serif">竞 赛 档 案</text>
+  <text class="pill mono" wx:if="{{comp}}">NO.{{comp.no}}</text>
+</view>
+
+<block wx:if="{{comp}}">
+  <!-- 封面 -->
+  <view class="dt-cover">
+    <image src="{{comp.cover}}" mode="aspectFill"/>
+    <view class="dt-flag serif">{{comp.levelName}}</view>
+  </view>
+
+  <!-- 主信息 -->
+  <view class="dt-main card">
     <view class="dt-title serif">{{comp.title}}</view>
-    <view class="org mono">主办：{{comp.host}}</view>
+    <view class="dt-meta mono">{{comp.host}}</view>
+    <view class="dt-tags">
+      <text class="pill">{{comp.track === 'teacher' ? '教师赛道' : '学生赛道'}}</text>
+      <text class="pill">{{comp.category}}</text>
+      <text class="st-pill {{comp.closed ? 'st-rej' : 'st-run'}}">{{comp.closed ? '已结束' : '报名中'}}</text>
+    </view>
+    <view class="dt-desc">{{comp.desc}}</view>
   </view>
-</view>
 
-<!-- 档案读数 -->
-<view class="meta-grid">
-  <view class="meta-cell">
-    <small class="mono">LEVEL / 级别</small>
-    <b class="red serif">{{comp.levelName}}</b>
+  <!-- 竞赛属性信息 -->
+  <view class="sec-band"><view class="sq"></view><b>竞 赛 属 性</b><view class="ln"></view></view>
+  <view class="dt-props card">
+    <view class="prop"><text class="k">是否教育部名单赛事</text><text class="v {{comp.isEduList ? 'yes' : ''}}">{{comp.isEduList ? '是 ✓' : '否'}}</text></view>
+    <view class="prop"><text class="k">颁发部门</text><text class="v">{{comp.awardDept || '—'}}</text></view>
+    <view class="prop"><text class="k">竞赛分类</text><text class="v">{{comp.category}}</text></view>
+    <view class="prop"><text class="k">组队要求</text><text class="v">{{comp.teamMin}}-{{comp.teamMax}} 人</text></view>
+    <view class="prop"><text class="k">报名截止</text><text class="v verm">{{comp.deadline}}</text></view>
+    <view class="prop"><text class="k">审批流程</text><text class="v">{{flowName}}</text></view>
   </view>
-  <view class="meta-cell">
-    <small class="mono">DEADLINE / 截止</small>
-    <b class="red serif">{{comp.deadline}}</b>
-  </view>
-</view>
 
-<!-- 赛程时间轴 -->
-<view class="sec-band"><span class="sq"></span><b>赛 程</b><span class="ln"></span></view>
-<view class="tl">
-  <view class="node {{item.now ? 'now' : ''}}" wx:for="{{comp.timeline}}" wx:key="name">
-    <view>
-      <b>{{item.name}}</b>
-      <small class="mono">{{item.range}}</small>
+  <!-- 赛程安排 -->
+  <view class="sec-band"><view class="sq"></view><b>赛 程 安 排</b><view class="ln"></view></view>
+  <view class="dt-timeline card">
+    <view class="tl-row {{item.now ? 'now' : ''}}" wx:for="{{comp.timeline}}" wx:key="name">
+      <view class="tl-dot"></view>
+      <view class="tl-body">
+        <b>{{item.name}}</b>
+        <small class="mono">{{item.range}}</small>
+      </view>
+      <text wx:if="{{item.now}}" class="pill red">进行中</text>
     </view>
   </view>
-</view>
 
-<!-- 队伍要求 -->
-<view class="sec-band"><span class="sq"></span><b>队 伍 要 求</b><span class="ln"></span></view>
-<view class="team-req">
-  <view class="tr-card" wx:for="{{comp.req}}" wx:key="b">
-    <text class="tr-ic">{{item.icon === 'team' ? '⧉' : '✪'}}</text>
-    <b class="serif">{{item.b}}</b>
-    <small>{{item.s}}</small>
+  <!-- 附件下载 -->
+  <view class="sec-band"><view class="sq"></view><b>附 件 下 载</b><view class="ln"></view></view>
+  <view class="dt-files card">
+    <view class="file-row" wx:for="{{files}}" wx:key="name" data-i="{{index}}" bindtap="downloadFile">
+      <text class="fi-ic">📎</text>
+      <text class="fi-name">{{item.name}}</text>
+      <text class="fi-size mono">{{item.size || ''}}</text>
+      <text class="fi-dl">下载</text>
+    </view>
   </view>
-</view>
 
-<!-- 报名须知 -->
-<view class="sec-band"><span class="sq"></span><b>报 名 须 知</b><span class="ln"></span></view>
-<view class="notice">
-  提交后进入<b> {{chainName}} </b>：指导教师 → 系 → 院 → 校。驳回会退回上一级并<b>保留版本号</b>，重新提交生成 v2。逾期 48 小时未审自动催办。
-  <view class="notice-hand hand">← 这句是给学生看的重点</view>
-</view>
+  <!-- 已报名队伍 -->
+  <view class="sec-band"><view class="sq"></view><b>已 报 名 队 伍</b><view class="ln"></view></view>
+  <view class="dt-teams card">
+    <view class="tm-row" wx:for="{{signedTeams}}" wx:key="_id">
+      <text class="tm-name">{{item.teamName || item.applicantName}}</text>
+      <text class="tm-count mono">{{item.members.length}} 人</text>
+      <text class="st-pill {{item.status === 'passed' ? 'st-ok' : item.status === 'rejected' ? 'st-rej' : 'st-run'}}">
+        {{item.status === 'passed' ? '已通过' : item.status === 'rejected' ? '已驳回' : '审批中'}}
+      </text>
+    </view>
+    <view wx:if="{{signedTeams.length === 0}}" class="tm-empty hand">虚位以待，第一个报名的会是你吗？</view>
+  </view>
 
-<!-- 底部操作条 -->
-<view class="detail-foot">
-  <view class="fav-btn {{fav ? 'on' : ''}}" bindtap="toggleFav">★</view>
-  <button class="btn btn-ink apply-btn" bindtap="apply">立 即 报 名</button>
-  <view class="barcode" data-no="NO.{{comp.no}}"></view>
-</view>
+  <!-- 底部报名栏 -->
+  <view class="dt-foot-spacer"></view>
+  <view class="dt-foot">
+    <view class="ft-fav" bindtap="toggleFav">{{fav ? '★ 已收藏' : '☆ 收藏'}}</view>
+    <button class="btn {{comp.closed ? 'btn-ghost' : 'btn-verm'}} ft-apply" bindtap="apply">
+      {{comp.closed ? '报名已截止' : myReg ? '查看我的报名 v' + myReg.version : '立 即 报 名'}}
+    </button>
+  </view>
+</block>
