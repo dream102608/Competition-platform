@@ -3,29 +3,51 @@
     "pages/login/login",
     "pages/home/home",
     "pages/hall/hall",
-    "pages/approval/approval",
+    "pages/knowledge/knowledge",
+    "pages/watchtower/watchtower",
+    "pages/team/team",
     "pages/profile/profile",
     "pages/detail/detail",
-    "pages/form/form"
+    "pages/form/form",
+    "pages/approval/approval",
+    "pages/leave/leave",
+    "pages/training/training",
+    "pages/checkin/checkin",
+    "pages/schedule/schedule",
+    "pages/news/news",
+    "pages/stats/stats",
+    "pages/admin/admin",
+    "pages/board/board",
+    "pages/export/export"
   ],
   "window": {
     "navigationStyle": "custom",
-    "backgroundColor": "#EDE4CE",
-    "backgroundTextStyle": "dark"
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F4EDDF",
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": false
   },
   "tabBar": {
-    "color": "#4A443A",
+    "color": "#7A7264",
     "selectedColor": "#C8442A",
-    "backgroundColor": "#F4EDDF",
-    "borderStyle": "black",
+    "backgroundColor": "#FBF7EC",
+    "borderStyle": "white",
     "list": [
-      { "pagePath": "pages/home/home", "text": "首页" },
-      { "pagePath": "pages/hall/hall", "text": "大厅" },
-      { "pagePath": "pages/approval/approval", "text": "审批" },
+      { "pagePath": "pages/home/home",     "text": "首页" },
+      { "pagePath": "pages/hall/hall",     "text": "竞赛" },
+      { "pagePath": "pages/knowledge/knowledge", "text": "广场" },
+      { "pagePath": "pages/team/team",     "text": "队伍" },
       { "pagePath": "pages/profile/profile", "text": "我的" }
     ]
   },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于签到打卡时记录位置"
+    }
+  },
+  "requiredPrivateInfos": ["getLocation"],
   "style": "v2",
   "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "cloud": true
 }

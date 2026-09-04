@@ -1,6 +1,7 @@
 {
   "compileType": "miniprogram",
-  "appid": "wxf3184277f1aaf0ed",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "appid": "wx4f7a139911797890",
   "projectname": "jingsai-v1",
   "setting": {
     "es6": true,
@@ -35,5 +36,6 @@
     "ignore": [],
     "include": []
   },
-  "editorSetting": {}
+  "editorSetting": {},
+  "libVersion": "3.17.2"
 }

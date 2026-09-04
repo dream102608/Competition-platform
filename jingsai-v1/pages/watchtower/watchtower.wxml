@@ -1,0 +1,83 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="p-head">
+  <text class="t serif">科 创 瞭 望 台</text>
+  <text class="pill mono red" wx:if="{{canManage}}">{{roleName}}</text>
+</view>
+
+<!-- 观看统计卡 -->
+<view class="wt-stats card">
+  <view class="ws-item"><b class="mono verm">{{stats.videoCount}}</b><small>视频课程</small></view>
+  <view class="ws-item"><b class="mono">{{stats.totalViews}}</b><small>总观看人次</small></view>
+  <view class="ws-item"><b class="mono">{{stats.watchedCount}}</b><small>我看过的</small></view>
+  <view class="ws-item"><b class="mono ok">{{stats.finishRate}}%</b><small>我的完播率</small></view>
+</view>
+
+<!-- 搜索 + 管理入口 -->
+<view class="wt-bar">
+  <input class="wt-search" placeholder="🔍 搜索视频标题" value="{{kw}}" bindinput="onKw"/>
+  <button class="btn btn-verm wt-up" wx:if="{{canUpload}}" bindtap="openUpload">⬆ 上传视频</button>
+</view>
+<view class="wt-tip hand" wx:if="{{canUpload}}">管理员可增删改查；教学秘书可增删查；视频文件将存入云存储。</view>
+
+<!-- 课程分组视频列表 -->
+<block wx:for="{{courseGroups}}" wx:key="_id" wx:for-item="course">
+  <view class="sec-band"><view class="sq"></view><b>{{course.name}}</b><view class="ln"></view></view>
+  <view class="wt-course card">
+    <view class="wc-intro hand" wx:if="{{course.intro}}">{{course.intro}}</view>
+    <view class="wc-lect mono" wx:if="{{course.lecturerName}}">主讲：{{course.lecturerName}} {{course.lecturerTitle}}</view>
+    <view class="wt-video" wx:for="{{course.videos}}" wx:key="_id" wx:for-item="v"
+          data-id="{{v._id}}" bindtap="play">
+      <view class="wv-no mono">{{index + 1 < 10 ? '0' : ''}}{{index + 1}}</view>
+      <view class="wv-info">
+        <b>{{v.title}}</b>
+        <small class="mono">{{v.duration || '时长未知'}} · {{v.lecturerName}} · {{v.views || 0}} 次观看</small>
+        <view class="wv-prog" wx:if="{{v.watch}}">
+          <view class="wv-prog-in" style="width:{{v.watchPct}}%"></view>
+        </view>
+      </view>
+      <view class="wv-badge {{v.watch && v.watch.finished ? 'done' : ''}} mono">
+        {{v.watch ? (v.watch.finished ? '✓ 已完播' : '▶ 续看') : '▶ 播放'}}
+      </view>
+      <text class="wv-del" wx:if="{{canUpload}}" data-id="{{v._id}}" catchtap="delVideo">删除</text>
+    </view>
+    <view wx:if="{{course.videos.length === 0}}" class="hand wt-empty">本课程还没有视频。</view>
+  </view>
+</block>
+<view wx:if="{{courseGroups.length === 0}}" class="hand wt-empty2">没有找到相关视频课程。</view>
+
+<!-- 播放弹窗 -->
+<view class="mask" wx:if="{{playShow}}">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">{{playing.title}}</view>
+    <view class="wv-meta mono">{{playing.lecturerName}} · {{playing.duration}} · {{playing.views}} 次观看</view>
+    <video class="wv-video" src="{{playSrc}}" autoplay show-fullscreen-btn enable-progress-gesture="{{false}}"
+           object-fit="contain" bindtimeupdate="onTime" bindended="onEnded" binderror="onVideoErr"></video>
+    <view class="wv-intro hand">{{playing.intro}}</view>
+    <view class="wv-rule mono">📌 学生观看不可拖拽进度、不可倍速，看到 90% 记为完播</view>
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="closePlayer">关闭</button>
+    </view>
+  </view>
+</view>
+
+<!-- 上传视频弹窗（管理员/教学秘书） -->
+<view class="mask" wx:if="{{upShow}}">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">上 传 视 频 课 程</view>
+    <input class="kn-input fm-line" placeholder="视频标题（必填，最多50字）" maxlength="50" value="{{up.title}}" data-k="title" bindinput="onUpField"/>
+    <picker range="{{courses}}" range-key="name" value="{{upCourseIdx}}" bindchange="onUpCourse">
+      <view class="kn-input fm-line">所属课程：{{courses[upCourseIdx].name || '请选择'}} ▾</view>
+    </picker>
+    <picker range="{{lecturers}}" range-key="name" value="{{upLecIdx}}" bindchange="onUpLec">
+      <view class="kn-input fm-line">主讲人：{{lecturers[upLecIdx].name || '请选择'}} ▾</view>
+    </picker>
+    <textarea class="kn-textarea" placeholder="视频简介（选填）" value="{{up.intro}}" data-k="intro" bindinput="onUpField"/>
+    <input class="kn-input fm-line" placeholder="排序权重（数字越大越靠前，选填）" type="number" value="{{up.sort}}" data-k="sort" bindinput="onUpField"/>
+    <button class="btn btn-line sh-full" bindtap="pickVideo">{{up.fileName ? '✓ ' + up.fileName : '📹 选择视频文件（mp4）'}}</button>
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="closeUpload">取消</button>
+      <button class="btn btn-verm sh-btn" bindtap="confirmUpload">发布</button>
+    </view>
+  </view>
+</view>

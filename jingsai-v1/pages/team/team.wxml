@@ -1,0 +1,127 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<!-- 报头（保留水墨） -->
+<view class="p-head">
+  <text class="t serif">我 的 队 伍</text>
+</view>
+
+<!-- 无队伍：创建引导（参考图大圆角居中卡） -->
+<view wx:if="{{!team}}" class="tm-none">
+  <view class="tm-none-ic">🏕</view>
+  <view class="hand tm-none-txt">你还没有队伍。创建一个，你就是队长。</view>
+  <button class="btn btn-verm tm-create" bindtap="openCreate">创 建 队 伍</button>
+</view>
+
+<block wx:if="{{team}}">
+  <!-- 队伍头部（参考图大圆角卡片） -->
+  <view class="tm-head card">
+    <view class="tm-name serif">{{team.name}}</view>
+    <view class="tm-cap mono">队长：{{team.captainName}}　·　{{team.members.length}} 名队员</view>
+    <view class="tm-intro" wx:if="{{team.intro}}">{{team.intro}}</view>
+  </view>
+
+  <!-- 子Tab（参考图胶囊切换） -->
+  <view class="tm-tabs">
+    <view class="tm-tab {{sub === item.key ? 'on' : ''}}" wx:for="{{subTabs}}" wx:key="key"
+          data-k="{{item.key}}" bindtap="switchSub">{{item.name}}</view>
+  </view>
+
+  <!-- 队员管理 -->
+  <block wx:if="{{sub === 'members'}}">
+    <view class="tm-card card">
+      <view class="m-row" wx:for="{{team.members}}" wx:key="openid">
+        <text class="m-name">{{item.name}}</text>
+        <text class="pill red" wx:if="{{item.role === 'captain'}}">队长</text>
+        <text class="pill" wx:if="{{team.viceId === item.openid}}">副队长</text>
+        <block wx:if="{{isCaptain && item.openid !== myOpenid}}">
+          <text class="m-op" wx:if="{{team.viceId === item.openid}}" data-oid="{{item.openid}}" bindtap="unsetVice">撤销副队长</text>
+          <text class="m-op" wx:else data-oid="{{item.openid}}" data-name="{{item.name}}" bindtap="setVice">任命副队长</text>
+          <text class="m-op del" data-oid="{{item.openid}}" bindtap="removeMember">移除</text>
+        </block>
+      </view>
+    </view>
+    <view class="tm-card card" wx:if="{{isCaptain && team.applicants.length}}">
+      <view class="tm-sec-t serif">入队申请（{{team.applicants.length}}）</view>
+      <view class="m-row" wx:for="{{team.applicants}}" wx:key="openid">
+        <text class="m-name">{{item.name}}</text>
+        <text class="m-op ok" data-oid="{{item.openid}}" bindtap="approve">通过</text>
+        <text class="m-op del" data-oid="{{item.openid}}" bindtap="rejectApply">拒绝</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- 学习日志 -->
+  <block wx:if="{{sub === 'logs'}}">
+    <view class="tm-card card">
+      <view class="lg-row" wx:for="{{team.logs}}" wx:key="time">
+        <view class="lg-dot"></view>
+        <view class="lg-body">
+          <b>{{item.name}}</b><small class="mono">　{{item.time}}</small>
+          <view class="lg-content">{{item.content}}</view>
+        </view>
+      </view>
+      <view wx:if="{{!team.logs.length}}" class="hand tm-empty">还没有学习记录，今天学了什么？</view>
+    </view>
+    <button class="btn btn-line tm-add" data-kind="logs" bindtap="openInput">✎ 记录今日学习（每日 1 条）</button>
+  </block>
+
+  <!-- 资料共享 -->
+  <block wx:if="{{sub === 'files'}}">
+    <view class="tm-card card">
+      <view class="f-row" wx:for="{{team.files}}" wx:key="time">
+        <text class="fi-ic">📎</text>
+        <text class="f-name">{{item.fileName}}</text>
+        <small class="mono">{{item.name}} · {{item.time}}</small>
+      </view>
+      <view wx:if="{{!team.files.length}}" class="hand tm-empty">资料夹空空的，上传一份模板吧。</view>
+    </view>
+    <button class="btn btn-line tm-add" data-kind="files" bindtap="openInput">📎 登记资料文件名</button>
+  </block>
+
+  <!-- 讨论墙 -->
+  <block wx:if="{{sub === 'posts'}}">
+    <view class="tm-card card">
+      <view class="p-row" wx:for="{{team.posts}}" wx:key="time">
+        <b>{{item.name}}</b><small class="mono">　{{item.time}}</small>
+        <view class="p-content">{{item.content}}</view>
+      </view>
+      <view wx:if="{{!team.posts.length}}" class="hand tm-empty">讨论墙静悄悄的，说点什么吧。</view>
+    </view>
+    <button class="btn btn-line tm-add" data-kind="posts" bindtap="openInput">💬 发一条讨论</button>
+  </block>
+
+  <!-- 底部统计（3 格概览） -->
+  <view class="info-card">
+    <view class="title"><view class="sq"></view><text class="serif">队 伍 统 计</text></view>
+    <view class="tm-stats">
+      <view class="st-item"><b class="mono">{{stats.points}}</b><small>队伍积分</small></view>
+      <view class="st-item" bindtap="goCheckin"><b class="mono">{{stats.checkins}}</b><small>签到人次 ▸</small></view>
+      <view class="st-item"><b class="mono">{{stats.knowledge}}</b><small>知识点数</small></view>
+    </view>
+  </view>
+</block>
+
+<!-- 创建队伍弹窗 -->
+<view class="mask" wx:if="{{createShow}}" bindtap="closeCreate">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">创 建 队 伍</view>
+    <input class="kn-input fm-line" placeholder="队伍名称（创建后你自动成为队长）" value="{{createName}}" bindinput="onCreateName"/>
+    <textarea class="kn-textarea" placeholder="一句话介绍队伍目标（选填）" value="{{createIntro}}" bindinput="onCreateIntro"/>
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="closeCreate">取消</button>
+      <button class="btn btn-ink sh-btn" bindtap="doCreate">创建</button>
+    </view>
+  </view>
+</view>
+
+<!-- 发布输入弹窗 -->
+<view class="mask" wx:if="{{inputShow}}" bindtap="closeInput">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">{{inputKind === 'logs' ? '学 习 日 志' : inputKind === 'files' ? '登 记 资 料' : '发 表 讨 论'}}</view>
+    <textarea class="kn-textarea" placeholder="{{inputKind === 'files' ? '输入资料文件名 / 说明' : '写点什么…'}}" value="{{inputText}}" bindinput="onInput"/>
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="closeInput">取消</button>
+      <button class="btn btn-verm sh-btn" bindtap="submitInput">发布</button>
+    </view>
+  </view>
+</view>

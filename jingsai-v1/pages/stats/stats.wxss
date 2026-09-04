@@ -1,0 +1,37 @@
+/* pages/stats/stats.wxss —— 统计分析 */
+.st-grid { display: flex; flex-wrap: wrap; gap: 16rpx; padding: 0 28rpx; }
+.st-cell { width: calc(50% - 8rpx); box-sizing: border-box; text-align: center; padding: 26rpx 0; border-radius: 12rpx; }
+.st-cell b { font-size: 46rpx; display: block; }
+.st-cell .run { color: var(--ind); }
+.st-cell .ok { color: var(--green); }
+.st-cell small { font-size: 20rpx; color: var(--ink-soft); }
+
+.st-rate {
+  margin: 0 28rpx 20rpx; padding: 30rpx; display: flex; align-items: center; gap: 30rpx;
+  background: var(--cream); border: 3rpx solid var(--ink); border-radius: 20rpx;
+  box-shadow: 6rpx 6rpx 0 var(--ink); box-sizing: border-box;
+}
+.rate-ring {
+  width: 160rpx; height: 160rpx; border-radius: 50%;
+  border: 8rpx solid var(--verm); display: flex; align-items: center; justify-content: center;
+}
+.rate-ring b { font-size: 36rpx; color: var(--verm); }
+.rate-txt { font-size: 25rpx; color: var(--ink-soft); }
+
+.st-bars {
+  margin: 0 28rpx 30rpx; padding: 20rpx 24rpx;
+  background: var(--cream); border: 3rpx solid var(--ink); border-radius: 16rpx;
+  box-shadow: 6rpx 6rpx 0 var(--ink); box-sizing: border-box;
+}
+.bar-row { display: flex; align-items: center; gap: 14rpx; padding: 12rpx 0; }
+.bar-name { flex: 0 0 220rpx; font-size: 21rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar-track { flex: 1; height: 26rpx; border: 2rpx solid var(--ink); background: var(--cream); }
+.bar-fill { height: 100%; background: var(--verm); }
+.bar-num { font-size: 20rpx; width: 50rpx; text-align: right; }
+.st-empty { text-align: center; color: var(--ink-soft); padding: 20rpx; }
+
+.st-tip { text-align: center; color: var(--ink-soft); padding: 40rpx 60rpx; }
+
+/* 数据导出按钮 */
+.st-exports { display: flex; gap: 20rpx; margin: 0 28rpx 40rpx; }
+.st-exports .btn { flex: 1; height: 88rpx; font-size: 26rpx; }

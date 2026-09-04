@@ -1,0 +1,120 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="p-head">
+  <text class="t serif">我 的 课 表</text>
+  <picker range="{{semesters}}" value="{{semesterIdx}}" bindchange="switchSemester">
+    <text class="pill mono">{{semesters[semesterIdx]}} ▾</text>
+  </picker>
+</view>
+
+<!-- 操作栏 -->
+<view class="sc-ops">
+  <button class="btn btn-verm sc-btn" bindtap="importExcel">⬆ Excel/CSV 导入课表</button>
+  <button class="btn btn-line sc-btn" bindtap="uploadFile">⬆ 上传图片/PDF</button>
+  <button class="btn btn-line sc-btn" bindtap="openAdd">✎ 手动添加课程</button>
+  <button class="btn btn-line sc-btn" wx:if="{{canQueryFree}}" bindtap="openQuery">🔍 查空闲学生</button>
+</view>
+
+<!-- 周课表 12×7 -->
+<view class="sc-grid card">
+  <view class="sc-row sc-head">
+    <view class="sc-cell sc-time">节次</view>
+    <view class="sc-cell" wx:for="{{weekdays}}" wx:key="*this">{{item}}</view>
+  </view>
+  <view class="sc-row" wx:for="{{grid}}" wx:key="period" wx:for-item="row">
+    <view class="sc-cell sc-time">
+      <b>{{row.period.no}}</b>
+      <small>{{row.period.start}}</small>
+    </view>
+    <view class="sc-cell {{cell.course ? 'busy' : 'free'}} {{cell.course && cell.start ? 'start' : ''}}"
+          wx:for="{{row.cells}}" wx:for-item="cell" wx:key="index">
+      <text wx:if="{{cell.course && cell.start}}" class="sc-course">{{cell.course.name}}</text>
+      <text wx:if="{{cell.course && cell.start}}" class="sc-place">{{cell.course.place}}</text>
+    </view>
+  </view>
+</view>
+
+<view class="sc-legend mono">
+  <text>■ 有课</text><text class="free-lg">□ 空闲</text><text>共 {{courses.length}} 门课</text>
+</view>
+
+<!-- 课程清单（可删除） -->
+<view class="sec-band"><view class="sq"></view><b>课 程 清 单</b><view class="ln"></view></view>
+<view class="sc-list">
+  <view class="sc-item card" wx:for="{{courses}}" wx:key="index">
+    <view class="sc-item-l">
+      <b>{{item.name}}</b>
+      <small class="mono">{{weekdays[item.weekday - 1]}} · {{item.slotLabel}} · {{item.place}}</small>
+      <small wx:if="{{item.teacher}}" class="mono">教师：{{item.teacher}}</small>
+    </view>
+    <text class="sc-del" data-i="{{index}}" bindtap="removeCourse">删除</text>
+  </view>
+  <view wx:if="{{courses.length === 0}}" class="hand sc-empty">本学期还没有课程，点「手动添加」或上传课表文件。</view>
+</view>
+
+<!-- Excel 导入预览弹窗 -->
+<view class="mask" wx:if="{{impShow}}">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">导 入 预 览（{{impCourses.length}} 门）</view>
+    <scroll-view scroll-y class="imp-scroll">
+      <view class="imp-row" wx:for="{{impCourses}}" wx:key="index">
+        <b>{{item.name}}</b>
+        <small class="mono">{{weekdays[item.weekday - 1]}} · {{item.slotLabel}}{{item.place ? ' · ' + item.place : ''}}{{item.teacher ? ' · ' + item.teacher : ''}}</small>
+      </view>
+    </scroll-view>
+    <view class="imp-tip hand">与现有课程时间冲突的行会自动跳过。</view>
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="closeImport">取消</button>
+      <button class="btn btn-verm sh-btn" bindtap="confirmImport">确认导入</button>
+    </view>
+  </view>
+</view>
+
+<!-- 添加课程弹窗 -->
+<view class="mask" wx:if="{{addShow}}" bindtap="closeAdd">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">手 动 添 加 课 程</view>
+    <input class="kn-input fm-line" placeholder="课程名称（必填）" value="{{add.name}}" data-k="name" bindinput="onAddField"/>
+    <input class="kn-input fm-line" placeholder="任课教师（选填）" value="{{add.teacher}}" data-k="teacher" bindinput="onAddField"/>
+    <input class="kn-input fm-line" placeholder="上课地点（选填）" value="{{add.place}}" data-k="place" bindinput="onAddField"/>
+    <picker range="{{weekdayNames}}" value="{{add.weekday - 1}}" bindchange="onAddWeekday">
+      <view class="kn-input fm-line">星期：{{weekdayNames[add.weekday - 1]}} ▾</view>
+    </picker>
+    <picker range="{{slotMap}}" range-key="label" value="{{add.slotIdx}}" bindchange="onAddSlot">
+      <view class="kn-input fm-line">节次：{{slotMap[add.slotIdx].label}}（{{slotMap[add.slotIdx].range}}）▾</view>
+    </picker>
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="closeAdd">取消</button>
+      <button class="btn btn-verm sh-btn" bindtap="saveAdd">保存</button>
+    </view>
+  </view>
+</view>
+
+<!-- 空闲学生查询弹窗（教师/辅导员） -->
+<view class="mask" wx:if="{{queryShow}}" bindtap="closeQuery">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">空 闲 学 生 查 询</view>
+    <picker range="{{weekdayNames}}" value="{{qWeekday - 1}}" bindchange="onQWeekday">
+      <view class="kn-input fm-line">星期：{{weekdayNames[qWeekday - 1]}} ▾</view>
+    </picker>
+    <picker range="{{slotMap}}" range-key="label" value="{{qSlotIdx}}" bindchange="onQSlot">
+      <view class="kn-input fm-line">节次：{{slotMap[qSlotIdx].label}}（{{slotMap[qSlotIdx].range}}）▾</view>
+    </picker>
+    <button class="btn btn-ink sh-full" bindtap="runQuery">开 始 查 询</button>
+
+    <block wx:if="{{freeResult}}">
+      <view class="q-res">
+        <view class="q-t ok">✓ 空闲（{{freeResult.free.length}} 人）</view>
+        <view class="q-name" wx:for="{{freeResult.free}}" wx:key="name">{{item.name}} <small>{{item.major}}</small></view>
+        <view class="q-t rej">✕ 有课（{{freeResult.busy.length}} 人）</view>
+        <view class="q-name dim" wx:for="{{freeResult.busy}}" wx:key="name">{{item.name}}</view>
+        <view class="q-tip hand" wx:if="{{freeResult.total === 0}}">本学期还没有学生上传课表。</view>
+      </view>
+      <button class="btn btn-line sh-full" wx:if="{{freeResult.free.length}}" bindtap="exportFree">⬇ 导出空闲名单（Excel）</button>
+    </block>
+
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="closeQuery">关闭</button>
+    </view>
+  </view>
+</view>

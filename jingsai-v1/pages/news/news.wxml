@@ -1,0 +1,35 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="p-head">
+  <text class="t serif">新 闻 动 态</text>
+  <text class="pill mono red" wx:if="{{canPost}}" bindtap="openPub">+ 投稿</text>
+</view>
+
+<view class="nw-card card" wx:for="{{list}}" wx:key="_id">
+  <view class="nw-flags">
+    <text class="pill red" wx:if="{{item.topped}}">置顶</text>
+    <text class="pill">{{item.newsType}}</text>
+    <text class="st-pill {{item.status === 'passed' ? 'st-ok' : item.status === 'rejected' ? 'st-rej' : 'st-run'}}">{{item.statusText}}</text>
+  </view>
+  <view class="nw-title serif">{{item.title}}</view>
+  <view class="nw-content">{{item.content}}</view>
+  <view class="nw-meta mono">{{item.applicantName}} · {{item.createdAt}}<text wx:if="{{item.publishAt}}"> · 定时 {{item.publishAt}}</text></view>
+</view>
+<view wx:if="{{list.length === 0}}" class="nw-empty hand">还没有新闻。</view>
+
+<!-- 投稿弹窗 -->
+<view class="mask" wx:if="{{pubShow}}" bindtap="closePub">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">投 稿 新 闻</view>
+    <picker range="{{newsTypes}}" value="{{pub.typeIdx}}" bindchange="onPubType">
+      <view class="kn-input fm-line">类型：{{newsTypes[pub.typeIdx]}} ▾</view>
+    </picker>
+    <input class="kn-input fm-line" placeholder="标题" value="{{pub.title}}" data-k="title" bindinput="onPubField"/>
+    <textarea class="kn-textarea" placeholder="正文内容" value="{{pub.content}}" data-k="content" bindinput="onPubField"/>
+    <input class="kn-input fm-line" placeholder="定时发布时间（选填，如 2026-09-10 09:00）" value="{{pub.publishAt}}" data-k="publishAt" bindinput="onPubField"/>
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="closePub">取消</button>
+      <button class="btn btn-verm sh-btn" bindtap="submitPub">提交审核</button>
+    </view>
+  </view>
+</view>

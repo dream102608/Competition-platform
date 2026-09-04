@@ -1,36 +1,98 @@
-// pages/login/login.js —— S1 登录与角色路由
+// pages/login/login.js —— 登录页：学校搜索 → 身份选择 → 登录
 const app = getApp();
 const data = require('../../utils/data');
+const CFG = require('../../utils/config');
+const SCHOOLS = require('../../utils/schools');
 
 Page({
+  noop() {}, // 阻止弹窗点击穿透（勿删）
   data: {
     sbh: 24,
     role: 'student',
-    roles: [
-      { key: 'student', name: '学生票根', desc: '报名 · 组队 · 查进度', ver: 'V1.0', on: true },
-      { key: 'teacher', name: '教师票根', desc: '审批 · 带队 · 数据收集', ver: 'V1.1', on: false },
-      { key: 'admin', name: '管理员票根', desc: '系统配置 · 全局监控', ver: 'V3.0', on: false }
-    ]
+    autoRoles: [],      // 注册即可用
+    fixedRoles: [],     // 需学院/系统指定
+    schoolKw: '',       // 学校搜索关键词
+    school: null,       // 已选学校 {name, province, city, level, type}
+    schoolList: [],     // 搜索下拉结果
+    schoolSearched: false,
+    // 注册表单
+    regShow: false,
+    roleName: '',
+    reg: { name: '', studentId: '' }
   },
 
   onLoad() {
-    this.setData({ sbh: app.globalData.sbh });
+    this.setData({
+      sbh: app.globalData.sbh,
+      autoRoles: CFG.ROLES.filter(r => r.auto),
+      fixedRoles: CFG.ROLES.filter(r => !r.auto),
+      // 默认带出本校（燕京理工学院）
+      school: SCHOOLS.searchSchools(SCHOOLS.DEFAULT_SCHOOL, 1)[0] || { name: SCHOOLS.DEFAULT_SCHOOL, province: '', city: '', level: '', type: '' }
+    });
   },
 
+  /* ---------- 学校搜索 ---------- */
+  onSchoolInput(e) {
+    const kw = e.detail.value;
+    this.setData({
+      schoolKw: kw,
+      schoolList: SCHOOLS.searchSchools(kw, 30),
+      schoolSearched: !!kw.trim()
+    });
+  },
+
+  onSearchConfirm() {
+    if (this.data.schoolList.length) this.pickSchool({ currentTarget: { dataset: { index: 0 } } });
+  },
+
+  pickSchool(e) {
+    const item = this.data.schoolList[e.currentTarget.dataset.index];
+    if (!item) return;
+    this.setData({ school: item, schoolList: [], schoolKw: '', schoolSearched: false });
+  },
+
+  /* ---------- 身份选择 ---------- */
   pick(e) {
-    const key = e.currentTarget.dataset.role;
-    const r = this.data.roles.find(x => x.key === key);
-    if (!r.on) {
-      wx.showToast({ title: `该身份将在 ${r.ver} 开放`, icon: 'none' });
+    this.setData({ role: e.currentTarget.dataset.role });
+  },
+
+  locked() {
+    wx.showToast({ title: '该角色由学院/管理员指定，登录后在后台分配', icon: 'none', duration: 2000 });
+  },
+
+  /* ---------- 登录：弹出注册表单 ---------- */
+  onLogin() {
+    if (!this.data.school) {
+      wx.showToast({ title: '请先选择你的学校', icon: 'none' });
       return;
     }
-    this.setData({ role: key });
+    const roleName = (CFG.ROLE_NAMES || {})[this.data.role] || '学生';
+    this.setData({ regShow: true, roleName });
+  },
+  closeReg() { this.setData({ regShow: false }); },
+  onRegField(e) { this.setData({ ['reg.' + e.currentTarget.dataset.k]: e.detail.value }); },
+
+  /** 一键带出微信昵称作为姓名（用户拒绝授权时静默忽略，可手填） */
+  fillWxName() {
+    if (!wx.getUserProfile) return;
+    wx.getUserProfile({
+      desc: '用于完善平台档案姓名',
+      success: (res) => {
+        const nick = res.userInfo && res.userInfo.nickName;
+        if (nick && nick !== '微信用户') this.setData({ 'reg.name': nick });
+      },
+      fail: () => {}
+    });
   },
 
-  onLogin() {
+  confirmReg() {
     if (this._busy) return;
+    const r = this.data.reg;
+    if (!r.name.trim()) { wx.showToast({ title: '请填写姓名', icon: 'none' }); return; }
     this._busy = true;
-    app.login(this.data.role).then(() => {
+    app.login(this.data.role, this.data.school.name, {
+      name: r.name.trim(), studentId: r.studentId.trim()
+    }).then(() => {
       this._busy = false;
       wx.switchTab({ url: '/pages/home/home' });
     });

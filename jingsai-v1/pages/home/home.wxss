@@ -1,75 +1,121 @@
-/* S2 首页 · 早报版式 */
-.paper-mast { padding: 26rpx 28rpx 18rpx; border-bottom: 4rpx solid var(--ink); }
-.paper-mast .date { display: flex; justify-content: space-between; font-size: 19rpx; letter-spacing: 3rpx; color: var(--ink-soft); }
-.paper-mast .mast-title { font-size: 76rpx; font-weight: 900; letter-spacing: 6rpx; margin: 14rpx 0 8rpx; }
-.paper-mast .slogan { font-size: 18rpx; letter-spacing: 6rpx; color: var(--ink-fade); }
+/* pages/home/home.wxss —— 首页 V3.0（参考图风格重排）
+   设计：地址条 + 胶囊搜索 + 大轮播 + 2×5 圆图标宫格 + 特色 banner + 列表
+   保留：水墨报头、条码、学院章、印章、奖牌、硬边卡片等元素
+*/
 
-/* 跑马灯 */
-.ticker { display: flex; align-items: center; border-bottom: 2rpx solid var(--ink); background: var(--cream); }
-.ticker .tag { font-size: 20rpx; color: var(--paper); background: var(--verm); padding: 8rpx 14rpx; flex-shrink: 0; }
-.ticker-box { overflow: hidden; white-space: nowrap; flex: 1; padding: 8rpx 0; }
-.ticker .txt {
-  display: inline-block; white-space: nowrap;
-  font-size: 24rpx; color: var(--ink-soft);
-  animation: marquee 14s linear infinite;
+/* ========== 报头（保留水墨） ========== */
+.paper-mast {
+  text-align: center; padding: 16rpx 28rpx 20rpx;
+  border-bottom: 3rpx solid var(--ink);
+  position: relative; box-sizing: border-box;
 }
-@keyframes marquee {
-  0% { transform: translateX(20%); }
-  100% { transform: translateX(-100%); }
+.mast-bar { width: 240rpx; margin: 14rpx auto 0; }
+.mast-bc { height: 22rpx; }
+.mast-stamp {
+  position: absolute; right: 36rpx; top: 60rpx;
+  width: 84rpx; height: 84rpx; font-size: 19rpx;
 }
+.paper-mast .date {
+  display: flex; justify-content: space-between;
+  font-size: 20rpx; color: var(--ink-soft); letter-spacing: 2rpx;
+}
+.mast-title { font-size: 48rpx; font-weight: 900; letter-spacing: 8rpx; margin: 8rpx 0 4rpx; }
+.slogan { font-size: 18rpx; letter-spacing: 4rpx; color: var(--ink-fade); }
 
-/* 头版 Banner */
-.home-banner { position: relative; margin: 22rpx 28rpx; border: 3rpx solid var(--ink); }
-.home-banner image { width: 100%; height: 300rpx; display: block; filter: saturate(.8) contrast(1.02); }
-.home-banner .flag {
-  position: absolute; right: -8rpx; top: 18rpx;
+/* ========== 4 格概览（在信息卡内） ========== */
+.ov-row { display: flex; gap: 14rpx; }
+.ov-item {
+  flex: 1; text-align: center;
+  background: var(--paper);
+  border: 2.4rpx solid var(--ink); border-radius: 12rpx;
+  padding: 16rpx 0;
+  box-sizing: border-box;
+}
+.ov-item b { font-size: 36rpx; display: block; font-family: var(--mono); }
+.ov-item small { font-size: 18rpx; color: var(--ink-soft); font-family: var(--serif); letter-spacing: 1rpx; }
+.ov-item .run { color: var(--ind); }
+.ov-item .ok  { color: var(--green); }
+.ov-item .verm { color: var(--verm); }
+
+/* ========== 新闻滚动条（保留） ========== */
+.ticker {
+  display: flex; align-items: center;
+  border: 2.4rpx solid var(--ink); border-radius: 12rpx;
+  background: var(--paper);
+  box-shadow: 3rpx 3rpx 0 var(--ink);
+  overflow: hidden; box-sizing: border-box;
+}
+.ticker .tag {
   background: var(--verm); color: var(--paper);
-  font-size: 24rpx; padding: 6rpx 18rpx; letter-spacing: 4rpx;
-  transform: rotate(-4deg);
+  font-size: 20rpx; padding: 14rpx 18rpx; letter-spacing: 4rpx; flex: none;
 }
-.home-banner .cap {
-  display: flex; align-items: center; justify-content: space-between;
-  background: var(--ink); color: var(--paper);
-  padding: 16rpx 22rpx; font-size: 28rpx; letter-spacing: 2rpx;
-}
-.home-banner .cap-arrow { color: var(--verm); font-size: 32rpx; }
+.ticker-box { flex: 1; overflow: hidden; white-space: nowrap; }
+.ticker .txt { font-size: 24rpx; padding: 0 16rpx; }
 
-/* 功能宫格 */
-.grid-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 20rpx; margin: 0 28rpx; }
-.g-item {
-  position: relative;
-  border: 3rpx solid var(--ink); background: var(--cream);
-  box-shadow: 6rpx 6rpx 0 var(--ink);
-  padding: 24rpx 22rpx;
-  display: flex; flex-direction: column; gap: 6rpx;
+/* ========== 热门竞赛（保留水墨硬边卡） ========== */
+.hot-card {
+  display: flex; margin: 0 28rpx 24rpx; overflow: hidden;
+  background: var(--cream); border: 3rpx solid var(--ink);
+  border-radius: 16rpx; box-shadow: 6rpx 6rpx 0 var(--ink);
 }
-.g-item:active { transform: translate(2rpx, 2rpx); box-shadow: 4rpx 4rpx 0 var(--ink); }
-.g-item .g-ic { font-size: 34rpx; color: var(--ink); margin-bottom: 6rpx; }
-.g-item .g-ic.verm { color: var(--verm); }
-.g-item b { font-size: 30rpx; font-weight: 900; letter-spacing: 2rpx; }
-.g-item small { font-size: 20rpx; color: var(--ink-fade); letter-spacing: 1rpx; }
-.g-item.off { border-style: dashed; box-shadow: none; opacity: .6; }
-.g-item .soon {
-  position: absolute; top: 12rpx; right: 12rpx;
-  font-size: 16rpx; color: var(--verm); border: 2rpx solid var(--verm);
-  padding: 0 8rpx; transform: rotate(6deg);
-}
+.hot-cover { width: 210rpx; height: 118rpx; flex-shrink: 0; align-self: center; border: 2rpx solid var(--ink); margin: 8rpx 0 8rpx 8rpx; }
+.hot-info { flex: 1; padding: 18rpx 20rpx; min-width: 0; }
+.hot-info b { font-size: 26rpx; display: block; font-family: var(--serif); }
+.hot-info small { color: var(--ink-soft); font-size: 20rpx; display: block; margin: 4rpx 0 10rpx; }
+.hot-tags { display: flex; gap: 10rpx; flex-wrap: wrap; }
 
-/* 报名进度卡 */
-.prog-card { margin: 30rpx 28rpx 40rpx; padding: 24rpx; }
-.pc-t { display: flex; align-items: center; justify-content: space-between; border-bottom: 2rpx solid var(--ink); padding-bottom: 14rpx; }
-.pc-t b { font-size: 30rpx; letter-spacing: 8rpx; }
-.pc-row { display: flex; align-items: center; gap: 16rpx; padding: 20rpx 4rpx; border-bottom: 2rpx dashed var(--paper-4); }
+/* ========== 报名进度（保留） ========== */
+.prog-card {
+  margin: 0 28rpx 24rpx;
+  background: var(--cream); border: 3rpx solid var(--ink);
+  border-radius: 16rpx; box-shadow: 6rpx 6rpx 0 var(--ink);
+}
+.pc-body { padding: 6rpx 24rpx 20rpx; }
+.pc-row {
+  display: flex; align-items: center; gap: 18rpx;
+  padding: 20rpx 0; border-bottom: 2rpx dashed var(--ink-fade);
+}
 .pc-row:last-child { border-bottom: none; }
-.pc-row .num { font-size: 30rpx; font-weight: 700; color: var(--verm); }
+.pc-row .num { font-size: 30rpx; color: var(--verm); font-weight: 700; }
 .pc-info { flex: 1; min-width: 0; }
-.pc-info b { display: block; font-size: 25rpx; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pc-info small { font-size: 17rpx; color: var(--ink-fade); }
-.pc-track { display: flex; align-items: center; }
+.pc-info b { font-size: 25rpx; display: block; }
+.pc-info small { font-size: 18rpx; color: var(--ink-fade); }
 .pc-track .dot {
-  width: 14rpx; height: 14rpx; border-radius: 50%;
-  border: 3rpx solid var(--ink); margin-right: 14rpx;
+  display: inline-block; width: 14rpx; height: 14rpx; border-radius: 50%;
+  border: 2.4rpx solid var(--ink); margin-right: 8rpx;
 }
 .pc-track .dot.done { background: var(--verm); border-color: var(--verm); }
-.pc-row .ver { font-size: 18rpx; color: var(--verm); border: 2rpx solid var(--verm); padding: 2rpx 8rpx; }
-.pc-empty { text-align: center; padding: 30rpx 0; font-size: 28rpx; color: var(--verm); }
+.pc-row .ver { font-size: 20rpx; color: var(--ink-soft); }
+.pc-empty { text-align: center; padding: 30rpx 0; color: var(--ink-soft); font-family: var(--hand); }
+
+/* ========== 证书轮播（保留） ========== */
+.cert-sw { height: 180rpx; margin: 0 28rpx 20rpx; }
+.cert-slide {
+  display: flex; align-items: center; gap: 20rpx; height: 152rpx;
+  padding: 0 24rpx; box-sizing: border-box;
+}
+.cs-medal { width: 80rpx; height: 80rpx; font-size: 30rpx; flex: none; }
+.cs-info { flex: 1; min-width: 0; }
+.cs-info b { font-size: 27rpx; display: block; letter-spacing: 1rpx; line-height: 1.4; }
+.cs-info small { font-size: 19rpx; color: var(--ink-soft); }
+.cs-stamp { width: 76rpx; height: 76rpx; font-size: 17rpx; flex: none; }
+
+/* ========== 荣誉墙（横向滚动保留） ========== */
+.honor-scroll {
+  white-space: nowrap; padding: 4rpx 28rpx 10rpx;
+  box-sizing: border-box;
+}
+.honor-card {
+  display: inline-flex; flex-direction: column; align-items: center; text-align: center;
+  width: 300rpx; padding: 28rpx 20rpx 20rpx; margin-right: 20rpx;
+  vertical-align: top; white-space: normal;
+  background: var(--cream); border: 3rpx solid var(--ink);
+  border-radius: 16rpx; box-shadow: 6rpx 6rpx 0 var(--ink);
+  box-sizing: border-box;
+}
+.honor-t { font-size: 24rpx; margin-top: 14rpx; letter-spacing: 1rpx; line-height: 1.4; }
+.honor-a { font-size: 19rpx; color: var(--ink-soft); margin-top: 8rpx; line-height: 1.5; }
+.honor-y {
+  margin-top: 12rpx; font-size: 18rpx; color: var(--verm); letter-spacing: 3rpx;
+  border-top: 2rpx dashed var(--ink-fade); padding-top: 10rpx; width: 80%;
+}

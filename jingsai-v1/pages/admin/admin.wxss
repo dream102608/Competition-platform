@@ -1,0 +1,28 @@
+/* pages/admin/admin.wxss —— 系统管理 V3.0（参考图风格重排） */
+.ad-deny { text-align: center; padding: 100rpx 0; color: var(--ink-soft); font-size: 30rpx; font-family: var(--hand); }
+
+/* Tab 胶囊切换（参考图风格） */
+.ad-tabs { display: flex; gap: 10rpx; margin: 20rpx 28rpx; }
+.ad-tab {
+  flex: 1; text-align: center; height: 72rpx; line-height: 72rpx;
+  font-size: 24rpx; font-family: var(--serif); font-weight: 700;
+  background: var(--cream); color: var(--ink-soft);
+  border: 2.4rpx solid var(--ink); border-radius: 999rpx;
+  letter-spacing: 2rpx;
+}
+.ad-tab.on { background: var(--verm); color: var(--paper); border-color: var(--verm); }
+
+.ad-card {
+  margin: 0 28rpx 18rpx; padding: 20rpx 24rpx;
+  background: var(--cream); border: 3rpx solid var(--ink); border-radius: 16rpx;
+  box-shadow: 6rpx 6rpx 0 var(--ink); box-sizing: border-box;
+}
+.ad-row1 { display: flex; align-items: center; gap: 14rpx; }
+.ad-row1 b { flex: 1; font-size: 27rpx; font-family: var(--serif); }
+.ad-meta { font-size: 19rpx; color: var(--ink-soft); margin: 8rpx 0; }
+.ad-ops { display: flex; gap: 24rpx; margin-top: 10rpx; border-top: 2rpx dashed var(--ink-fade); padding-top: 12rpx; }
+.ad-op { font-size: 23rpx; color: var(--ind); }
+.ad-op.del { color: var(--verm); }
+.ad-empty { text-align: center; padding: 60rpx 0; color: var(--ink-soft); font-family: var(--hand); }
+.ad-chain { font-size: 24rpx; color: var(--ink-soft); line-height: 1.8; margin-top: 8rpx; }
+.ad-tip { text-align: center; padding: 20rpx 40rpx 40rpx; color: var(--ink-soft); }

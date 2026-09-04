@@ -1,54 +1,70 @@
-// pages/hall/hall.js —— S3 竞赛大厅（分类广告版式）
+// pages/hall/hall.js —— S3 竞赛大厅（学生/教师双赛道 + 分类筛选 + 搜索）
 const app = getApp();
 const data = require('../../utils/data');
+const CFG = require('../../utils/config');
 
 Page({
   data: {
     sbh: 24,
-    track: 'subject',        // subject | innov
+    track: 'student',        // student | teacher
     trackTabs: [
-      { key: 'subject', name: '学科竞赛' },
-      { key: 'innov', name: '创新创业' }
+      { key: 'student', name: '学生竞赛' },
+      { key: 'teacher', name: '教师竞赛' }
     ],
     keyword: '',
     filter: '全部',
-    filters: ['全部', '可报名', '国家级', '已截止'],
-    promo: null,
-    comps: []
+    filters: [],
+    comps: [],
+    todayStr: ''
   },
 
   onLoad() {
-    this.setData({ sbh: app.globalData.sbh });
+    const t = app.globalData.hallTrack;
+    app.globalData.hallTrack = null;
+    const d = new Date();
+    const p = (n) => String(n).padStart(2, '0');
+    this.setData({
+      sbh: app.globalData.sbh,
+      track: t === 'teacher' ? 'teacher' : 'student',
+      todayStr: `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
+    });
   },
 
-  onShow() { this.refresh(); },
+  onShow() { data.ready().then(() => this.refresh()); },
 
   refresh() {
-    const all = data.getCompetitions().filter(c => c.track === this.data.track);
-    const promo = all.find(c => !c.closed && c.level === 'A');
-    let list = all.filter(c => c._id !== (promo && promo._id));
-    // 筛选
+    const all = data.getCompetitions()
+      .filter(c => (c.track || 'student') === this.data.track)
+      .map(c => Object.assign({}, c, {
+        ddlDays: this.ddl(c),
+        statusText: c.closed ? '已结束' : '报名中'
+      }));
+    let list = all;
     const f = this.data.filter;
-    if (f === '可报名') list = list.filter(c => !c.closed);
-    if (f === '国家级') list = list.filter(c => c.level === 'A');
-    if (f === '已截止') list = list.filter(c => c.closed);
-    // 搜索
-    const kw = this.data.keyword.trim();
+    if (f !== '全部') list = list.filter(c => c.category === f);
+    const kw = this.data.keyword.trim().toLowerCase();
     if (kw) {
-      const k = kw.toLowerCase();
-      list = all.filter(c =>
-        (c.title || '').toLowerCase().indexOf(k) > -1 ||
-        (c.no || '').toLowerCase().indexOf(k) > -1 ||
-        (c.org || '').toLowerCase().indexOf(k) > -1
+      list = list.filter(c =>
+        (c.title || '').toLowerCase().indexOf(kw) > -1 ||
+        (c.no || '').toLowerCase().indexOf(kw) > -1 ||
+        (c.host || '').toLowerCase().indexOf(kw) > -1
       );
-      this.setData({ promo: null, comps: list });
-      return;
     }
-    this.setData({ promo: promo || null, comps: list });
+    this.setData({
+      filters: CFG.COMP_CATEGORIES[this.data.track],
+      comps: list
+    });
+  },
+
+  ddl(c) {
+    if (c.closed) return '—';
+    const end = new Date(c.deadline + 'T23:59:59');
+    const diff = Math.ceil((end - Date.now()) / 86400000);
+    return diff < 0 ? '已过期' : diff + ' 天';
   },
 
   switchTrack(e) {
-    this.setData({ track: e.currentTarget.dataset.key });
+    this.setData({ track: e.currentTarget.dataset.key, filter: '全部' });
     this.refresh();
   },
 

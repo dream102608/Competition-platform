@@ -1,0 +1,63 @@
+/* pages/watchtower/watchtower.wxss —— 科创瞭望台 V3.0（参考图风格重排） */
+.wt-stats {
+  display: flex; gap: 14rpx; margin: 20rpx 28rpx;
+}
+.ws-item {
+  flex: 1; text-align: center;
+  background: var(--cream); border: 2.4rpx solid var(--ink); border-radius: 12rpx;
+  box-shadow: 3rpx 3rpx 0 var(--ink); padding: 18rpx 0; box-sizing: border-box;
+}
+.ws-item b { font-size: 36rpx; display: block; font-family: var(--mono); }
+.ws-item .verm { color: var(--verm); }
+.ws-item .ok { color: #2E7D32; }
+.ws-item small { font-size: 18rpx; color: var(--ink-soft); font-family: var(--serif); letter-spacing: 1rpx; }
+
+.wt-bar { display: flex; gap: 14rpx; padding: 0 28rpx 8rpx; align-items: center; }
+.wt-search {
+  flex: 1; height: 72rpx; padding: 0 20rpx; box-sizing: border-box;
+  background: var(--paper-2); border: 2.4rpx solid var(--ink); font-size: 24rpx;
+  border-radius: 999rpx;
+}
+.wt-up {
+  width: 200rpx; height: 72rpx; font-size: 24rpx; letter-spacing: 2rpx;
+  border-radius: 999rpx;
+}
+.wt-up.btn::after { border: none; }
+.wt-tip { padding: 0 28rpx 12rpx; font-size: 19rpx; color: var(--ink-fade); }
+
+.wt-course {
+  margin: 0 28rpx 22rpx; padding: 20rpx 24rpx;
+  background: var(--cream); border: 3rpx solid var(--ink); border-radius: 16rpx;
+  box-shadow: 6rpx 6rpx 0 var(--ink); box-sizing: border-box;
+}
+.wc-intro { font-size: 21rpx; color: var(--ink-soft); margin-bottom: 6rpx; }
+.wc-lect { font-size: 19rpx; color: var(--ink-fade); margin-bottom: 10rpx; letter-spacing: 1rpx; }
+
+.wt-video {
+  display: flex; align-items: center; gap: 16rpx;
+  padding: 16rpx 0; border-top: 2rpx dashed var(--ink-fade);
+}
+.wv-no { font-size: 24rpx; color: var(--ink-fade); width: 48rpx; flex-shrink: 0; }
+.wv-info { flex: 1; min-width: 0; }
+.wv-info b { font-size: 25rpx; display: block; line-height: 1.4; }
+.wv-info small { font-size: 18rpx; color: var(--ink-soft); }
+.wv-prog { height: 6rpx; background: rgba(26,24,21,.12); margin-top: 8rpx; border-radius: 3rpx; overflow: hidden; }
+.wv-prog-in { height: 100%; background: var(--verm); }
+.wv-badge {
+  font-size: 18rpx; color: var(--verm); border: 2rpx solid var(--verm);
+  padding: 4rpx 12rpx; flex-shrink: 0; letter-spacing: 1rpx; border-radius: 999rpx;
+}
+.wv-badge.done { color: #2E7D32; border-color: #2E7D32; }
+.wv-del { font-size: 20rpx; color: var(--ink-fade); padding: 6rpx 4rpx 6rpx 12rpx; flex-shrink: 0; }
+
+.wt-empty { text-align: center; padding: 20rpx 0; color: var(--ink-soft); font-family: var(--hand); }
+.wt-empty2 { text-align: center; padding: 60rpx 0; color: var(--ink-soft); font-family: var(--hand); }
+
+/* 播放器弹窗（用通用 sheet 宽度，无横向溢出） */
+.wv-meta { font-size: 19rpx; color: var(--ink-soft); margin-bottom: 12rpx; }
+.wv-video {
+  width: 100%; height: 380rpx; background: #000;
+  border: 2.4rpx solid var(--ink); border-radius: 12rpx; box-sizing: border-box;
+}
+.wv-intro { margin-top: 14rpx; font-size: 22rpx; color: var(--ink-soft); line-height: 1.6; }
+.wv-rule { margin-top: 10rpx; font-size: 18rpx; color: var(--ink-fade); letter-spacing: 1rpx; }

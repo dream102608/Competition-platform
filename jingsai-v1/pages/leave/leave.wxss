@@ -1,0 +1,37 @@
+/* pages/leave/leave.wxss —— 请假管理 V3.0（参考图风格重排） */
+.lv-form {
+  margin: 0 28rpx 24rpx; padding: 24rpx 28rpx;
+  background: var(--cream); border: 3rpx solid var(--ink); border-radius: 20rpx;
+  box-shadow: 6rpx 6rpx 0 var(--ink); box-sizing: border-box;
+}
+.lv-label {
+  font-size: 24rpx; font-weight: 700; margin: 18rpx 0 10rpx;
+  font-family: var(--serif); letter-spacing: 1rpx;
+}
+.lv-picker {
+  border: 2.4rpx solid var(--ink); background: var(--paper-2);
+  padding: 16rpx 18rpx; font-size: 26rpx; border-radius: 12rpx;
+  box-sizing: border-box;
+}
+.lv-textarea {
+  width: 100%; min-height: 150rpx;
+  border: 2.4rpx solid var(--ink); background: var(--paper-2);
+  padding: 16rpx; font-size: 26rpx; border-radius: 12rpx; box-sizing: border-box;
+}
+.lv-upload { width: 100%; height: 80rpx; font-size: 24rpx; letter-spacing: 2rpx; }
+.lv-upload.btn::after { border: none; }
+.lv-submit { width: 100%; height: 92rpx; font-size: 30rpx; margin-top: 24rpx; }
+.lv-submit.btn::after { border: none; }
+.lv-submit.disabled { opacity: .5; }
+.lv-note { margin-top: 16rpx; font-size: 22rpx; }
+
+.lv-card {
+  margin: 0 28rpx 20rpx; padding: 22rpx 24rpx;
+  background: var(--cream); border: 3rpx solid var(--ink); border-radius: 16rpx;
+  box-shadow: 6rpx 6rpx 0 var(--ink); box-sizing: border-box;
+}
+.lv-row1 { display: flex; justify-content: space-between; align-items: center; }
+.lv-row1 b { font-size: 28rpx; font-family: var(--serif); }
+.lv-meta { font-size: 19rpx; color: var(--ink-soft); margin: 8rpx 0; }
+.lv-reason { font-size: 25rpx; color: var(--ink-soft); }
+.lv-empty { text-align: center; padding: 60rpx 0; color: var(--ink-soft); font-family: var(--hand); }

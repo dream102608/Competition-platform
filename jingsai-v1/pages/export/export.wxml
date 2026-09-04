@@ -1,0 +1,172 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<!-- 报头 -->
+<view class="p-head">
+  <text class="t serif">数 据 导 出</text>
+  <text class="pill mono {{canFull ? 'red' : 'blue'}}" wx:if="{{authorized}}">{{roleLabel}}</text>
+</view>
+
+<!-- 无权限提示 -->
+<view wx:if="{{!authorized}}" class="ad-deny hand">
+  <view style="font-size:60rpx; margin-bottom:30rpx;">🔒</view>
+  <view>数据导出仅教师 / 辅导员 / 管理员 / 学院领导可见。</view>
+  <view style="margin-top:14rpx; font-size:22rpx;">如需查看自己指导学生的参赛情况，请在「我的」切换为教师身份。</view>
+</view>
+
+<block wx:if="{{authorized}}">
+  <!-- 权限说明 banner -->
+  <view class="banner-c {{canFull ? 'ink' : 'blue'}}" wx:if="{{user}}">
+    <view class="bc-ic">{{canFull ? '管' : '师'}}</view>
+    <view style="flex:1; min-width:0;">
+      <view class="ttl" style="font-size:36rpx; letter-spacing:4rpx;">{{canFull ? '全院数据导出' : '指导范围数据导出'}}</view>
+      <view class="sub" style="font-size:20rpx; opacity:.85; margin-top:6rpx;">{{permissionNote}}</view>
+      <view class="sub" style="font-size:18rpx; opacity:.7; margin-top:4rpx;">共 {{stats.total}} 条记录 · 本月新增 {{stats.thisMonth}} · 累计导出 {{stats.exports}} 次</view>
+    </view>
+    <view class="illu" style="background:rgba(244,237,223,.18); border-color:var(--paper); color:var(--paper);">导</view>
+  </view>
+
+  <!-- ① 科创赛事数据 -->
+  <view class="sec-band"><view class="sq"></view><b>科 创 赛 事 数 据</b><view class="ln"></view></view>
+
+  <view class="exp-card card">
+    <view class="exp-head">
+      <text class="exp-t serif">报 名 名 单</text>
+      <text class="pill mono small">{{stats.total}} 条</text>
+    </view>
+    <view class="exp-desc hand">按竞赛与状态筛选，导出全部报名记录含审批节点。</view>
+    <view class="exp-filter">
+      <picker range="{{competitions}}" range-key="title" bindchange="onCompPick">
+        <view class="kn-input exp-pick">{{compLabel}} ▾</view>
+      </picker>
+      <picker range="{{statusOpts}}" bindchange="onStatusPick">
+        <view class="kn-input exp-pick">{{statusLabel}} ▾</view>
+      </picker>
+    </view>
+    <button class="btn btn-verm exp-btn" bindtap="exportRegs">⬇ 导出 报名名单.xlsx</button>
+  </view>
+
+  <view class="exp-card card">
+    <view class="exp-head">
+      <text class="exp-t serif">单 个 竞 赛 明 细</text>
+      <text class="pill mono small">含全部字段</text>
+    </view>
+    <view class="exp-desc hand">只导出一个竞赛的报名，含队员、指导教师、全部审批节点。</view>
+    <view class="exp-filter">
+      <picker range="{{competitions}}" range-key="title" bindchange="onOneCompPick">
+        <view class="kn-input exp-pick">{{oneCompLabel}} ▾</view>
+      </picker>
+    </view>
+    <button class="btn btn-line exp-btn" bindtap="exportOneComp">⬇ 导出 竞赛明细.xlsx</button>
+  </view>
+
+  <view class="exp-card card">
+    <view class="exp-head">
+      <text class="exp-t serif">学 生 获 奖 名 单</text>
+      <text class="pill mono small">{{stats.awards}} 项</text>
+    </view>
+    <view class="exp-desc hand">已通过审核的获奖证书列表，可按等级过滤。</view>
+    <view class="exp-filter">
+      <picker range="{{awardOpts}}" bindchange="onAwardPick">
+        <view class="kn-input exp-pick">{{awardLabel}} ▾</view>
+      </picker>
+    </view>
+    <button class="btn btn-line exp-btn" bindtap="exportAwards">⬇ 导出 获奖名单.xlsx</button>
+  </view>
+
+  <!-- ② 学生数据 -->
+  <view class="sec-band"><view class="sq"></view><b>学 生 数 据</b><view class="ln"></view></view>
+
+  <view class="exp-card card">
+    <view class="exp-head">
+      <text class="exp-t serif">我 指 导 的 学 生</text>
+      <text class="pill mono blue">{{stats.advisees}} 人</text>
+    </view>
+    <view class="exp-desc hand">
+      {{isTeacher ? '仅导出你指导过的所有学生（含报名/培训/打卡统计）。' : '导出指定指导教师名下的全部学生。'}}
+    </view>
+    <view class="exp-filter" wx:if="{{canFull}}">
+      <picker range="{{teacherOpts}}" range-key="name" bindchange="onTeacherPick">
+        <view class="kn-input exp-pick">{{teacherLabel}} ▾</view>
+      </picker>
+    </view>
+    <button class="btn btn-verm exp-btn" bindtap="exportAdvisees">⬇ 导出 指导学生.xlsx</button>
+  </view>
+
+  <view class="exp-card card">
+    <view class="exp-head">
+      <text class="exp-t serif">培 训 报 名 记 录</text>
+      <text class="pill mono small">含签到</text>
+    </view>
+    <view class="exp-desc hand">培训发布、报名、签到、积分完整记录。</view>
+    <view class="exp-filter">
+      <picker range="{{trainingOpts}}" range-key="title" bindchange="onTrainingPick">
+        <view class="kn-input exp-pick">{{trainingLabel}} ▾</view>
+      </picker>
+    </view>
+    <button class="btn btn-line exp-btn" bindtap="exportTrainings">⬇ 导出 培训记录.xlsx</button>
+  </view>
+
+  <view class="exp-card card">
+    <view class="exp-head">
+      <text class="exp-t serif">空 闲 学 生 查 询</text>
+      <text class="pill mono small">按时间筛</text>
+    </view>
+    <view class="exp-desc hand">按星期与节次查询当前没有课的学生名单（指导培训/竞赛组队用）。</view>
+    <view class="exp-filter">
+      <picker range="{{weekdayOpts}}" bindchange="onWeekdayPick">
+        <view class="kn-input exp-pick">{{weekdayLabel}} ▾</view>
+      </picker>
+      <picker range="{{slotOpts}}" bindchange="onSlotPick">
+        <view class="kn-input exp-pick">{{slotLabel}} ▾</view>
+      </picker>
+    </view>
+    <button class="btn btn-line exp-btn" bindtap="exportFree">⬇ 导出 空闲学生.xlsx</button>
+  </view>
+
+  <!-- ③ 行政台账（仅管理员级） -->
+  <block wx:if="{{canFull}}">
+    <view class="sec-band"><view class="sq"></view><b>行 政 台 账</b><view class="ln"></view></view>
+
+    <view class="exp-card card">
+      <view class="exp-head">
+        <text class="exp-t serif">经 费 台 账</text>
+        <text class="pill mono verm">仅管理员</text>
+      </view>
+      <view class="exp-desc hand">经费申请与终审记录，按状态过滤。</view>
+      <view class="exp-filter">
+        <picker range="{{statusOpts}}" bindchange="onExpenseStatusPick">
+          <view class="kn-input exp-pick">{{expenseStatusLabel}} ▾</view>
+        </picker>
+      </view>
+      <button class="btn btn-ink exp-btn" bindtap="exportExpenses">⬇ 导出 经费台账.xlsx</button>
+    </view>
+
+    <view class="exp-card card">
+      <view class="exp-head">
+        <text class="exp-t serif">课 表 明 细</text>
+        <text class="pill mono verm">仅管理员</text>
+      </view>
+      <view class="exp-desc hand">全院学生课表原始数据，含学期、星期、小节、地点。</view>
+      <view class="exp-filter">
+        <picker range="{{semesterOpts}}" bindchange="onSemesterPick">
+          <view class="kn-input exp-pick">{{semesterLabel}} ▾</view>
+        </picker>
+      </view>
+      <button class="btn btn-ink exp-btn" bindtap="exportSchedules">⬇ 导出 课表明细.xlsx</button>
+    </view>
+  </block>
+
+  <!-- ④ 说明 -->
+  <view class="info-card">
+    <view class="title"><view class="sq"></view><text class="serif">导 出 说 明</text></view>
+    <view class="exp-note">
+      · 文件存于云存储 <b class="mono">archives/</b> 目录，14 天后自动清理。<text class="hand">如有长期归档需求，请下载到本地保存。</text><br/>
+      · 每次导出都会写入审计日志，可在「<b>我的 → 操作记录</b>」中查询。<br/>
+      · 教师身份自动仅导出<text class="red"> 指导范围内</text>的数据；管理角色可导出<text class="red"> 全院</text>数据。<br/>
+      · Excel 由云函数 ExcelJS 组件生成，文件类型 .xlsx，可直接在 WPS / Excel 打开。<br/>
+      · 提示：单次导出上限 1000 条，超过会自动分批（按竞赛/状态分组）。
+    </view>
+  </view>
+</block>
+
+<view class="tail">墨纸编辑部 · 出品</view>

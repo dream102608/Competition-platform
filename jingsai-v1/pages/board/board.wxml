@@ -1,0 +1,70 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<!-- 大标题 -->
+<view class="bd-mast">
+  <view class="bd-kicker mono">DATA BOARD · 2026 H1</view>
+  <view class="bd-title serif">竞赛数据大屏</view>
+  <view class="bd-sub mono">信息科学与技术学院 · 2026 上半年学科竞赛获奖统计（真实数据）</view>
+</view>
+
+<!-- 核心指标 -->
+<view class="bd-kpis">
+  <view class="bd-kpi"><b class="mono">{{total}}</b><small>获奖总数</small></view>
+  <view class="bd-kpi gold"><b class="mono">{{national}}</b><small>国家级</small></view>
+  <view class="bd-kpi"><b class="mono">{{province}}</b><small>省部级</small></view>
+  <view class="bd-kpi"><b class="mono">{{compCount}}</b><small>赛事项目</small></view>
+</view>
+
+<!-- 竞赛获奖排行 -->
+<view class="sec-band"><view class="sq"></view><b>赛 事 获 奖 排 行</b><view class="ln"></view></view>
+<view class="bd-card card">
+  <view class="bd-row" wx:for="{{compBars}}" wx:key="name">
+    <view class="bd-name">
+      <b>{{item.name}}</b>
+      <small class="mono" wx:if="{{item.national}}">含国家级 {{item.national}} 项</small>
+    </view>
+    <view class="bd-track">
+      <view class="bd-bar verm" style="width:{{item.pct}}%"></view>
+    </view>
+    <text class="bd-num mono">{{item.count}}</text>
+  </view>
+</view>
+
+<!-- 专业分布 -->
+<view class="sec-band"><view class="sq"></view><b>专 业 获 奖 分 布</b><view class="ln"></view></view>
+<view class="bd-card card">
+  <view class="bd-row" wx:for="{{majorBars}}" wx:key="name">
+    <view class="bd-name"><b>{{item.name}}</b></view>
+    <view class="bd-track">
+      <view class="bd-bar ind" style="width:{{item.pct}}%"></view>
+    </view>
+    <text class="bd-num mono">{{item.count}}</text>
+  </view>
+</view>
+
+<!-- 月份趋势 -->
+<view class="sec-band"><view class="sq"></view><b>月 份 获 奖 趋 势</b><view class="ln"></view></view>
+<view class="bd-card card">
+  <view class="bd-row" wx:for="{{monthBars}}" wx:key="name">
+    <view class="bd-name"><b>{{item.name}}</b></view>
+    <view class="bd-track">
+      <view class="bd-bar green" style="width:{{item.pct}}%"></view>
+    </view>
+    <text class="bd-num mono">{{item.count}}</text>
+  </view>
+</view>
+
+<!-- 国家级获奖明细 -->
+<view class="sec-band"><view class="sq"></view><b>国 家 级 获 奖 明 细（{{national}} 项）</b><view class="ln"></view></view>
+<view class="bd-card card">
+  <view class="bd-na" wx:for="{{nationalList}}" wx:key="index">
+    <view class="medal gold bd-medal">金</view>
+    <view class="bd-na-info">
+      <b>{{item.comp}} · {{item.award}}</b>
+      <small class="mono">{{item.names}} · {{item.major}}</small>
+      <small class="mono bd-na-t">指导教师：{{item.teacher}} · {{item.month}}</small>
+    </view>
+  </view>
+</view>
+
+<view class="bd-tail mono">数据来源：学院 2026 上半年学科竞赛情况统计表 · 墨纸编辑部</view>

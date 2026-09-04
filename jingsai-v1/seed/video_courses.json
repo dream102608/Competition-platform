@@ -1,0 +1,4 @@
+{"_id":"vc-1","name":"竞赛入门必修课","category":"竞赛通识","coverText":"入门","intro":"面向零基础同学的竞赛通识课程，讲清赛制、组队与备赛节奏。","lecturerId":"lec-1","sort":100}
+{"_id":"vc-2","name":"数学建模专题训练营","category":"数学建模","coverText":"建模","intro":"从建模思路、论文写作到代码实现的全流程训练。","lecturerId":"lec-1","sort":90}
+{"_id":"vc-3","name":"电子设计实战","category":"电子设计","coverText":"电设","intro":"以真题为线索的硬件设计与调试实战课。","lecturerId":"lec-2","sort":80}
+{"_id":"vc-4","name":"学院风采宣传片","category":"学院宣传","coverText":"宣传","intro":"学院竞赛成果与师生风采展示，供领导视察与对外宣传使用。","lecturerId":"lec-3","sort":70}

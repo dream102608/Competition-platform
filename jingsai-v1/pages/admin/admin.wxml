@@ -1,0 +1,58 @@
+<view class="sbh" style="height:{{sbh}}px"></view>
+
+<view class="p-head">
+  <text class="t serif">系 统 管 理</text>
+  <text class="pill mono red">管理员</text>
+</view>
+
+<view wx:if="{{!isAdmin}}" class="ad-deny hand">只有管理员能进入这里。</view>
+
+<block wx:if="{{isAdmin}}">
+  <view class="ad-tabs">
+    <view class="ad-tab {{tab === item.key ? 'on' : ''}}" wx:for="{{tabs}}" wx:key="key"
+          data-k="{{item.key}}" bindtap="switchTab">{{item.name}}</view>
+  </view>
+
+  <!-- 用户管理 -->
+  <block wx:if="{{tab === 'users'}}">
+    <view class="ad-card card" wx:for="{{users}}" wx:key="_id">
+      <view class="ad-row1">
+        <b>{{item.name}}</b>
+        <text class="pill">{{item.roleName}}</text>
+        <text class="st-pill {{item.disabled ? 'st-rej' : 'st-ok'}}">{{item.disabled ? '已禁用' : '正常'}}</text>
+      </view>
+      <view class="ad-meta mono">{{item.college}} {{item.major}} · {{item.studentId || '未填学号'}}</view>
+      <view class="ad-ops">
+        <text class="ad-op" data-i="{{index}}" bindtap="openRolePicker">调整角色</text>
+        <text class="ad-op {{item.disabled ? '' : 'del'}}" data-i="{{index}}" bindtap="toggleUser">{{item.disabled ? '启用' : '禁用'}}</text>
+      </view>
+    </view>
+    <view wx:if="{{users.length === 0}}" class="ad-empty hand">还没有注册用户。</view>
+  </block>
+
+  <!-- 证书审核 -->
+  <block wx:if="{{tab === 'certs'}}">
+    <view class="ad-card card" wx:for="{{certs}}" wx:key="id">
+      <view class="ad-row1">
+        <b>{{item.studentName}}</b>
+        <text class="pill">{{item.award}}</text>
+        <text class="st-pill {{item.status === 'passed' ? 'st-ok' : item.status === 'rejected' ? 'st-rej' : 'st-run'}}">{{item.statusText}}</text>
+      </view>
+      <view class="ad-meta mono">{{item.compTitle}} · {{item.year}} 年{{item.note ? ' · 驳回原因：' + item.note : ''}}</view>
+      <view class="ad-ops" wx:if="{{item.status === 'pending'}}">
+        <text class="ad-op" data-i="{{index}}" bindtap="certApprove">✅ 通过</text>
+        <text class="ad-op del" data-i="{{index}}" bindtap="certReject">❌ 驳回</text>
+      </view>
+    </view>
+    <view wx:if="{{certs.length === 0}}" class="ad-empty hand">还没有学生上传证书。</view>
+  </block>
+
+  <!-- 审批流配置（查看） -->
+  <block wx:if="{{tab === 'flows'}}">
+    <view class="ad-card card" wx:for="{{flows}}" wx:key="name">
+      <view class="ad-row1"><b>{{item.name}}</b></view>
+      <view class="ad-chain">{{item.chain}}</view>
+    </view>
+    <view class="ad-tip hand">审批流的级数与角色在代码 utils/config.js 中配置，改完重新上传即可。</view>
+  </block>
+</block>

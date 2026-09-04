@@ -1,105 +1,122 @@
 <view class="sbh" style="height:{{sbh}}px"></view>
 
 <view class="p-head">
-  <view class="t serif">审 批 中 心</view>
-  <text class="h-ic">◔</text>
+  <text class="t serif">审 批 中 心</text>
+  <text class="pill mono red" wx:if="{{badge > 0}}">{{badge}} 待办</text>
 </view>
 
-<!-- 双 Tab -->
+<!-- 三栏切换 -->
 <view class="ap-tabs">
-  <view class="at {{tab === 'todo' ? 'on' : ''}}" bindtap="switchTab" data-t="todo">
-    待我审批<text wx:if="{{badge}}" class="bdg mono">{{badge}}</text>
-  </view>
-  <view class="at {{tab === 'mine' ? 'on' : ''}}" bindtap="switchTab" data-t="mine">我发起的</view>
+  <view class="ap-tab {{tab === 'todo' ? 'on' : ''}}" data-t="todo" bindtap="switchTab">待审批{{badge ? ' · ' + badge : ''}}</view>
+  <view class="ap-tab {{tab === 'done' ? 'on' : ''}}" data-t="done" bindtap="switchTab">已审批</view>
+  <view class="ap-tab {{tab === 'mine' ? 'on' : ''}}" data-t="mine" bindtap="switchTab">我发起的</view>
 </view>
 
-<!-- ========== 待我审批（签批版式） ========== -->
+<!-- ======== 待审批 ======== -->
 <block wx:if="{{tab === 'todo'}}">
-  <view wx:if="{{todos.length === 0}}" class="ap-empty card">
-    <view class="hand">眼下无事，天下太平。</view>
-    <view class="mono sub">NO PENDING SIGN-OFF</view>
-  </view>
-
-  <view wx:for="{{todos}}" wx:key="_id" class="ap-item card">
-    <view class="ai-h">
-      <view class="ai-t">
-        <b>{{item.compTitle}} · {{item.teamName}}队</b>
-        <view class="who mono">申请人：{{item.applicant}} · v{{item.version}} · {{item.regNo}}</view>
-      </view>
-      <view class="seal mini">
-        <small>{{item.nodeName}}</small>
-        <view class="stxt">待审<text decode="{{true}}">&nbsp;</text>批章</view>
-      </view>
+  <view class="ap-card card" wx:for="{{todos}}" wx:key="_id">
+    <view class="ap-head" data-id="{{item._id}}" bindtap="toggle">
+      <text class="pill">{{item.typeName}}</text>
+      <view class="ap-title">{{item.title || item.compTitle}}</view>
+      <view class="ap-meta mono">{{item.applicantName}} · {{item.createdAt}} · 当前节点：{{item.curNodeName}}</view>
+      <text class="ap-arrow">{{activeId === item._id ? '▾ 收起' : '▸ 展开'}}</text>
     </view>
-
-    <view class="ap-track">
-      <view class="ap-step ok" wx:for="{{item.trackFlags}}" wx:for-item="done" wx:for-index="ni" wx:key="ni">
-        <text class="st">{{done ? '✓' : ''}}</text>
+    <view class="ap-detail" wx:if="{{activeId === item._id}}">
+      <view class="node" wx:for="{{item.nodes}}" wx:for-item="n" wx:key="index">
+        <view class="nd-dot {{n.status}}"></view>
+        <view class="nd-body">
+          <b>{{n.name}} <text wx:if="{{n.needSign}}" class="pill red">需手签</text></b>
+          <small class="mono">{{n.approver}} · {{n.time}}</small>
+          <view class="rej-note" wx:if="{{n.status === 'reject' && n.note}}">{{n.note}}</view>
+        </view>
       </view>
-    </view>
-
-    <view class="sign-area">
-      <view class="sh serif">手 写 签 名 · SIGN HERE</view>
-      <view class="sig hand">{{item.nodeName}}</view>
-      <view class="sig-sub mono">签名板将在 V1.1 上线 canvas 手写（当前为演示签名）</view>
-    </view>
-
-    <view class="ap-actions">
-      <button class="btn ap-btn reject" data-id="{{item._id}}" bindtap="reject">✕ 驳回</button>
-      <button class="btn btn-verm ap-btn" data-id="{{item._id}}" bindtap="pass">✓ 通过盖章</button>
+      <view class="ap-ops">
+        <button class="btn btn-ink ap-btn" data-id="{{item._id}}" data-type="{{item._type || item.type}}" bindtap="pass">✓ 通过</button>
+        <button class="btn btn-verm ap-btn" data-id="{{item._id}}" data-type="{{item._type || item.type}}" bindtap="openReject">✕ 驳回</button>
+      </view>
     </view>
   </view>
+  <view wx:if="{{todos.length === 0}}" class="ap-empty hand">待办清零，喝杯茶吧。</view>
 </block>
 
-<!-- ========== 我发起的（轨迹版式） ========== -->
+<!-- ======== 已审批 ======== -->
+<block wx:if="{{tab === 'done'}}">
+  <view class="ap-card card" wx:for="{{history}}" wx:key="_id">
+    <view class="ap-head" data-id="{{item._id}}" bindtap="toggle">
+      <text class="pill">{{item.typeName}}</text>
+      <view class="ap-title">{{item.title || item.compTitle}}</view>
+      <text class="st-pill {{item.status === 'passed' ? 'st-ok' : 'st-rej'}}">{{item.statusText}}</text>
+    </view>
+    <view class="ap-detail" wx:if="{{activeId === item._id}}">
+      <view class="node" wx:for="{{item.nodes}}" wx:for-item="n" wx:key="index">
+        <view class="nd-dot {{n.status}}"></view>
+        <view class="nd-body">
+          <b>{{n.name}}</b>
+          <small class="mono">{{n.approver}} · {{n.time}}</small>
+          <view class="rej-note" wx:if="{{n.note && n.status !== 'waiting'}}">{{n.note}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{history.length === 0}}" class="ap-empty hand">还没有审批记录。</view>
+</block>
+
+<!-- ======== 我发起的 ======== -->
 <block wx:if="{{tab === 'mine'}}">
-  <view
-    wx:for="{{regs}}" wx:key="_id"
-    class="ap-item card {{activeId === item._id ? 'open' : ''}}">
-    <view class="ai-h" bindtap="toggle" data-id="{{item._id}}">
-      <view class="ai-t">
-        <b>{{item.compTitle}} · {{item.teamName}}队</b>
-        <view class="who mono">{{item.regNo}} · v{{item.version}}
-          <text class="st-pill {{item.status === 'approving' ? 'st-run' : item.status === 'rejected' ? 'st-rej' : item.status === 'passed' ? 'st-ok' : ''}}">
-            {{item.status === 'approving' ? '审批中' : item.status === 'rejected' ? '已驳回' : item.status === 'passed' ? '已通过' : '已撤回'}}
-          </text>
-        </view>
-      </view>
-      <text class="arrow">{{activeId === item._id ? '▾' : '▸'}}</text>
+  <view class="ap-card card" wx:for="{{mine}}" wx:key="_id">
+    <view class="ap-head" data-id="{{item._id}}" bindtap="toggle">
+      <text class="pill">{{item.typeName}}</text>
+      <view class="ap-title">{{item.title || item.compTitle}}</view>
+      <view class="ap-meta mono">v{{item.version}} · {{item.createdAt}}</view>
+      <text class="st-pill {{item.status === 'passed' ? 'st-ok' : item.status === 'rejected' ? 'st-rej' : item.status === 'withdrawn' ? 'st-rej' : 'st-run'}}">{{item.statusText}}</text>
     </view>
-
-    <!-- 展开的签批链 -->
-    <block wx:if="{{activeId === item._id}}">
-      <view class="ap-track">
-        <view
-          wx:for="{{item.nodes}}" wx:for-item="node" wx:for-index="ni" wx:key="name"
-          class="ap-step {{node.status === 'pass' ? 'ok' : node.status === 'reject' ? 'rej' : ''}}">
-          <text class="st">{{node.status === 'pass' ? '✓' : node.status === 'reject' ? '✕' : ''}}</text>
-          <view class="asn">
-            <b>{{node.name}}</b>
-            <small>{{node.status === 'pass' ? node.note : node.status === 'reject' ? '驳回 · 退回上一级' : node.note}}</small>
-          </view>
-          <text class="tm mono">{{node.time}}</text>
-        </view>
-        <view wx:if="{{item.nodes[item.nodes.length - 1].status === 'pass'}}" class="final-seal">
-          <view class="seal">
-            <small>竞赛管理</small>
-            <view class="stxt">审批<text decode="{{true}}">&nbsp;</text>通过章</view>
-          </view>
+    <view class="ap-detail" wx:if="{{activeId === item._id}}">
+      <view class="node" wx:for="{{item.nodes}}" wx:for-item="n" wx:key="index">
+        <view class="nd-dot {{n.status}}"></view>
+        <view class="nd-body">
+          <b>{{n.name}}</b>
+          <small class="mono">{{n.approver}} · {{n.time}}</small>
+          <view class="rej-note" wx:if="{{n.status === 'reject' && n.note}}">{{n.note}}</view>
         </view>
       </view>
-
-      <view wx:if="{{item.status === 'rejected'}}" class="rej-note">「{{item.nodes[item.nodes.length - 1].status === 'reject' ? item.nodes[item.nodes.length - 1].note : ''}}」</view>
-
-      <view wx:if="{{item.overtime}}" class="overtime">
-        <text class="ot-ic">△</text>当前节点已滞留 53 小时，已触发自动催办
+      <view class="ap-ops" wx:if="{{item.status === 'approving'}}">
+        <button class="btn btn-line ap-btn" data-id="{{item._id}}" data-type="{{item._type || item.type}}" bindtap="urge">⚡ 催办{{item.urgeCount ? '×' + item.urgeCount : ''}}</button>
+        <button class="btn btn-ghost ap-btn" data-id="{{item._id}}" data-type="{{item._type || item.type}}" bindtap="withdraw">撤回</button>
       </view>
-
-      <view class="mine-acts">
-        <button wx:if="{{item.status === 'approving'}}" class="btn ap-btn ghost" data-id="{{item._id}}" bindtap="urge">◔ 催办</button>
-        <button wx:if="{{item.status === 'approving'}}" class="btn ap-btn ghost" data-id="{{item._id}}" bindtap="withdraw">↩ 撤回</button>
-        <button wx:if="{{item.status === 'rejected'}}" class="btn btn-verm ap-btn" data-id="{{item._id}}" bindtap="resubmit">✎ 改完重交（v{{item.version + 1}}）</button>
+      <view class="ap-ops" wx:if="{{item.status === 'rejected'}}">
+        <button class="btn btn-verm ap-btn" data-id="{{item._id}}" data-type="{{item._type || item.type}}" bindtap="resubmit">↻ 修改后重报（v{{item.version + 1}}）</button>
       </view>
-    </block>
+    </view>
   </view>
+  <view wx:if="{{mine.length === 0}}" class="ap-empty hand">你还没有发起过任何申请。</view>
 </block>
+
+<!-- ======== 驳回原因弹窗 ======== -->
+<view class="mask" wx:if="{{rejShow}}" bindtap="closeReject">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">驳回原因（至少 10 字）</view>
+    <textarea class="sh-textarea" placeholder="请写明驳回理由，将退回给申请人修改" value="{{rejNote}}" bindinput="onRejNote"/>
+    <view class="sh-tpls">
+      <text class="chip" wx:for="{{rejTpls}}" wx:key="*this" data-i="{{index}}" bindtap="pickTpl">{{item}}</text>
+    </view>
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="closeReject">取消</button>
+      <button class="btn btn-verm sh-btn" bindtap="confirmReject">确认驳回</button>
+    </view>
+  </view>
+</view>
+
+<!-- ======== 手签字弹窗 ======== -->
+<view class="mask" wx:if="{{signShow}}">
+  <view class="sheet" catchtap="noop">
+    <view class="sh-t serif">手写签字确认</view>
+    <view class="sh-tip hand">请在下方框内手写你的签名（此环节按制度要求手签）</view>
+    <canvas type="2d" id="signCanvas" class="sign-canvas"
+            bindtouchstart="signStart" bindtouchmove="signMove" bindtouchend="signEnd"></canvas>
+    <view class="sh-ops">
+      <button class="btn btn-ghost sh-btn" bindtap="clearSign">清除重写</button>
+      <button class="btn btn-ghost sh-btn" bindtap="cancelSign">取消</button>
+      <button class="btn btn-ink sh-btn" bindtap="confirmSign">签字通过</button>
+    </view>
+  </view>
+</view>
